@@ -1,4 +1,8 @@
 #include "SoundMgr.h"
+#include "system.h"
+#include "jaudio/verysimple.h"
+#include "stdio.h"
+#include "math.h"
 
 /*
  * --INFO--
@@ -316,68 +320,16 @@ void SeMgr::setPikiNum(int)
  * Address:	800A3674
  * Size:	0000E4
  */
-void SeWin::doRender(Graphics&)
+void SeWin::doRender(Graphics& gfx)
 {
-	/*
-	.loc_0x0:
-	  mflr      r0
-	  stw       r0, 0x4(r1)
-	  stwu      r1, -0x68(r1)
-	  stw       r31, 0x64(r1)
-	  mr        r31, r4
-	  stw       r30, 0x60(r1)
-	  mr        r30, r3
-	  lwz       r12, 0x0(r30)
-	  lwz       r12, 0x24(r12)
-	  mtlr      r12
-	  blrl
-	  lwz       r12, 0x0(r30)
-	  lis       r4, 0x802B
-	  addi      r6, r4, 0x1BF8
-	  lwz       r12, 0x2C(r12)
-	  mr        r3, r30
-	  addi      r4, r31, 0
-	  mtlr      r12
-	  li        r5, 0x20
-	  blrl
-	  lwz       r5, 0x4C(r30)
-	  addi      r3, r1, 0x20
-	  crclr     6, 0x6
-	  subi      r4, r13, 0x5360
-	  bl        0x172EC4
-	  mr        r3, r30
-	  lwz       r12, 0x0(r30)
-	  addi      r4, r31, 0
-	  addi      r6, r1, 0x20
-	  lwz       r12, 0x2C(r12)
-	  li        r5, 0x50
-	  mtlr      r12
-	  blrl
-	  lwz       r4, 0x3030(r13)
-	  addi      r3, r1, 0x20
-	  lwz       r0, 0x4C(r30)
-	  crclr     6, 0x6
-	  lwz       r4, 0x2C(r4)
-	  rlwinm    r0,r0,3,0,28
-	  add       r4, r4, r0
-	  lwz       r5, 0x4(r4)
-	  subi      r4, r13, 0x5358
-	  bl        0x172E7C
-	  mr        r3, r30
-	  lwz       r12, 0x0(r30)
-	  addi      r4, r31, 0
-	  addi      r6, r1, 0x20
-	  lwz       r12, 0x2C(r12)
-	  li        r5, 0x8C
-	  mtlr      r12
-	  blrl
-	  lwz       r0, 0x6C(r1)
-	  lwz       r31, 0x64(r1)
-	  lwz       r30, 0x60(r1)
-	  addi      r1, r1, 0x68
-	  mtlr      r0
-	  blr
-	*/
+	char buffer[64];
+	char _[16];
+	printStart(gfx);
+	printcentre(gfx, 32, "SE テスト"); // "SE Test"
+	sprintf(buffer, "SE %d", _4C);
+	printcentre(gfx, 80, buffer);
+	sprintf(buffer, "%s", seMgr->mStrings[_4C].mString);
+	printcentre(gfx, 140, buffer);
 }
 
 /*
@@ -387,238 +339,102 @@ void SeWin::doRender(Graphics&)
  */
 void SeWin::update()
 {
-	/*
-	.loc_0x0:
-	  mflr      r0
-	  stw       r0, 0x4(r1)
-	  stwu      r1, -0x70(r1)
-	  stw       r31, 0x6C(r1)
-	  mr        r31, r3
-	  lwz       r0, 0x28(r3)
-	  cmpwi     r0, 0x1001
-	  beq-      .loc_0xBC
-	  bge-      .loc_0x30
-	  cmpwi     r0, 0x1000
-	  bge-      .loc_0x3C
-	  b         .loc_0x2D0
+	// 0x1000  800a3794
+	// 0x1001  800a3814
+	// 0x1002  800a37e4
+	switch (mStatus) {
+	case 0x1000: { // ok begin
+		_54--;
+		mPosY += 32;
+		if (!_54) {
+			mStatus = 0x1001;
+		}
+		if (__fabsf(mController->getMainStickY()) > 0.5f) {
+			_60 = true;
+		}
+		return;
+	}
+	case 0x1002: {
+		_54--; // TODO: can this move into the condition?
+		mPosY += 32;
+		if (!_54) {
+			mStatus = 0x1003;
+		}
+		return;
+	}
+	case 0x1001: {
+		if (_60) {
+			if (__fabsf(mController->getMainStickY()) > 0.5f) {
+				return;
+			}
+			_60 = false;
+		}
+		const f32 mainStickY = mController->getMainStickY();
 
-	.loc_0x30:
-	  cmpwi     r0, 0x1003
-	  bge-      .loc_0x2D0
-	  b         .loc_0x8C
-
-	.loc_0x3C:
-	  lwz       r3, 0x54(r31)
-	  subi      r0, r3, 0x1
-	  stw       r0, 0x54(r31)
-	  lwz       r3, 0x24(r31)
-	  addi      r0, r3, 0x20
-	  stw       r0, 0x24(r31)
-	  lwz       r0, 0x54(r31)
-	  cmpwi     r0, 0
-	  bne-      .loc_0x68
-	  li        r0, 0x1001
-	  stw       r0, 0x28(r31)
-
-	.loc_0x68:
-	  lwz       r3, 0x48(r31)
-	  bl        -0x62CF0
-	  fabs      f1, f1
-	  lfs       f0, -0x7290(r2)
-	  fcmpo     cr0, f1, f0
-	  ble-      .loc_0x2D0
-	  li        r0, 0x1
-	  stb       r0, 0x60(r31)
-	  b         .loc_0x2D0
-
-	.loc_0x8C:
-	  lwz       r3, 0x54(r31)
-	  subi      r0, r3, 0x1
-	  stw       r0, 0x54(r31)
-	  lwz       r3, 0x24(r31)
-	  addi      r0, r3, 0x20
-	  stw       r0, 0x24(r31)
-	  lwz       r0, 0x54(r31)
-	  cmpwi     r0, 0
-	  bne-      .loc_0x2D0
-	  li        r0, 0x1003
-	  stw       r0, 0x28(r31)
-	  b         .loc_0x2D0
-
-	.loc_0xBC:
-	  lbz       r0, 0x60(r31)
-	  cmplwi    r0, 0
-	  beq-      .loc_0xE8
-	  lwz       r3, 0x48(r31)
-	  bl        -0x62D50
-	  fabs      f1, f1
-	  lfs       f0, -0x7290(r2)
-	  fcmpo     cr0, f1, f0
-	  bgt-      .loc_0x2D0
-	  li        r0, 0
-	  stb       r0, 0x60(r31)
-
-	.loc_0xE8:
-	  lwz       r3, 0x48(r31)
-	  bl        -0x62D70
-	  lfs       f0, -0x7290(r2)
-	  li        r5, 0x1
-	  fcmpo     cr0, f1, f0
-	  ble-      .loc_0x174
-	  lwz       r0, 0x58(r31)
-	  cmpwi     r0, 0
-	  bgt-      .loc_0x118
-	  lfs       f0, -0x728C(r2)
-	  stfs      f0, 0x5C(r31)
-	  b         .loc_0x12C
-
-	.loc_0x118:
-	  lfs       f1, 0x5C(r31)
-	  lfs       f0, -0x7288(r2)
-	  fcmpo     cr0, f1, f0
-	  bge-      .loc_0x12C
-	  li        r5, 0
-
-	.loc_0x12C:
-	  lwz       r3, 0x2DEC(r13)
-	  lfs       f1, 0x5C(r31)
-	  lfs       f0, 0x28C(r3)
-	  fadds     f0, f1, f0
-	  stfs      f0, 0x5C(r31)
-	  lfs       f1, 0x5C(r31)
-	  lfs       f0, -0x7284(r2)
-	  fcmpo     cr0, f1, f0
-	  ble-      .loc_0x168
-	  lwz       r3, 0x58(r31)
-	  cmpwi     r3, 0x6
-	  bge-      .loc_0x204
-	  addi      r0, r3, 0x1
-	  stw       r0, 0x58(r31)
-	  b         .loc_0x204
-
-	.loc_0x168:
-	  li        r0, 0x1
-	  stw       r0, 0x58(r31)
-	  b         .loc_0x204
-
-	.loc_0x174:
-	  lfs       f0, -0x7280(r2)
-	  fcmpo     cr0, f1, f0
-	  bge-      .loc_0x1F4
-	  lwz       r0, 0x58(r31)
-	  cmpwi     r0, 0
-	  blt-      .loc_0x198
-	  lfs       f0, -0x728C(r2)
-	  stfs      f0, 0x5C(r31)
-	  b         .loc_0x1AC
-
-	.loc_0x198:
-	  lfs       f1, 0x5C(r31)
-	  lfs       f0, -0x7288(r2)
-	  fcmpo     cr0, f1, f0
-	  bge-      .loc_0x1AC
-	  li        r5, 0
-
-	.loc_0x1AC:
-	  lwz       r3, 0x2DEC(r13)
-	  lfs       f1, 0x5C(r31)
-	  lfs       f0, 0x28C(r3)
-	  fadds     f0, f1, f0
-	  stfs      f0, 0x5C(r31)
-	  lfs       f1, 0x5C(r31)
-	  lfs       f0, -0x7284(r2)
-	  fcmpo     cr0, f1, f0
-	  ble-      .loc_0x1E8
-	  lwz       r3, 0x58(r31)
-	  cmpwi     r3, -0x6
-	  ble-      .loc_0x204
-	  subi      r0, r3, 0x1
-	  stw       r0, 0x58(r31)
-	  b         .loc_0x204
-
-	.loc_0x1E8:
-	  li        r0, -0x1
-	  stw       r0, 0x58(r31)
-	  b         .loc_0x204
-
-	.loc_0x1F4:
-	  li        r0, 0
-	  stw       r0, 0x58(r31)
-	  lfs       f0, -0x728C(r2)
-	  stfs      f0, 0x5C(r31)
-
-	.loc_0x204:
-	  lwz       r4, 0x58(r31)
-	  cmpwi     r4, 0
-	  beq-      .loc_0x26C
-	  rlwinm.   r0,r5,0,24,31
-	  beq-      .loc_0x26C
-	  cmpwi     r4, 0
-	  ble-      .loc_0x250
-	  lwz       r3, 0x3030(r13)
-	  lwz       r5, 0x4C(r31)
-	  lwz       r3, 0x24(r3)
-	  add       r0, r4, r5
-	  cmpw      r0, r3
-	  blt-      .loc_0x240
-	  sub       r3, r3, r5
-	  subi      r4, r3, 0x1
-
-	.loc_0x240:
-	  lwz       r0, 0x4C(r31)
-	  add       r0, r0, r4
-	  stw       r0, 0x4C(r31)
-	  b         .loc_0x26C
-
-	.loc_0x250:
-	  lwz       r0, 0x4C(r31)
-	  add.      r0, r4, r0
-	  bge-      .loc_0x260
-	  li        r4, 0
-
-	.loc_0x260:
-	  lwz       r0, 0x4C(r31)
-	  add       r0, r0, r4
-	  stw       r0, 0x4C(r31)
-
-	.loc_0x26C:
-	  lwz       r3, 0x48(r31)
-	  lwz       r3, 0x28(r3)
-	  rlwinm.   r0,r3,0,19,19
-	  beq-      .loc_0x2A4
-	  lwz       r3, 0x50(r31)
-	  bl        -0x8CEF8
-	  lwz       r3, 0x3030(r13)
-	  lwz       r0, 0x4C(r31)
-	  lwz       r3, 0x2C(r3)
-	  rlwinm    r0,r0,3,0,28
-	  add       r3, r3, r0
-	  lwz       r0, 0x0(r3)
-	  stw       r0, 0x50(r31)
-	  b         .loc_0x2D0
-
-	.loc_0x2A4:
-	  rlwinm.   r0,r3,0,18,18
-	  bne-      .loc_0x2B4
-	  rlwinm.   r0,r3,0,15,15
-	  beq-      .loc_0x2D0
-
-	.loc_0x2B4:
-	  lwz       r3, 0x4C(r31)
-	  bl        -0x8CF30
-	  mr        r3, r31
-	  lwz       r12, 0x0(r31)
-	  lwz       r12, 0x14(r12)
-	  mtlr      r12
-	  blrl
-
-	.loc_0x2D0:
-	  lwz       r0, 0x74(r1)
-	  lwz       r31, 0x6C(r1)
-	  addi      r1, r1, 0x70
-	  mtlr      r0
-	  blr
-	*/
+		bool flag = true; // regswap
+		if (mainStickY > 0.5f) {
+			if (_58 <= 0) {
+				_5C = 0.0f;
+			} else if (_5C < 0.8f) {
+				// ok end
+				flag = false;
+				_5C += gsys->mDeltaTime;
+				if (_5C > 1.4f) {
+					if (_58 < 6) {
+						_58 += 1;
+					}
+				} else {
+					_58 = 1;
+				}
+			}
+			// ok-ish end
+		} else if (mainStickY < -0.5f) {
+			if (_58 < 1) {
+				_5C = 0.0f;
+			} else if (_5C < 0.8f) {
+				flag = false;
+			}
+			_5C += gsys->mDeltaTime;
+			// ok-ish end
+			if (_5C > 1.4f) {
+				if (_58 > -6) {
+					_58 -= 1;
+				}
+			} else {
+				_58 = -1;
+			}
+		} else {
+			_58 = 0;
+			_5C = 0.0f;
+		}
+		// ok-ish end
+		if (_58 && flag) {
+			if (_58 > 0) {
+				int iVar1 = _58;
+				if (seMgr->_24 <= iVar1 + _4C) {
+					iVar1 = seMgr->_24 - _4C - 1;
+				}
+				_4C += iVar1;
+			} else {
+				// TODO: is this instead a weird ternary?
+				int iVar1 = _58;
+				if (_58 + _4C < 0) {
+					iVar1 = 0;
+				}
+				_4C += iVar1;
+			}
+		}
+		const int inputPressed = mController->mInputPressed;
+		if ((inputPressed & KBBTN_A)) {
+			Jac_StopSe(_4C);
+			_50 = seMgr->mStrings[_4C].mLength;
+		} else if ((inputPressed & KBBTN_B) || (inputPressed & KBBTN_Z)) {
+			Jac_StopSe(_4C);
+			close();
+		}
+		return;
+	}
+	}
 }
 
 /*
@@ -628,42 +444,19 @@ void SeWin::update()
  */
 void SeWin::open()
 {
-	/*
-	.loc_0x0:
-	  mflr      r0
-	  stw       r0, 0x4(r1)
-	  stwu      r1, -0x18(r1)
-	  stw       r31, 0x14(r1)
-	  mr        r31, r3
-	  lwz       r0, 0x28(r3)
-	  cmpwi     r0, 0x1000
-	  beq-      .loc_0x68
-	  mr        r3, r31
-	  bl        0x6E5A8
-	  mr        r3, r31
-	  bl        0x6E3AC
-	  lwz       r4, 0x24(r31)
-	  li        r3, -0x78
-	  li        r0, 0
-	  addi      r4, r4, 0x78
-	  srawi     r4, r4, 0x5
-	  addze     r4, r4
-	  stw       r4, 0x54(r31)
-	  stw       r3, 0x24(r31)
-	  stw       r0, 0x58(r31)
-	  stw       r0, 0x50(r31)
-	  stw       r0, 0x4C(r31)
-	  lfs       f0, -0x728C(r2)
-	  stfs      f0, 0x5C(r31)
-	  stb       r0, 0x60(r31)
+	if (mStatus == 0x1000)
+		return;
+	placeCentre();
+	GmWin::open();
+	const int iVar1 = mPosY + 120;
 
-	.loc_0x68:
-	  lwz       r0, 0x1C(r1)
-	  lwz       r31, 0x14(r1)
-	  addi      r1, r1, 0x18
-	  mtlr      r0
-	  blr
-	*/
+	_54   = iVar1 / 32;
+	mPosY = -120;
+	_58   = 0;
+	_50   = nullptr;
+	_4C   = 0;
+	_5C   = 0.0f;
+	_60   = false;
 }
 
 /*
@@ -673,28 +466,10 @@ void SeWin::open()
  */
 void SeWin::close()
 {
-	/*
-	.loc_0x0:
-	  mflr      r0
-	  stw       r0, 0x4(r1)
-	  stwu      r1, -0x18(r1)
-	  stw       r31, 0x14(r1)
-	  mr        r31, r3
-	  lwz       r0, 0x28(r3)
-	  cmpwi     r0, 0x1002
-	  beq-      .loc_0x38
-	  mr        r3, r31
-	  bl        0x6E52C
-	  mr        r3, r31
-	  bl        0x6E33C
-	  li        r0, 0xF
-	  stw       r0, 0x54(r31)
+	if (mStatus == 0x1002)
+		return;
+	placeCentre();
+	GmWin::close();
 
-	.loc_0x38:
-	  lwz       r0, 0x1C(r1)
-	  lwz       r31, 0x14(r1)
-	  addi      r1, r1, 0x18
-	  mtlr      r0
-	  blr
-	*/
+	_54 = 15;
 }

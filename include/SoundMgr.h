@@ -7,6 +7,8 @@
 #include "Ayu.h"
 #include "Win.h"
 #include "SoundID.h"
+#include "Controller.h"
+#include "String.h"
 
 struct Creature;
 
@@ -107,11 +109,17 @@ struct SeMgr : public Node {
 
 	// _00     = VTBL
 	// _00-_20 = Node
+	// _00-_30 = SeMgr
+	u8 _20[0x24 - 0x20]; // _20
+	int _24;             // _24
+	u8 _28[0x2C - 0x28]; // _28
+	String* mStrings;    // _2C
+
 	// TODO: members
 };
 
 /**
- * @brief TODO
+ * @brief Unused SE Test window.
  */
 struct SeWin : public GmWin {
 	virtual void open();              // _10
@@ -119,9 +127,18 @@ struct SeWin : public GmWin {
 	virtual void update();            // _18
 	virtual void doRender(Graphics&); // _1C
 
+	static void FakeFunction(); // TODO: REMOVE
+
 	// _00     = VTBL
-	// _00-_14 = GmWin?
-	// TODO: members
+	// _00-_14 = CoreNode
+	// _00-_48 = GmWin
+	Controller* mController; // _48
+	int _4C;                 // _4C  // Used as parameter for Jac_StopSe
+	int _50;                 // _50  // Used as parameter for Jac_StopSe
+	int _54;                 // _54
+	int _58;                 // _58
+	f32 _5C;                 // _5C
+	bool _60;                // _60  Might be (unsigned) char, idk
 };
 
 /**
