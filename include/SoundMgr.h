@@ -8,7 +8,6 @@
 #include "Win.h"
 #include "SoundID.h"
 #include "Controller.h"
-#include "String.h"
 
 struct Creature;
 
@@ -107,13 +106,18 @@ struct SeMgr : public Node {
 	void stopBGM();
 	void stopSoundAll();
 
+	struct SeInfo {
+		u32 seID;
+		char* seName;
+	};
+
 	// _00     = VTBL
 	// _00-_20 = Node
 	// _00-_30 = SeMgr
 	u8 _20[0x24 - 0x20]; // _20
 	int _24;             // _24
 	u8 _28[0x2C - 0x28]; // _28
-	String* mStrings;    // _2C
+	SeInfo* mSeInfos;    // _2C
 
 	// TODO: members
 };

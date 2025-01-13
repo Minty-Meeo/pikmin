@@ -328,7 +328,7 @@ void SeWin::doRender(Graphics& gfx)
 	printcentre(gfx, 32, "SE テスト"); // "SE Test"
 	sprintf(buffer, "SE %d", _4C);
 	printcentre(gfx, 80, buffer);
-	sprintf(buffer, "%s", seMgr->mStrings[_4C].mString);
+	sprintf(buffer, "%s", seMgr->mSeInfos[_4C].seName);
 	printcentre(gfx, 140, buffer);
 }
 
@@ -356,7 +356,7 @@ void SeWin::update()
 		return;
 	}
 	case 0x1002: {
-		_54--; // TODO: can this move into the condition?
+		_54--;
 		mPosY += 32;
 		if (!_54) {
 			mStatus = 0x1003;
@@ -428,7 +428,7 @@ void SeWin::update()
 		const int inputPressed = mController->mInputPressed;
 		if ((inputPressed & KBBTN_A)) {
 			Jac_StopSe(_50);
-			_50 = seMgr->mStrings[_4C].mLength;
+			_50 = seMgr->mSeInfos[_4C].seID;
 		} else if ((inputPressed & KBBTN_B) || (inputPressed & KBBTN_Z)) {
 			Jac_StopSe(_4C);
 			close();
