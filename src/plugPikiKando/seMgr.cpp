@@ -319,8 +319,8 @@ void SeMgr::setPikiNum(int)
  */
 void SeWin::doRender(Graphics& gfx)
 {
-	char buffer[64];
-	char _[16];
+	char buffer[60];
+	u32 badCompiler;
 	printStart(gfx);
 	printcentre(gfx, 32, "SE テスト"); // "SE Test"
 	sprintf(buffer, "SE %d", _4C);
