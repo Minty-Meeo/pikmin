@@ -390,7 +390,7 @@ void SeWin::update()
 			}
 			// ok-ish end
 		} else if (mainStickY < -0.5f) {
-			if (_58 < 1) {
+			if (_58 < 0) {
 				_5C = 0.0f;
 			} else if (_5C < 0.8f) {
 				flag = false;
@@ -410,16 +410,15 @@ void SeWin::update()
 		}
 		// ok-ish end
 		if (_58 && flag) {
-			if (_58 > 0) {
-				int iVar1 = _58;
+			int iVar1 = _58;
+			if (iVar1 > 0) {
 				if (iVar1 + _4C >= seMgr->_24) {
 					iVar1 = seMgr->_24 - _4C - 1;
 				}
 				_4C += iVar1;
 			} else {
 				// TODO: is this instead a weird ternary?
-				int iVar1 = _58;
-				if (_58 + _4C < 0) {
+				if (iVar1 + _4C < 0) {
 					iVar1 = 0;
 				}
 				_4C += iVar1;
