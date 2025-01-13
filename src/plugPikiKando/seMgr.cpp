@@ -412,7 +412,7 @@ void SeWin::update()
 		if (_58 && flag) {
 			if (_58 > 0) {
 				int iVar1 = _58;
-				if (seMgr->_24 <= iVar1 + _4C) {
+				if (iVar1 + _4C >= seMgr->_24) {
 					iVar1 = seMgr->_24 - _4C - 1;
 				}
 				_4C += iVar1;
@@ -427,7 +427,7 @@ void SeWin::update()
 		}
 		const int inputPressed = mController->mInputPressed;
 		if ((inputPressed & KBBTN_A)) {
-			Jac_StopSe(_4C);
+			Jac_StopSe(_50);
 			_50 = seMgr->mStrings[_4C].mLength;
 		} else if ((inputPressed & KBBTN_B) || (inputPressed & KBBTN_Z)) {
 			Jac_StopSe(_4C);
