@@ -14,6 +14,14 @@ struct Creature;
 /**
  * @brief TODO
  */
+struct SeInfo {
+	int _00;   // _00
+	char* _04; // _04
+};
+
+/**
+ * @brief TODO
+ */
 struct SVector_ {
 	// TODO: members
 };
@@ -99,27 +107,25 @@ struct SeMgr : public Node {
 	void setPikiNum(int);
 
 	// unused/inlined:
-	void findInfo(int);
-	void play(u32);
-	void stop(u32);
+	SeInfo* findInfo(int);
 	void playBGM(u32);
 	void stopBGM();
 	void stopSoundAll();
 
-	struct SeInfo {
-		u32 seID;
-		char* seName;
-	};
+	static void play(u32);
+	static void stop(u32);
+
+	// DLL inlines:
+	int getSENum() { return mSENum; }
+	SeInfo* getIndexInfo(int idx) { return &mSeInfos[idx]; }
 
 	// _00     = VTBL
 	// _00-_20 = Node
 	// _00-_30 = SeMgr
-	u8 _20[0x24 - 0x20]; // _20
-	int _24;             // _24
-	u8 _28[0x2C - 0x28]; // _28
-	SeInfo* mSeInfos;    // _2C
-
-	// TODO: members
+	u32 _20;          // _20
+	int mSENum;       // _24
+	int _28;          // _28
+	SeInfo* mSeInfos; // _2C
 };
 
 /**

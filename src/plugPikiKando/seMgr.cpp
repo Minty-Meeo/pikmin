@@ -1,28 +1,27 @@
 #include "SoundMgr.h"
 #include "system.h"
 #include "jaudio/verysimple.h"
+#include "zen/Math.h"
 #include "stdio.h"
 #include "math.h"
+#include "sysNew.h"
+#include "DebugLog.h"
 
 /*
  * --INFO--
  * Address:	........
  * Size:	00009C
  */
-static void _Error(char*, ...)
-{
-	// UNUSED FUNCTION
-}
+DEFINE_ERROR();
 
 /*
  * --INFO--
  * Address:	........
  * Size:	0000F0
  */
-static void _Print(char*, ...)
-{
-	// UNUSED FUNCTION
-}
+DEFINE_PRINT("seMgr");
+
+SeMgr* seMgr;
 
 /*
  * --INFO--
@@ -31,6 +30,12 @@ static void _Print(char*, ...)
  */
 SeMgr::SeMgr()
 {
+	_20      = 0;
+	mSENum   = 0;
+	_28      = 128;
+	mSeInfos = new SeInfo[_28];
+
+	// bunch of addInfos
 	/*
 	.loc_0x0:
 	  mflr      r0
@@ -159,7 +164,7 @@ void SeMgr::playNaviSound(s32, s32)
  * Address:	........
  * Size:	000048
  */
-void SeMgr::findInfo(int)
+SeInfo* SeMgr::findInfo(int)
 {
 	// UNUSED FUNCTION
 }
@@ -169,24 +174,16 @@ void SeMgr::findInfo(int)
  * Address:	800A35D0
  * Size:	000034
  */
-void SeMgr::addInfo(int, char*)
+void SeMgr::addInfo(int p1, char* p2)
 {
-	/*
-	.loc_0x0:
-	  lwz       r0, 0x24(r3)
-	  lwz       r6, 0x2C(r3)
-	  rlwinm    r0,r0,3,0,28
-	  stwx      r4, r6, r0
-	  lwz       r0, 0x24(r3)
-	  lwz       r4, 0x2C(r3)
-	  rlwinm    r0,r0,3,0,28
-	  add       r4, r4, r0
-	  stw       r5, 0x4(r4)
-	  lwz       r4, 0x24(r3)
-	  addi      r0, r4, 0x1
-	  stw       r0, 0x24(r3)
-	  blr
-	*/
+	if (mSENum >= _28) {
+		PRINT("maxInfos !\n");
+		ERROR("mail to me\n");
+	}
+
+	mSeInfos[mSENum]._00 = p1;
+	mSeInfos[mSENum]._04 = p2;
+	mSENum++;
 }
 
 /*
@@ -213,9 +210,9 @@ void SeMgr::play(u32)
  * Address:	........
  * Size:	000024
  */
-void SeMgr::stop(u32)
+void SeMgr::stop(u32 soundID)
 {
-	// UNUSED FUNCTION
+	Jac_StopSe(soundID);
 }
 
 /*
@@ -328,7 +325,7 @@ void SeWin::doRender(Graphics& gfx)
 	printcentre(gfx, 32, "SE テスト"); // "SE Test"
 	sprintf(buffer, "SE %d", _4C);
 	printcentre(gfx, 80, buffer);
-	sprintf(buffer, "%s", seMgr->mSeInfos[_4C].seName);
+	sprintf(buffer, "%s", seMgr->getIndexInfo(_4C)->_04);
 	printcentre(gfx, 140, buffer);
 }
 
@@ -339,18 +336,16 @@ void SeWin::doRender(Graphics& gfx)
  */
 void SeWin::update()
 {
-	// 0x1000  800a3794
-	// 0x1001  800a3814
-	// 0x1002  800a37e4
-	char _[0x70 - 0x18];
+	u32 badCompiler[2]; // sigh
+
 	switch (mStatus) {
-	case 0x1000: { // ok begin
+	case 0x1000: {
 		_54--;
 		mPosY += 32;
 		if (!_54) {
 			mStatus = 0x1001;
 		}
-		if (__fabsf(mController->getMainStickY()) > 0.5f) {
+		if (zen::Abs(mController->getMainStickY()) > 0.5f) {
 			_60 = true;
 		}
 		return;
@@ -365,38 +360,35 @@ void SeWin::update()
 	}
 	case 0x1001: {
 		if (_60) {
-			if (__fabsf(mController->getMainStickY()) > 0.5f) {
+			if (zen::Abs(mController->getMainStickY()) > 0.5f) {
 				return;
 			}
 			_60 = false;
 		}
 		const f32 mainStickY = mController->getMainStickY();
 
-		bool flag = true; // regswap
+		bool flag = true;
 		if (mainStickY > 0.5f) {
 			if (_58 <= 0) {
 				_5C = 0.0f;
 			} else if (_5C < 0.8f) {
-				// ok end
 				flag = false;
-				_5C += gsys->mDeltaTime;
-				if (_5C > 1.4f) {
-					if (_58 < 6) {
-						_58 += 1;
-					}
-				} else {
-					_58 = 1;
-				}
 			}
-			// ok-ish end
+			_5C += gsys->getFrameTime();
+			if (_5C > 1.4f) {
+				if (_58 < 6) {
+					_58 += 1;
+				}
+			} else {
+				_58 = 1;
+			}
 		} else if (mainStickY < -0.5f) {
-			if (_58 < 0) {
+			if (_58 >= 0) {
 				_5C = 0.0f;
 			} else if (_5C < 0.8f) {
 				flag = false;
 			}
-			_5C += gsys->mDeltaTime;
-			// ok-ish end
+			_5C += gsys->getFrameTime();
 			if (_5C > 1.4f) {
 				if (_58 > -6) {
 					_58 -= 1;
@@ -408,28 +400,24 @@ void SeWin::update()
 			_58 = 0;
 			_5C = 0.0f;
 		}
-		// ok-ish end
 		if (_58 && flag) {
-			int iVar1 = _58;
-			if (iVar1 > 0) {
-				if (iVar1 + _4C >= seMgr->_24) {
-					iVar1 = seMgr->_24 - _4C - 1;
-				}
-				_4C += iVar1;
+			if (_58 > 0) {
+				_4C += (_58 + _4C >= seMgr->getSENum()) ? seMgr->getSENum() - _4C - 1 : _58;
+				PRINT(" UP up is %d : curr became %d\n", _58, _4C);
 			} else {
-				// TODO: is this instead a weird ternary?
-				if (iVar1 + _4C < 0) {
-					iVar1 = 0;
-				}
-				_4C += iVar1;
+				_4C += (_58 + _4C < 0) ? 0 : _58;
+				PRINT(" DOWN up is %d : curr became %d\n", _58, _4C);
 			}
 		}
-		const int inputPressed = mController->mInputPressed;
-		if ((inputPressed & KBBTN_A)) {
-			Jac_StopSe(_50);
-			_50 = seMgr->mSeInfos[_4C].seID;
-		} else if ((inputPressed & KBBTN_B) || (inputPressed & KBBTN_Z)) {
-			Jac_StopSe(_4C);
+
+		if (mController->isPressed(KBBTN_A)) {
+			PRINT("stop %d sound ***********\n", _50);
+			SeMgr::stop(_50);
+			SeInfo* info = seMgr->getIndexInfo(_4C);
+			_50          = info->_00;
+			SeMgr::play(info->_00);
+		} else if (mController->isPressed(KBBTN_B) || mController->isPressed(KBBTN_Z)) {
+			SeMgr::stop(_4C);
 			close();
 		}
 		return;
