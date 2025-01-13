@@ -342,6 +342,7 @@ void SeWin::update()
 	// 0x1000  800a3794
 	// 0x1001  800a3814
 	// 0x1002  800a37e4
+	char _[0x70 - 0x18];
 	switch (mStatus) {
 	case 0x1000: { // ok begin
 		_54--;
