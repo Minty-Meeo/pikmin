@@ -5,27 +5,15 @@
  * Address:	80008BE0
  * Size:	000038
  */
-void exnor_1st(u32, u32)
+u32 exnor_1st(u32 val, u32 count)
 {
-	/*
-	.loc_0x0:
-	  mtctr     r4
-	  cmplwi    r4, 0
-	  blelr-
+	for (int i = 0; i < count; ++i) {
+		const u32 a = val >> 23;
+		const u32 b = val ^ (val >> 7) ^ (val >> 15);
 
-	.loc_0xC:
-	  rlwinm    r0,r3,25,7,31
-	  rlwinm    r4,r3,17,15,31
-	  xor       r0, r3, r0
-	  rlwinm    r5,r3,9,23,31
-	  xor       r0, r4, r0
-	  rlwinm    r3,r3,31,1,31
-	  eqv       r0, r5, r0
-	  rlwinm    r0,r0,30,1,1
-	  or        r3, r3, r0
-	  bdnz+     .loc_0xC
-	  blr
-	*/
+		val = (val >> 1) | ((~(a ^ b) & 1) << 30);
+	}
+	return val;
 }
 
 /*
@@ -33,27 +21,15 @@ void exnor_1st(u32, u32)
  * Address:	80008C20
  * Size:	000038
  */
-void exnor(u32, u32)
+u32 exnor(u32 val, u32 count)
 {
-	/*
-	.loc_0x0:
-	  mtctr     r4
-	  cmplwi    r4, 0
-	  blelr-
+	for (int i = 0; i < count; ++i) {
+		const u32 a = val ^ (val << 7) ^ (val << 15);
+		const u32 b = val << 23;
 
-	.loc_0xC:
-	  rlwinm    r0,r3,7,0,24
-	  rlwinm    r4,r3,15,0,16
-	  xor       r0, r3, r0
-	  rlwinm    r5,r3,23,0,8
-	  xor       r0, r4, r0
-	  rlwinm    r3,r3,1,0,30
-	  eqv       r0, r5, r0
-	  rlwinm    r0,r0,2,30,30
-	  or        r3, r3, r0
-	  bdnz+     .loc_0xC
-	  blr
-	*/
+		val = (val << 1) | ((~(b ^ a) >> 30) & 2);
+	}
+	return val;
 }
 
 /*
