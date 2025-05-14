@@ -149,8 +149,20 @@ void Jac_SelfInitHeap(jaheap_* heap, u32 param_2, u32 param_3, u32 param_4)
  * Address:	8000ECA0
  * Size:	000100
  */
-void Jac_SelfAllocHeap(jaheap_*, jaheap_*, u32, u32)
+BOOL Jac_SelfAllocHeap(jaheap_* heap1, jaheap_* heap2, u32 param_3, u32 param_4)
 {
+	if (heap1->_08 && heap1->_08 != -1) {
+		return FALSE;
+	}
+	heap1->_08 = param_4;
+	heap1->_10 = param_3;
+	heap1->_0C = 0;
+	heap1->_00 = 0;
+	heap1->_01 = heap2->_01;
+	heap1->_02 = 0;
+	heap1->_14 = NULL;
+	heap1->_18 = heap2;
+
 	/*
 	.loc_0x0:
 	  lwz       r7, 0x8(r3)
@@ -285,148 +297,93 @@ void Jac_InitMotherHeap(jaheap_* heap, u32 param_2, u32 param_3, u8 param_4)
  * Address:	8000EE40
  * Size:	0001B4
  */
-BOOL Jac_AllocHeap(jaheap_*, jaheap_*, u32)
+BOOL Jac_AllocHeap(jaheap_* heapA, jaheap_* heapB, u32 param_3)
 {
-	/*
-	.loc_0x0:
-	  lwz       r6, 0x8(r4)
-	  addi      r0, r5, 0x1F
-	  rlwinm    r0,r0,0,0,26
-	  cmplwi    r6, 0
-	  bne-      .loc_0x1C
-	  li        r3, 0
-	  blr
+	u32 uVar1;
+	u32 uVar2;
+	u32 uVar3;
+	jaheap_* pjVar4;
+	jaheap_* pjVar5;
+	jaheap_* pjVar6;
+	u32 in_r11;
+	u32 uVar7;
 
-	.loc_0x1C:
-	  lwz       r5, 0x8(r3)
-	  cmplwi    r5, 0
-	  beq-      .loc_0x3C
-	  addis     r5, r5, 0x1
-	  cmplwi    r5, 0xFFFF
-	  beq-      .loc_0x3C
-	  li        r3, 0
-	  blr
+	uVar1 = param_3 + 0x1f & 0xffffffe0;
 
-	.loc_0x3C:
-	  lwz       r7, 0xC(r4)
-	  lwz       r5, 0x10(r4)
-	  sub       r5, r5, r7
-	  cmplw     r5, r0
-	  bge-      .loc_0x12C
-	  lwz       r7, 0x14(r4)
-	  lis       r5, 0x1000
-	  addi      r8, r6, 0
-	  subi      r12, r5, 0x1
-	  addi      r9, r7, 0
-	  li        r10, 0
+	uVar3 = heapB->_08;
 
-	.loc_0x68:
-	  cmplwi    r9, 0
-	  beq-      .loc_0xA8
-	  lwz       r6, 0x8(r9)
-	  sub       r5, r6, r8
-	  cmplw     r5, r0
-	  blt-      .loc_0x98
-	  sub       r5, r5, r0
-	  cmplw     r5, r12
-	  bge-      .loc_0x98
-	  addi      r10, r9, 0
-	  addi      r11, r8, 0
-	  addi      r12, r5, 0
+	if (uVar3 == 0) {
+		return FALSE;
+	}
+	if ((heapA->_08 != 0) && (heapA->_08 != -1)) {
+		return FALSE;
+	}
 
-	.loc_0x98:
-	  lwz       r5, 0x10(r9)
-	  lwz       r9, 0x1C(r9)
-	  add       r8, r6, r5
-	  b         .loc_0x68
+	if (uVar1 > heapB->_10 - heapB->_0C) {
+		uVar7  = 0xfffffff;
+		pjVar6 = NULL;
+		pjVar4 = heapB->_14;
+		for (pjVar5 = pjVar4; pjVar5; pjVar5 = pjVar5->_1C) {
+			uVar2 = pjVar5->_08 - uVar3;
+			if (uVar1 <= uVar2) {
+				uVar2 -= uVar1;
+				if (uVar2 < uVar7) {
+					pjVar6 = pjVar5;
+					in_r11 = uVar3;
+					uVar7  = uVar2;
+				}
+			}
+			uVar3 = pjVar5->_08 + pjVar5->_10;
+		}
+		if (pjVar6) {
+			if (pjVar6 == pjVar4) {
+				heapA->_1C = pjVar4;
+				heapB->_14 = heapA;
+			} else {
+				do {
+					pjVar5 = pjVar4;
+					pjVar4 = pjVar5->_1C;
+				} while (pjVar4 != pjVar6);
+				heapA->_1C  = pjVar4;
+				pjVar5->_1C = heapA;
+			}
+			heapA->_08 = in_r11;
+			heapA->_10 = uVar1;
+			heapA->_0C = 0;
+			heapA->_00 = 0;
+			heapA->_01 = heapB->_01;
+			heapA->_02 = 0;
+			heapA->_14 = NULL;
+			heapA->_18 = heapB;
+			heapB->_02 = heapB->_02 + 1;
+			return TRUE;
+		}
+		return FALSE;
+	}
 
-	.loc_0xA8:
-	  cmplwi    r10, 0
-	  bne-      .loc_0xB8
-	  li        r3, 0
-	  blr
-
-	.loc_0xB8:
-	  cmplw     r10, r7
-	  bne-      .loc_0xCC
-	  stw       r7, 0x1C(r3)
-	  stw       r3, 0x14(r4)
-	  b         .loc_0xF0
-
-	.loc_0xCC:
-	  mr        r6, r7
-
-	.loc_0xD0:
-	  lwz       r5, 0x1C(r6)
-	  cmplw     r5, r10
-	  bne-      .loc_0xE8
-	  stw       r5, 0x1C(r3)
-	  stw       r3, 0x1C(r6)
-	  b         .loc_0xF0
-
-	.loc_0xE8:
-	  mr        r6, r5
-	  b         .loc_0xD0
-
-	.loc_0xF0:
-	  stw       r11, 0x8(r3)
-	  li        r5, 0
-	  stw       r0, 0x10(r3)
-	  stw       r5, 0xC(r3)
-	  stb       r5, 0x0(r3)
-	  lbz       r0, 0x1(r4)
-	  stb       r0, 0x1(r3)
-	  sth       r5, 0x2(r3)
-	  stw       r5, 0x14(r3)
-	  stw       r4, 0x18(r3)
-	  li        r3, 0x1
-	  lhz       r5, 0x2(r4)
-	  addi      r0, r5, 0x1
-	  sth       r0, 0x2(r4)
-	  blr
-
-	.loc_0x12C:
-	  add       r5, r6, r7
-	  li        r6, 0
-	  stw       r5, 0x8(r3)
-	  stw       r0, 0x10(r3)
-	  stw       r6, 0xC(r3)
-	  stb       r6, 0x0(r3)
-	  lbz       r5, 0x1(r4)
-	  stb       r5, 0x1(r3)
-	  sth       r6, 0x2(r3)
-	  stw       r6, 0x14(r3)
-	  stw       r4, 0x18(r3)
-	  lwz       r7, 0x14(r4)
-	  cmplwi    r7, 0
-	  bne-      .loc_0x170
-	  stw       r3, 0x14(r4)
-	  stw       r6, 0x1C(r3)
-	  b         .loc_0x18C
-
-	.loc_0x170:
-	  lwz       r5, 0x1C(r7)
-	  cmplwi    r5, 0
-	  bne-      .loc_0x184
-	  stw       r3, 0x1C(r7)
-	  b         .loc_0x18C
-
-	.loc_0x184:
-	  mr        r7, r5
-	  b         .loc_0x170
-
-	.loc_0x18C:
-	  li        r5, 0
-	  stw       r5, 0x1C(r3)
-	  li        r3, 0x1
-	  lwz       r5, 0xC(r4)
-	  add       r0, r5, r0
-	  stw       r0, 0xC(r4)
-	  lhz       r5, 0x2(r4)
-	  addi      r0, r5, 0x1
-	  sth       r0, 0x2(r4)
-	  blr
-	*/
+	heapA->_08 = uVar3 + heapB->_0C;
+	heapA->_10 = uVar1;
+	heapA->_0C = 0;
+	heapA->_00 = 0;
+	heapA->_01 = heapB->_01;
+	heapA->_02 = 0;
+	heapA->_14 = NULL;
+	heapA->_18 = heapB;
+	pjVar4     = heapB->_14;
+	if (heapB->_14 == NULL) {
+		heapB->_14 = heapA;
+		heapA->_1C = NULL;
+	} else {
+		do {
+			pjVar5 = pjVar4;
+			pjVar4 = pjVar5->_1C;
+		} while (pjVar4);
+		pjVar5->_1C = heapA;
+	}
+	heapA->_1C = NULL;
+	heapB->_0C += uVar1;
+	heapB->_02 += 1;
+	return TRUE;
 }
 
 /*
@@ -586,42 +543,22 @@ void Jac_DeleteHeap(jaheap_*)
  * Address:	8000F1C0
  * Size:	000064
  */
-static void Jac_Move_Children(jaheap_*, s32)
+static void Jac_Move_Children(jaheap_* heap, s32 param_2)
 {
-	/*
-	.loc_0x0:
-	  mflr      r0
-	  stw       r0, 0x4(r1)
-	  stwu      r1, -0x18(r1)
-	  stmw      r30, 0x10(r1)
-	  mr.       r30, r4
-	  beq-      .loc_0x50
-	  lwz       r31, 0x14(r3)
+	jaheap_* heap_00;
 
-	.loc_0x1C:
-	  cmplwi    r31, 0
-	  beq-      .loc_0x50
-	  lwz       r0, 0x8(r31)
-	  add       r0, r0, r30
-	  stw       r0, 0x8(r31)
-	  lwz       r0, 0x14(r31)
-	  cmplwi    r0, 0
-	  beq-      .loc_0x48
-	  addi      r3, r31, 0
-	  addi      r4, r30, 0
-	  bl        .loc_0x0
+	if (!param_2)
+		return;
 
-	.loc_0x48:
-	  lwz       r31, 0x1C(r31)
-	  b         .loc_0x1C
-
-	.loc_0x50:
-	  lwz       r0, 0x1C(r1)
-	  lmw       r30, 0x10(r1)
-	  addi      r1, r1, 0x18
-	  mtlr      r0
-	  blr
-	*/
+	// TODO: Super wrong (infinite loop), but the assembly almost matches.
+	if (heap_00 = heap->_14)
+		do {
+			heap_00->_08 += param_2;
+			if (heap_00->_14) {
+				Jac_Move_Children(heap_00, param_2);
+			}
+			heap_00 = heap_00->_1C;
+		} while (TRUE);
 }
 
 /*
@@ -686,8 +623,23 @@ void Jac_CheckFreeHeap_Linear(jaheap_*)
  * Address:	8000F320
  * Size:	0000C4
  */
-void Jac_ShowHeap(jaheap_*, u32)
+void Jac_ShowHeap(jaheap_* volatile heap, u32 param_2)
 {
+	jaheap_* volatile pjVar1;
+	char test[96] = "        ";
+	jaheap_* heap_NV;
+
+	heap_NV = heap;
+	for (pjVar1 = heap_NV->_14; pjVar1; pjVar1 = pjVar1->_1C) {
+		if (pjVar1->_14) {
+			Jac_ShowHeap(pjVar1, param_2 + 1);
+		}
+	}
+	for (pjVar1 = heap_NV->_24; pjVar1; pjVar1 = pjVar1->_28) {
+		if (pjVar1->_24) {
+			Jac_ShowHeap(pjVar1, param_2 + 1);
+		}
+	}
 	/*
 	.loc_0x0:
 	  mflr      r0
