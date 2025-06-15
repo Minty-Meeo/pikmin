@@ -1118,7 +1118,7 @@ int Piki::graspSituation(Creature** outTarget)
 					grassTarget = item;
 				}
 
-			} else if (item->mObjType == OBJTYPE_Bomb && mColor == Yellow && item->isVisible()) {
+			} else if (item->mObjType == OBJTYPE_Bomb && canHoldBomb() && item->isVisible()) {
 				f32 bombDist = centreDist(this, item);
 				if (bombDist <= item->getCentreSize() + minTestDist) {
 					minTestDist = bombDist;
@@ -1207,7 +1207,7 @@ int Piki::graspSituation(Creature** outTarget)
 	}
 
 	////////// CHECK FOR BOMB GENERATORS (YELLOW ONLY) //////////
-	if (mColor == Yellow) {
+	if (canHoldBomb()) {
 		Creature* bombGenTarget = nullptr;
 		minTestDist             = pikiMgr->mPikiParms->mPikiParms.mIdleAttackSearchRange();
 		Iterator iterBomb(itemMgr);
@@ -2095,13 +2095,13 @@ void Piki::collisionCallback(immut CollEvent& event)
 		}
 	}
 
-	if (distCheck && collider->mObjType == OBJTYPE_Bomb && mColor == Yellow && !collider->isGrabbed() && collider->isVisible()
+	if (distCheck && collider->mObjType == OBJTYPE_Bomb && canHoldBomb() && !collider->isGrabbed() && collider->isVisible()
 	    && collider->isAlive() && mMode == PikiMode::FormationMode && !isHolding()) {
 		changeMode(PikiMode::PickMode, nullptr);
 		return;
 	}
 
-	if (distCheck && collider->mObjType == OBJTYPE_BombGen && mColor == Yellow && !collider->isGrabbed() && collider->isVisible()
+	if (distCheck && collider->mObjType == OBJTYPE_BombGen && canHoldBomb() && !collider->isGrabbed() && collider->isVisible()
 	    && collider->isAlive() && mMode == PikiMode::FormationMode && !isHolding()) {
 		mActiveAction->abandon(nullptr);
 		mActiveAction->mCurrActionIdx = PikiAction::Mine;
