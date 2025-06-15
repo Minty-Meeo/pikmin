@@ -200,6 +200,8 @@ struct Piki : public Creature, public PaniAnimKeyListener {
 	void setSpeed(f32);
 	char* getCurrentMotionName();
 
+	bool canHoldBomb() { return mColor == Yellow; }
+
 	// NB: these are all the DLL inlines. No more.
 
 	void setEraseKill() { mEraseOnKill = true; }
