@@ -59,7 +59,7 @@ typedef u16 wchar_t;
 
 // Defining this macro enables development features removed from the final game.
 #if !defined(BUILD_MATCHING) && !defined(DEVELOP)
-// #define DEVELOP
+#define DEVELOP
 #endif
 
 // For when you have to pass something as a macro argument that contains commas.
