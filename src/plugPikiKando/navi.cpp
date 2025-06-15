@@ -1139,57 +1139,56 @@ void Navi::releasePikis()
 	CI_LOOP(iter)
 	{
 		Piki* piki = static_cast<Piki*>(*iter);
-		int state  = piki->getState();
-		if (piki->isAlive() && piki->mMode != PikiMode::FreeMode && state != PIKISTATE_GrowUp && state != PIKISTATE_Absorb
-		    && state != PIKISTATE_Swallowed && state != PIKISTATE_LookAt && state != PIKISTATE_Dying && state != PIKISTATE_Dead
-		    && state != PIKISTATE_Nukare && state != PIKISTATE_NukareWait && state != PIKISTATE_Pressed && state != PIKISTATE_Drown
-		    && state != PIKISTATE_KinokoChange && state != PIKISTATE_Flick && !piki->isKinoko() && piki->isAIActive()) {
-			pikiList[pikiCount++] = static_cast<Piki*>(*iter);
+		if (!piki->isAlive() && !piki->isAIActive() && piki->isKinoko() && piki->mMode == PikiMode::FreeMode) {
+			continue;
 		}
+		switch (piki->getState()) {
+		case PIKISTATE_GrowUp:
+		case PIKISTATE_Absorb:
+		case PIKISTATE_Swallowed:
+		case PIKISTATE_LookAt:
+		case PIKISTATE_Dying:
+		case PIKISTATE_Dead:
+		case PIKISTATE_Nukare:
+		case PIKISTATE_NukareWait:
+		case PIKISTATE_Pressed:
+		case PIKISTATE_Drown:
+		case PIKISTATE_KinokoChange:
+		case PIKISTATE_Flick:
+			continue;
+		}
+		pikiList[pikiCount++] = piki;
 	}
 
-	if (!pikiCount) {
+	if (pikiCount == 0) {
 		// no pikis to dismiss
 		return;
 	}
-	Vector3f colorCoMs[PikiColorCount + 1]; // each color + bomb-carriers
-	int colorCounts[PikiColorCount + 1];    // each color + bomb-carriers
-	f32 colorSizes[PikiColorCount + 1];
-	int j, i;
-	for (i = 0; i < PikiColorCount + 1; i++) {
+
+	Vector3f colorCoMs[PikiColorCount * 2]; // each color + bomb-carriers
+	u32 colorCounts[PikiColorCount * 2];    // each color + bomb-carriers
+	f32 colorSizes[PikiColorCount * 2];
+
+	for (int i = 0; i < PikiColorCount * 2; i++) {
 		colorCoMs[i].set(0.0f, 0.0f, 0.0f);
 		colorCounts[i] = 0;
 	}
 
-	for (i = 0; i < PikiColorCount + 1; i++) {
-		for (j = 0; j < pikiCount; j++) {
-			if (i == Blue || i == Red) {
-				if (i == pikiList[j]->mColor) {
-					colorCounts[i]++;
-					colorCoMs[i].add(pikiList[j]->mSRT.t);
-				}
-			} else {
-				if (pikiList[j]->mColor == Yellow) {
-					if (pikiList[j]->hasBomb()) {
-						colorCounts[3]++;
-						colorCoMs[3].add(pikiList[j]->mSRT.t);
-					} else {
-						colorCounts[Yellow]++;
-						colorCoMs[Yellow].add(pikiList[j]->mSRT.t);
-					}
-				}
-			}
-		}
+	// Group Pikis into groups based on mColor and hasBomb().
+	for (int i = 0; i < pikiCount; i++) {
+		int idx_offset = pikiList[i]->hasBomb() ? PikiColorCount : 0;
+		colorCounts[pikiList[i]->mColor + idx_offset]++;
+		colorCoMs[pikiList[i]->mColor + idx_offset].add(pikiList[i]->mSRT.t);
 	}
 
-	for (i = 0; i < PikiColorCount + 1; i++) {
+	for (int i = 0; i < PikiColorCount * 2; i++) {
 		if (colorCounts[i] > 0) {
 			colorCoMs[i].multiply(1.0f / colorCounts[i]);
-			colorSizes[i] = (2.5f * pikiList[0]->getSize()) * std::sqrtf(colorCounts[i]);
+			colorSizes[i] = 2.5f * pikiList[0]->getSize() * std::sqrtf(colorCounts[i]);
 		}
 	}
 
-	for (int i = 0; i < PikiColorCount + 1; i++) {
+	for (int i = 0; i < PikiColorCount * 2; i++) {
 		if (colorCounts[i] > 0) {
 			Vector3f sepNaviGroup = colorCoMs[i] - mSRT.t;
 			f32 dist              = sepNaviGroup.normalise() - colorSizes[i] - 15.0f;
@@ -1201,7 +1200,7 @@ void Navi::releasePikis()
 			}
 		}
 
-		for (int j = i + 1; j < PikiColorCount + 1; j++) {
+		for (int j = i + 1; j < PikiColorCount * 2; j++) {
 			if (colorCounts[i] > 0 && colorCounts[j] > 0) {
 				Vector3f colorColorSep = colorCoMs[i] - colorCoMs[j];
 				f32 colorDist          = colorColorSep.normalise() - colorSizes[i] - colorSizes[j];
@@ -1216,11 +1215,11 @@ void Navi::releasePikis()
 		}
 	}
 
-	for (i = 0; i < pikiCount; i++) {
+	for (int i = 0; i < pikiCount; i++) {
 		pikiList[i]->changeMode(PikiMode::FreeMode, this);
 		int color = pikiList[i]->mColor;
 		if (pikiList[i]->hasBomb()) {
-			color = 3;
+			color += PikiColorCount;
 		}
 
 		ActFree* action = static_cast<ActFree*>(pikiList[i]->mActiveAction->getCurrAction());
@@ -1229,8 +1228,6 @@ void Navi::releasePikis()
 			pikiList[i]->mNavi = nullptr;
 		}
 	}
-
-	STACK_PAD_VAR(2);
 }
 
 /**
