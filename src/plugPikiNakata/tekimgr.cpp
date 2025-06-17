@@ -64,6 +64,7 @@ char* TekiMgr::typeNames[TEKI_TypeCount] = {
 	"swallob",  // 32, Spotty Bulbear
 	"frow",     // 33, Wollywog
 	"nakata1",  // 34, ? (unused enemy, crashes)
+	"swalloc",  // 35, Orange Bulborb
 };
 
 int TekiMgr::typeIds[TEKI_TypeCount] = {
@@ -102,6 +103,7 @@ int TekiMgr::typeIds[TEKI_TypeCount] = {
 	'tksb', // 32, Spotty Bulbear
 	'tkfw', // 33, Wollywog
 	'tkn1', // 34, ? (unused enemy, crashes)
+	'tksc', // 35, Orange Bulborb
 };
 
 /*
