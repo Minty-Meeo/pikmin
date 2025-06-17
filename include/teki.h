@@ -109,7 +109,8 @@ enum TekiTypes {
 	TEKI_Swallob  = 32, // 32, Spotty Bulbear
 	TEKI_Frow     = 33, // 33, Wollywog
 	TEKI_Nakata1  = 34, // 34, ? (placeholder enemy, crashes)
-	TEKI_TypeCount,     // 35
+	TEKI_Swalloc  = 35, // 35, Orange Bulborb
+	TEKI_TypeCount,
 };
 
 BEGIN_ENUM_TYPE(TekiInteractType)

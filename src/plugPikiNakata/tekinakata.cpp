@@ -48,6 +48,7 @@ void TekiNakata::makeTekiParameters(TekiMgr* mgr)
 	mgr->mTekiParams[TEKI_Swallob] = new TaiBlackSwallowParameters();
 	mgr->mTekiParams[TEKI_Frow]    = new TaiBlackFrogParameters();
 	mgr->mTekiParams[TEKI_Namazu]  = new TaiCatfishParameters();
+	mgr->mTekiParams[TEKI_Swalloc] = new TaiSwallowParameters();
 }
 
 /**
@@ -172,5 +173,11 @@ void TekiNakata::makeTekis(TekiMgr* mgr)
 		TekiParameters* param = mgr->mTekiParams[TEKI_Namazu];
 		mgr->mStrategyTable->setStrategy(TEKI_Namazu, new TaiChappyStrategy(param));
 		mgr->mTekiSoundTables[TEKI_Namazu] = new TaiCatfishSoundTable();
+	}
+
+	if (mgr->isUsingType(TEKI_Swalloc)) {
+		TekiParameters* param = mgr->mTekiParams[TEKI_Swalloc];
+		mgr->mStrategyTable->setStrategy(TEKI_Swalloc, new TaiSwallowStrategy(param));
+		mgr->mTekiSoundTables[TEKI_Swalloc] = new TaiSwallowSoundTable();
 	}
 }
