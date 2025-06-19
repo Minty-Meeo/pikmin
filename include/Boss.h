@@ -35,7 +35,8 @@ enum BossID {
 	BOSS_BoxSnake    = 9,
 	BOSS_Mizu        = 10,
 	BOSS_Geyzer      = 11,
-	BOSS_IDCOUNT, // 12
+	BOSS_Bigfoot     = 12,
+	BOSS_IDCOUNT, // 13
 };
 
 /**
@@ -52,6 +53,7 @@ enum GenBossID {
 	GENBOSS_BoxSnake = 7,
 	GENBOSS_Mizu     = 8,
 	GENBOSS_Geyzer   = 9,
+	GENBOSS_Bigfoot  = 10,
 };
 
 /**
@@ -373,6 +375,7 @@ struct BossMgr : public ObjectMgr {
 	void initKingBack(int);
 	void initMizu(int);
 	void initGeyzer(int);
+	void initBigfoot(int);
 	void setBossParam(Boss*, GenObjectBoss*);
 	Boss* createBoss(int);
 
