@@ -663,19 +663,38 @@ TAIkabekuiCStrategy::TAIkabekuiCStrategy()
 	setState(TAIkabekuiCStateID::MovingPiki, state);
 
 	// STATE 6 - BiteAttack
+#ifdef BUGFIX // Is this a bug, or is it Intentional Game Design?  Hmm...
+	state = new TaiState(5);
+	j     = 0;
+	state->setAction(j++, inWaterDamage);
+	state->setAction(j++, pressCheck);
+	state->setAction(j++, damage);
+	state->setAction(j++, deadCheck);
+#else
 	state = new TaiState(3);
 	j     = 0;
 	state->setAction(j++, inWaterDamage);
 	state->setAction(j++, pressCheck);
+#endif
 	state->setAction(j++, kabekuiBite);
 	setState(TAIkabekuiCStateID::BiteAttack, state);
 
 	// STATE 7 - BiteChewing
+#ifdef BUGFIX // Is this a bug, or is it Intentional Game Design?  Hmm...
+	state = new TaiState(6);
+	j     = 0;
+	state->setAction(j++, inWaterDamage);
+	state->setAction(j++, stop);
+	state->setAction(j++, pressCheck);
+	state->setAction(j++, damage);
+	state->setAction(j++, deadCheck);
+#else
 	state = new TaiState(4);
 	j     = 0;
 	state->setAction(j++, inWaterDamage);
 	state->setAction(j++, stop);
 	state->setAction(j++, pressCheck);
+#endif
 	state->setAction(j++, eatPiki);
 	setState(TAIkabekuiCStateID::BiteChewing, state);
 
