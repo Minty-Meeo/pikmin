@@ -62,10 +62,11 @@ enum EObjType {
 	OBJTYPE_Nucleus   = 48, // both Nucleus and CoreNucleus
 	OBJTYPE_Mizu      = 49, // both Mizu and Geyzer
 	OBJTYPE_XXX3      = 50,
-	OBJTYPE_BossEnd   = OBJTYPE_XXX3,
+	OBJTYPE_Bigfoot   = 51,
+	OBJTYPE_BossEnd   = OBJTYPE_Bigfoot,
 
-	OBJTYPE_Plant  = 51, // Plant
-	OBJTYPE_Pellet = 52, // Pellet
+	OBJTYPE_Plant  = 52, // Plant
+	OBJTYPE_Pellet = 53, // Pellet
 	OBJTYPE_Navi   = 54, // Captain
 	OBJTYPE_Teki   = 55, // Enemy
 	OBJTYPE_NULL   = 57,

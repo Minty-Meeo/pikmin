@@ -704,13 +704,13 @@ bool InteractHitEffect::actBoss(Boss* boss)
 {
 	switch (boss->mObjType) {
 	case OBJTYPE_Spider:
+	case OBJTYPE_Bigfoot:
 		effectMgr->create(EffectMgr::EFF_Piki_BigHit, mEffectPos, nullptr, nullptr);
 		return true;
 
 	case OBJTYPE_Snake:
 		effectMgr->create(EffectMgr::EFF_Piki_BigHit, mEffectPos, nullptr, nullptr);
 		return true;
-		;
 
 	case OBJTYPE_King:
 		effectMgr->create(EffectMgr::EFF_Piki_BigHit, mEffectPos, nullptr, nullptr);
@@ -722,7 +722,6 @@ bool InteractHitEffect::actBoss(Boss* boss)
 	case OBJTYPE_Pom:
 		effectMgr->create(EffectMgr::EFF_Piki_BigHit, mEffectPos, nullptr, nullptr);
 		return true;
-		;
 	}
 
 	return false;

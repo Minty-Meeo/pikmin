@@ -55,9 +55,10 @@ ObjType _info[] = {
 	{ 46, "boss:Pom" },
 	{ 47, "boss:KingBack" },
 	{ 49, "boss:Mizu" },
-	{ 50, "boss:XXX3" },
-	{ 51, "PLANT" },
-	{ 52, "PELLET" },
+	{ 50, "boss:Bigfoot" },
+	{ 51, "boss:XXX3" },
+	{ 52, "PLANT" },
+	{ 53, "PELLET" },
 	{ 57, "" }
 };
 
