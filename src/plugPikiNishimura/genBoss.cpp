@@ -200,6 +200,10 @@ void GenObjectBoss::updateUseList(Generator*, int count)
 		bossMgr->addUseCount(BOSS_Geyzer, 1);
 		return;
 	}
+	if (mBossID == GENBOSS_Bigfoot) {
+		bossMgr->addUseCount(BOSS_Bigfoot, 1);
+		return;
+	}
 }
 
 /*
@@ -230,6 +234,8 @@ Creature* GenObjectBoss::birth(BirthInfo& info)
 		boss = bossMgr->create(GENBOSS_Mizu, info, this);
 	} else if (mBossID == GENBOSS_Geyzer) {
 		boss = bossMgr->create(GENBOSS_Geyzer, info, this);
+	} else if (mBossID == GENBOSS_Bigfoot) {
+		boss = bossMgr->create(GENBOSS_Bigfoot, info, this);
 	}
 
 	return boss;
