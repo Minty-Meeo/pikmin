@@ -352,6 +352,23 @@ void BossMgr::constructBoss()
 		}
 		memStat->end("mizu rest");
 	}
+
+	// BIGFOOT (Raging Long Legs)
+	if (useBoss(BOSS_Bigfoot)) {
+		memStat->start("bigfoot shape");
+		Shape* shape = gameflow.loadShape("bosses/bigfoot/bigfoot.mod", true);
+		memStat->end("bigfoot shape");
+
+		memStat->start("bigfoot anim");
+		mShapeObjects[BOSS_Bigfoot] = new BossShapeObject(shape, "bigfoot");
+		memStat->end("bigfoot anim");
+
+		memStat->start("bigfoot rest");
+		mBossProps[BOSS_Bigfoot] = new SpiderProp();
+		static_cast<SpiderProp*>(mBossProps[BOSS_Bigfoot])->load("bosses/bigfoot/", "parms.bin", 1);
+		init(BOSS_Bigfoot, getUseCount(BOSS_Bigfoot));
+		memStat->end("bigfoot rest");
+	}
 }
 
 /**
@@ -502,6 +519,15 @@ void BossMgr::initGeyzer(int count)
 	}
 }
 
+void BossMgr::initBigfoot(int count)
+{
+    for (int i = 0; i < count; i++) {
+        Spider* bigfoot = new Spider(mBossProps[BOSS_Bigfoot]);
+        BossNode* node  = new BossNode(bigfoot);
+        mFreeNodes[BOSS_Bigfoot].add(node);
+    }
+}
+
 /**
  * @TODO: Documentation
  * @note UNUSED Size: 000094
@@ -585,6 +611,9 @@ void BossMgr::init(int bossID, int count)
 		break;
 	case BOSS_Geyzer:
 		initGeyzer(count);
+		break;
+	case BOSS_Bigfoot:
+		initBigfoot(count);
 		break;
 	}
 
@@ -700,6 +729,14 @@ Creature* BossMgr::create(int genBossID, BirthInfo& birthInfo, GenObjectBoss* ge
 		if (boss) {
 			boss->initBoss(birthInfo, OBJTYPE_Mizu);
 			static_cast<Mizu*>(boss)->initGeyzer(birthInfo.mPosition);
+			setBossParam(boss, genBoss);
+		}
+		break;
+	case GENBOSS_Bigfoot:
+		boss = createBoss(BOSS_Bigfoot);
+		if (boss) {
+			boss->initBoss(birthInfo, OBJTYPE_Spider);
+			boss->init(birthInfo.mPosition);
 			setBossParam(boss, genBoss);
 		}
 		break;
