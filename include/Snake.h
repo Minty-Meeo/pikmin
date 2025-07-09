@@ -3,6 +3,7 @@
 
 #include "Boss.h"
 #include "Collision.h"
+#include "MapMgr.h"
 #include "types.h"
 #include "zen/CallBack.h"
 #include "zen/particle.h"
@@ -314,6 +315,8 @@ struct Snake : public Boss {
 	virtual void exitCourse();         // _110
 	virtual void drawShape(Graphics&); // _120
 
+	void draw(Graphics&);
+
 	void setBossType(bool);
 
 	inline SnakeProp* getSnakeProp() { return static_cast<SnakeProp*>(mProps); }
@@ -327,6 +330,19 @@ struct Snake : public Boss {
 	SnakeAi* mSnakeAi;                  // _3C8
 	SnakeBody* mSnakeBody;              // _3CC
 	Vector3f mSpawnPosition;            // _3D0
+	ShadowCaster mShadowCaster;         // cast mDrawer to SnakeDrawer*
+};
+
+struct SnakeDrawer : public Node {
+	inline SnakeDrawer(Snake* snake)
+	    : Node("")
+	    , mSnake(snake)
+	{
+	}
+
+	virtual void draw(Graphics&);
+
+	Snake* mSnake;
 };
 
 /**
