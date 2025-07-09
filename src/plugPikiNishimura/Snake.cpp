@@ -1,4 +1,5 @@
 #include "Snake.h"
+#include "DayMgr.h"
 #include "DebugLog.h"
 #include "Graphics.h"
 #include "Shape.h"
@@ -35,6 +36,9 @@ Snake::Snake(CreatureProp* props)
 	mBoundsUpdater = new BoundSphereUpdater(this);
 	mSnakeAi       = new SnakeAi(this);
 	mSnakeBody     = new SnakeBody(this);
+	mShadowCaster.initCore("");
+	mShadowCaster.initShadow();
+	mShadowCaster.mDrawer = new SnakeDrawer(this);
 }
 
 /**
@@ -74,6 +78,9 @@ void Snake::init(immut Vector3f& pos)
 	mSpawnPosition = pos;
 	mSnakeAi->initAI(this);
 	mSnakeBody->init(pos, this);
+	mShadowCaster.mLightCamera.mFov = 35.0f;
+	mapMgr->mShadowCaster.add(&mShadowCaster);
+	setShadowNeed(true);
 	mCollInfo->setUpdater('bnds', mBoundsUpdater);
 	mCollInfo->makeTubesChild('tube', 7);
 }
@@ -86,6 +93,7 @@ void Snake::doKill()
 	setIsAlive(0);
 	setIsAtari(0);
 	mSnakeBody->killCallBackEffect(false);
+	mShadowCaster.del();
 	bossMgr->kill(this);
 }
 
@@ -106,6 +114,31 @@ void Snake::update()
 	moveVelocity();
 	moveNew(gsys->getFrameTime());
 	doAnimation();
+}
+
+void Snake::draw(Graphics& gfx)
+{
+	Vector3f lightDirection = mapMgr->mDayMgr->mSunPosition - mSRT.t;
+	lightDirection.y        = 0.0f;
+	lightDirection.normalise();
+	lightDirection.multiply(150.0f);
+
+	Vector3f centre = mCollInfo->getBoundingSphere()->mCentre;
+	f32 yDiff       = centre.y - mSRT.t.y;
+	if (yDiff > 0.0f) {
+		centre.y += yDiff * 3.0f;
+	}
+
+	mShadowCaster.mSourcePosition.set(centre.x + lightDirection.x, centre.y + 1000.0f, centre.z + lightDirection.z);
+	mShadowCaster.mTargetPosition.set(mSRT.t.x, mSRT.t.y + 50.0f, mSRT.t.z);
+
+	Matrix4f viewMatrix;
+	mWorldMtx.makeSRT(mSRT);
+	gfx.mCamera->mLookAtMtx.multiplyTo(mWorldMtx, viewMatrix);
+
+	mAnimator.updateContext();
+	mShapeObject->mShape->updateAnim(gfx, viewMatrix, nullptr);
+	mSnakeBody->refresh(mShapeObject, gfx);
 }
 
 /**
@@ -161,4 +194,10 @@ void Snake::doAnimation()
 	}
 
 	mSnakeBody->update();
+}
+
+void SnakeDrawer::draw(Graphics& gfx)
+{
+	mSnake->draw(gfx);
+	mSnake->drawShape(gfx);
 }
