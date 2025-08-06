@@ -152,9 +152,7 @@ void MapSlider::update()
 	} else {
 		mFaceDirection += gsys->getFrameTime();
 		mLocalSRT.r.z = mFaceDirection * 0.5f;
-		mLocalSRT.t.x = mSliderPosition.x;
-		mLocalSRT.t.y = mSliderPosition.y;
-		mLocalSRT.t.z = mSliderPosition.z;
+		mLocalSRT.t = mSliderPosition;
 	}
 
 	DynCollShape::update();

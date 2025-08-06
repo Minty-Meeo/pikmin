@@ -1469,9 +1469,7 @@ void NaviGeyzerState::init(Navi* navi)
 void NaviGeyzerState::exec(Navi* navi)
 {
 	if (mGeyserState == 0) {
-		Vector3f vel(0.0f, 200.0f, 0.0f);
-		navi->mVelocity       = vel;
-		navi->mTargetVelocity = vel;
+		navi->mVelocity = navi->mTargetVelocity = Vector3f(0.0f, 200.0f, 0.0f);
 		if (navi->mSRT.t.y >= _2C) {
 			PRINT("**UP %.1f/%.1f!\n", navi->mSRT.t.y, _2C);
 			mGeyserState = 2;
@@ -1482,10 +1480,8 @@ void NaviGeyzerState::exec(Navi* navi)
 	}
 
 	if (!_30) {
-		_30                   = true;
-		Vector3f velocity     = getThrowVelocity(navi->mSRT.t, 100.0f, _20, Vector3f(0.0f, 0.0f, 0.0f));
-		navi->mVelocity       = velocity;
-		navi->mTargetVelocity = velocity;
+		_30             = true;
+		navi->mVelocity = navi->mTargetVelocity = getThrowVelocity(navi->mSRT.t, 100.0f, _20, Vector3f(0.0f, 0.0f, 0.0f));
 		PRINT("GEYZER VEL SET!\n");
 	}
 

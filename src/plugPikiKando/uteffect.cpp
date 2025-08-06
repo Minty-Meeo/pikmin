@@ -407,7 +407,7 @@ void BurnEffect::emit(immut EffectParm& parm)
 		Vector3f vel(*_0C);
 		vel.y = 0.0f;
 		vel.multiply(0.01f);
-		mEfxA->setAirField(Vector3f(vel), true);
+		mEfxA->setAirField(vel, true);
 	}
 
 	mEfxB = effectMgr->create(EffectMgr::EFF_Piki_FireSparkles, *parm.mPositionRef, this, nullptr);
@@ -416,7 +416,7 @@ void BurnEffect::emit(immut EffectParm& parm)
 		Vector3f vel(*_0C);
 		vel.y = 0.0f;
 		vel.multiply(0.01f);
-		mEfxB->setAirField(Vector3f(vel), true);
+		mEfxB->setAirField(vel, true);
 	}
 }
 

@@ -90,10 +90,7 @@ void MizuAi::killCallBackEffect(bool doForceFinish)
  */
 void MizuAi::setEveryFrame()
 {
-	Vector3f* vec   = mMizu->getInitPosition();
-	mMizu->mSRT.t.x = vec->x;
-	mMizu->mSRT.t.y = vec->y;
-	mMizu->mSRT.t.z = vec->z;
+	mMizu->mSRT.t = *mMizu->getInitPosition();
 }
 
 /**

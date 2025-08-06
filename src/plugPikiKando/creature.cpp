@@ -73,10 +73,7 @@ void Creature::load(RandomAccessStream& stream, bool doLoadPosition)
 	PRINT("* loading creature %s\n", ObjType::getName(mObjType));
 	int startPos = stream.getPosition();
 	if (doLoadPosition) {
-		// idk why they didn't use the Vector3f::read inline here, but they didn't
-		mSRT.t.x = stream.readFloat();
-		mSRT.t.y = stream.readFloat();
-		mSRT.t.z = stream.readFloat();
+		mSRT.t.read(stream);
 	}
 
 	doLoad(stream);
@@ -91,10 +88,7 @@ void Creature::save(RandomAccessStream& stream, bool doSavePosition)
 	PRINT("* saving creature %s\n", ObjType::getName(mObjType));
 	int startPos = stream.getPosition();
 	if (doSavePosition) {
-		// idk why they didn't use the Vector3f::write inline here but they didn't
-		stream.writeFloat(mSRT.t.x);
-		stream.writeFloat(mSRT.t.y);
-		stream.writeFloat(mSRT.t.z);
+		mSRT.t.write(stream);
 	}
 
 	doSave(stream);
