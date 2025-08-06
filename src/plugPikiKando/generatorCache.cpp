@@ -98,14 +98,11 @@ void GeneratorCache::saveCard(RandomAccessStream& output)
 	output.writeInt(mFreeSize);
 	PRINT("heap saved @ %d\n", output.getPosition());
 
-	int i;
-	for (i = 0; i < GENCACHE_HEAP_SIZE; i++) {
-		output.writeByte(mCacheHeap[i]);
-	}
+	output.write(mCacheHeap, GENCACHE_HEAP_SIZE);
 
 	int aliveCount;
 	int deadCount;
-	for (i = STAGE_START; i < STAGE_COUNT; i++) {
+	for (int i = STAGE_START; i < STAGE_COUNT; i++) {
 		Cache* cache = findCache(mAliveCacheList, i);
 		if (cache) {
 			output.writeByte(0);
@@ -143,13 +140,10 @@ void GeneratorCache::loadCard(RandomAccessStream& input)
 	}
 
 	PRINT("heap load from %d\n", input.getPosition());
-	int i;
-	for (i = 0; i < GENCACHE_HEAP_SIZE; i++) {
-		mCacheHeap[i] = input.readByte();
-	}
+	input.read(mCacheHeap, GENCACHE_HEAP_SIZE);
 
 	Cache tempList;
-	for (i = STAGE_START; i < STAGE_COUNT; i++) {
+	for (int i = STAGE_START; i < STAGE_COUNT; i++) {
 		u8 deadOrAlive = input.readByte(); // 0 = alive, 255 = dead
 		Cache* cache   = findCache(mDeadCacheList, i);
 		if (!cache) {
