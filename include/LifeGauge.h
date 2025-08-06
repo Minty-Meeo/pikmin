@@ -69,11 +69,6 @@ struct LifeGaugeMgr {
  * @brief TODO
  */
 struct LifeGauge {
-	enum RenderStyle {
-		Bar, // The always-overwritten default.
-		Wheel,
-	};
-
 	LifeGauge();
 
 	void updValue(f32, f32);
@@ -85,7 +80,6 @@ struct LifeGauge {
 	Vector3f mPosition;             // _00
 	Vector3f mOffset;               // _0C
 	int mDisplayState;              // _18
-	RenderStyle mRenderStyle;       // _1C
 	bool mSnapToTargetHealth;       // _20
 	f32 mFadeTransitionValue;       // _24
 	f32 mVisibleHoldTimer;          // _28

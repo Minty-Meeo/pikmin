@@ -234,7 +234,6 @@ BTeki::BTeki()
     : Creature(nullptr)
 {
 	mObjType                = OBJTYPE_Teki;
-	mLifeGauge.mRenderStyle = LifeGauge::Wheel;
 	mProps                  = new CreatureProp();
 	mPersonality            = new TekiPersonality();
 	mTekiAnimator           = new PaniTekiAnimator();

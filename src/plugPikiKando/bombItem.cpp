@@ -81,7 +81,6 @@ BombItem::BombItem(CreatureProp* props, ItemShapeObject* shape, SimpleAI* ai)
 	mLifeGauge.mSnapToTargetHealth = true;
 	mItemShapeObject               = shape;
 	mStateMachine                  = ai;
-	mLifeGauge.mRenderStyle        = LifeGauge::Wheel;
 }
 
 /**
