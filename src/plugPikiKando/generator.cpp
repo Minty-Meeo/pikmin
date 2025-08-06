@@ -725,9 +725,7 @@ void Generator::read(RandomAccessStream& input)
 	mGeneratorVersion != 'v0.0';
 
 	if (!ramMode) {
-		for (int i = 0; i < 32; i++) {
-			mMemo[i] = input.readByte();
-		}
+		input.read(mMemo, sizeof(mMemo));
 	} else {
 		mAliveCount      = input.readShort();
 		mLatestSpawnDay  = input.readShort();

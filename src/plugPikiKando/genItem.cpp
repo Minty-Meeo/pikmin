@@ -98,13 +98,8 @@ void GenObjectItem::doRead(RandomAccessStream& stream)
 	}
 
 	if (mVersion != 'v0.0') {
-		for (int i = 0; i < 32; i++) {
-			mStageName[i] = stream.readByte();
-		}
-
-		for (int i = 0; i < 32; i++) {
-			mPrintName[i] = stream.readByte();
-		}
+		stream.read(mStageName, sizeof(mStageName));
+		stream.read(mPrintName, sizeof(mPrintName));
 	} else {
 		sprintf(mStageName, " ");
 		sprintf(mPrintName, " ");
@@ -123,13 +118,8 @@ void GenObjectItem::doWrite(RandomAccessStream& stream)
 
 	stream.writeString(ObjType::getName(mObjType));
 	if (getLatestVersion() != 'v0.0') {
-		for (int i = 0; i < 32; i++) {
-			stream.writeByte(mStageName[i]);
-		}
-
-		for (int i = 0; i < 32; i++) {
-			stream.writeByte(mPrintName[i]);
-		}
+		stream.write(mStageName, sizeof(mStageName));
+		stream.write(mPrintName, sizeof(mPrintName));
 	}
 }
 

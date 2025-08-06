@@ -17,26 +17,27 @@ struct Stream {
 	// _04 = VTBL
 	immut char* mPath; // _00
 
-	virtual int readInt();                      // _08
-	virtual u8 readByte();                      // _0C
-	virtual s16 readShort();                    // _10
-	virtual f32 readFloat();                    // _14
-	virtual void readString(char*, int);        // _18
-	virtual void readString(String&);           // _1C
-	virtual char* readString();                 // _20
-	virtual void writeInt(int);                 // _24
-	virtual void writeByte(u8);                 // _28
-	virtual void writeShort(s16);               // _2C
-	virtual void writeFloat(f32);               // _30
-	virtual void writeString(immut char*);      // _34
-	virtual void writeString(immut String&);    // _38
-	virtual void read(void*, int);              // _3C
-	virtual void write(immut void*, int);       // _40
-	virtual int getPending();                   // _44
-	virtual int getAvailable();                 // _48
-	virtual void close();                       // _4C
-	virtual bool getClosing() { return false; } // _50 (weak)
-	virtual void flush() { }                    // _54 (weak)
+	int readInt();
+	u8 readByte();
+	s16 readShort();
+	f32 readFloat();
+	void readString(char*, int);
+	void readString(String&);
+	char* readString();
+	void writeInt(int);
+	void writeByte(u8);
+	void writeShort(s16);
+	void writeFloat(f32);
+	void writeString(immut char*);
+	void writeString(immut String&);
+
+	virtual void read(void*, int);
+	virtual void write(immut void*, int);
+	virtual int getPending();
+	virtual int getAvailable();
+	virtual void close();
+	virtual bool getClosing() { return false; }
+	virtual void flush() { }
 
 	void print(immut char*, ...);
 };

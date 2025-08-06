@@ -55,11 +55,5 @@ immut char* P2DStream::getResource(int dataType)
  */
 void P2DStream::align(int paddingAmount)
 {
-	int position        = mStream->getPosition();
-	u32 mask            = ~(paddingAmount - 1);
-	int alignedPosition = (position + (paddingAmount - 1)) & mask;
-
-	for (int i = 0; i < alignedPosition - position; i++) {
-		mStream->readByte();
-	}
+	mStream->skipPadding(paddingAmount);
 }
