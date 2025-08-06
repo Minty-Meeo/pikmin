@@ -429,11 +429,6 @@ Navi::Navi(CreatureProp* props, int naviID)
     : Creature(props)
 {
 	_700 = 4;
-	memStat->start("naviCaster");
-	mShadowCaster.initCore("");
-	mShadowCaster.mDrawer           = new NaviDrawer(this);
-	mShadowCaster.mLightCamera.mFov = 20.0f;
-	memStat->end("naviCaster");
 
 	memStat->start("naviEff");
 	mBurnEffect       = new BurnEffect(&mVelocity);
@@ -2013,8 +2008,6 @@ void Navi::refresh(Graphics& gfx)
  */
 void Navi::demoDraw(Graphics& gfx, immut Matrix4f* mtx)
 {
-	mShadowCaster.mSourcePosition.set(mSRT.t.x + 75.0f, mSRT.t.y + 100.0f, mSRT.t.z + 25.0f);
-	mShadowCaster.mTargetPosition.set(mSRT.t.x, mSRT.t.y + 10.0f, mSRT.t.z);
 	mNaviShapeObject->mShape->drawshape(gfx, *gfx.mCamera, nullptr);
 	mCollInfo->updateInfo(gfx, false);
 	mNaviLightPosition = mCollInfo->getSphere('ante')->mCentre;

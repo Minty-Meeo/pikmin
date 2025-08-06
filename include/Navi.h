@@ -16,7 +16,6 @@ struct RippleEffect;
 struct PermanentEffect;
 struct SlimeEffect;
 struct Kontroller;
-struct NaviDrawer;
 struct NaviStateMachine;
 struct GoalItem;
 struct NaviState;
@@ -170,7 +169,6 @@ public:
 	RippleEffect* mRippleEffect;         // _318
 	SlimeEffect* mSlimeEffect;           // _31C
 	NaviStateMachine* mStateMachine;     // _320
-	ShadowCaster mShadowCaster;          // _324, cast mDrawer to NaviDrawer*
 	f32 mMotionSpeed;                    // _6BC
 	int mIsDayEnd;                       // _6C0
 	ShapeDynMaterials mNaviDynMats;      // _6C4
@@ -255,23 +253,6 @@ public:
 	u8 _AD4[0x4];                        // _AD4, unknown
 	f32 _AD8;                            // _AD8
 	AState<Navi>* mCurrState;            // _ADC
-};
-
-/**
- * @brief TODO
- */
-struct NaviDrawer : public Node {
-	NaviDrawer(Navi* navi)
-	    : Node("")
-	{
-		mNavi = navi;
-	}
-
-	virtual void draw(Graphics& gfx) { mNavi->draw(gfx); } // _14 (weak)
-
-	// _00     = VTBL
-	// _00-_20 = Node
-	Navi* mNavi; // _20
 };
 
 extern bool DelayPikiBirth;
