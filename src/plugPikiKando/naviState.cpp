@@ -964,41 +964,6 @@ void NaviContainerState::init(Navi* navi)
 	                       totalExitPendingPikis + GameStat::mapPikis, AIConstant::_instance->mConstants.mMaxPikisOnField());
 	PRINT("FINISH START CONAINER WINDOW ***\n");
 	gameflow.mPauseAll = TRUE;
-	mContainerWinEvent = 0;
-	mContainerWinCount = 0;
-}
-
-/**
- * @todo: Documentation
- */
-void NaviContainerState::informWin(int pikiCnt)
-{
-	PRINT("GOT CONTAINER %d MESSAGE ****\n", pikiCnt);
-
-	// Enter that many pikis
-	if (pikiCnt > 0) {
-		mContainerWinEvent = 1;
-		mContainerWinCount = pikiCnt;
-		return;
-	}
-
-	// Exit that many pikis
-	if (pikiCnt < 0) {
-		mContainerWinEvent = 2;
-		mContainerWinCount = -pikiCnt; // Make positive, because we subtract this amount later
-	}
-}
-
-/**
- * @todo: Documentation
- */
-void NaviContainerState::onCloseWindow()
-{
-	PRINT("GOT CLOSE WIN MESSAGE ******\n");
-
-	if (mContainerWinEvent == 0) {
-		mContainerWinEvent = 3;
-	}
 }
 
 /**

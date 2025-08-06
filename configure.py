@@ -583,7 +583,6 @@ config.libs = [
             Object(not MatchingFor("G98E01_PIKIDEMO"), "plugPikiKando/naviState.cpp"),
             Object(Matching, "plugPikiKando/naviDemoState.cpp"),
             Object(not MatchingFor("G98E01_PIKIDEMO"), "plugPikiKando/gameCoreSection.cpp"),
-            Object(Matching, "plugPikiKando/gmWin.cpp"),
             Object(Matching, "plugPikiKando/gameStat.cpp"),
             Object(Matching, "plugPikiKando/kmath.cpp"),
             Object(Matching, "plugPikiKando/uteffect.cpp"),

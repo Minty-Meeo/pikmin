@@ -6,7 +6,6 @@
 #include "Node.h"
 #include "Parameters.h"
 #include "SoundID.h"
-#include "Win.h"
 #include "jaudio/pikiinter.h"
 #include "types.h"
 
@@ -184,38 +183,6 @@ protected:
 	int mSENum;       ///< _24, current number of managed sound effects.
 	int mMaxInfos;    ///< _28, max number of manageable sound effects (128 by default).
 	SeInfo* mSeInfos; ///< _2C, info for managed sound effects.
-};
-
-/**
- * @brief Unused SE Test window.
- *
- * @note Size: 0x64.
- */
-struct SeWin : public GmWin {
-public:
-	/// Starts window open sequence.
-	virtual void open(); // _10
-
-	/// Begins window close sequence.
-	virtual void close(); // _14
-
-	/// Updates window based on controller input and state.
-	virtual void update(); // _18
-
-	/// Prints current sound effect information to screen.
-	virtual void doRender(Graphics& gfx); // _1C
-
-protected:
-	// _00     = VTBL
-	// _00-_14 = CoreNode
-	// _00-_48 = GmWin
-	Controller* mController;  ///< _48, active controller.
-	int mCurrSeIndex;         ///< _4C, currently selected sound effect index.
-	int mCurrJacSoundID;      ///< _50, Jac player sound ID of currently selected sound effect.
-	int mAnimFramesRemaining; ///< _54, fade in/out timer.
-	int mUp;                  ///< _58, amount of indices to scroll up/down on update.
-	f32 mScrollTime;          ///< _5C, time that stick has been pressed.
-	bool mStickWasPushed;     ///< _60, has control stick been pushed (sufficiently) up or down?
 };
 
 /**
