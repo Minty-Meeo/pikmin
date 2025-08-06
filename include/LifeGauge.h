@@ -99,14 +99,6 @@ struct LifeGaugeMgr {
 struct LifeGauge {
 
 	/**
-	 * @brief Style to render the health gauge in.
-	 */
-	enum RenderStyle {
-		Bar,   ///< 0, render gauge as a horizontal bar - the always-overwritten default.
-		Wheel, ///< 1, render gauge as a circle/wheel - always used in-game.
-	};
-
-	/**
 	 * @brief Display states the health gauge goes through while being updated.
 	 */
 	enum DisplayState {
@@ -128,7 +120,6 @@ struct LifeGauge {
 	Vector3f mPosition;             ///< _00, position of object gauge is for - sometimes includes offset. Gauge pos = mPosition + mOffset.
 	Vector3f mOffset;               ///< _0C, sometimes offset of health gauge from object; sometimes 0. Gauge pos = mPosition + mOffset.
 	int mDisplayState;              ///< _18, display state of gauge - see `DisplayState` enum.
-	RenderStyle mRenderStyle;       ///< _1C, style to render gauge in - see `RenderStyle` enum. Always set to `Wheel` in retail.
 	bool mSnapToTargetHealth;       ///< _20, whether gauge should "snap" instantly to target health (as opposed to slowly fill or deplete).
 	f32 mFadeTransitionValue;       ///< _24, progress control for fade transitions - 0=fully faded out; 1=fully faded in.
 	f32 mVisibleHoldTimer;          ///< _28, timer for how long to keep gauge visible, even if full. Will hide after this time if full.

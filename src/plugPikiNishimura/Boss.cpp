@@ -41,7 +41,6 @@ Boss::Boss(CreatureProp* props)
     : Creature(props)
 {
 	mSeContext              = new SeContext(this, 1);
-	mLifeGauge.mRenderStyle = LifeGauge::Wheel;
 	mLifeGauge.mScale       = static_cast<BossProp*>(props)->mBossProps.mLifeGaugeScale();
 	mSearchBuffer.init(mSearchData, 3);
 }

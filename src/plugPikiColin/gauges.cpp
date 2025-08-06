@@ -303,7 +303,6 @@ void LifeGaugeMgr::removeLG(GaugeInfo* info)
  */
 LifeGauge::LifeGauge()
 {
-	mRenderStyle               = LifeGauge::Bar;
 	mDisplayState              = STATE_Hidden;
 	mFadeTransitionValue       = 0.0f;
 	mVisibleHoldTimer          = 0.0f;
@@ -387,7 +386,7 @@ void LifeGauge::refresh(Graphics& gfx)
 		mVisibleHoldTimer -= gsys->getFrameTime();
 		if (mVisibleHoldTimer <= 0.0f) {
 			mVisibleHoldTimer = 0.0f;
-			if (mRenderStyle == LifeGauge::Bar || mCurrentDisplayHealthRatio <= 0.0f || mCurrentDisplayHealthRatio >= 1.0f) {
+			if (mCurrentDisplayHealthRatio <= 0.0f || mCurrentDisplayHealthRatio >= 1.0f) {
 				// no point drawing full or empty health gauges for too long, hide it again
 				mDisplayState = STATE_FadeOut;
 			}
@@ -442,23 +441,7 @@ void LifeGauge::refresh(Graphics& gfx)
 
 	// don't bother drawing points behind the camera (negative depths)
 	if (depth1 > 0.0f && depth2 > 0.0f) {
-		if (mRenderStyle == LifeGauge::Bar) {
-			// never used in-game, but fun!
-			// draw border of bar gauge
-			gfx.setColour(Colour(lgborder.r, lgborder.g, lgborder.b, (int)(f32(lgborder.a) * mFadeTransitionValue)), true);
-			gfx.setAuxColour(Colour(lgborder.r, lgborder.g, lgborder.b, (int)(f32(lgborder.a) * mFadeTransitionValue)));
-			gfx.lineRectangle(RectArea(pos2.x - 19.0f, pos2.y - 10.0f, pos2.x + 19.0f, pos2.y - 6.0f));
-
-			// draw text bubble-like callout lines
-			gfx.drawLine(Vector3f(pos2.x - 10.0f, pos2.y - 5.0f, 0.0f), Vector3f(pos1.x, pos1.y, 0.0f));
-			gfx.drawLine(Vector3f(pos2.x - 5.0f, pos2.y - 5.0f, 0.0f), Vector3f(pos1.x, pos1.y, 0.0f));
-
-			// draw coloured part of gauge
-			gfx.setColour(Colour(gaugeColour.r, gaugeColour.g, gaugeColour.b, (int)(f32(gaugeColour.a) * mFadeTransitionValue)), true);
-			gfx.setAuxColour(Colour(gaugeColour.r, gaugeColour.g, gaugeColour.b, (int)(f32(gaugeColour.a) * mFadeTransitionValue)));
-			gfx.fillRectangle(
-			    RectArea(pos2.x - 18.0f, pos2.y - 9.0f, pos2.x - 18.0f + (mCurrentDisplayHealthRatio * 37.0f), pos2.y - 7.0f));
-		} else {
+		{
 			f32 innerRadius = mScale * (1.0f - depth1); // radius of the actual coloured section
 			f32 outerRadius = innerRadius * 1.1666f;    // radius of the background black circle
 
