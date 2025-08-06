@@ -4,7 +4,6 @@
 #include "Navi.h"
 #include "StateMachine.h"
 #include "Vector.h"
-#include "Win.h"
 #include "types.h"
 
 struct NaviState;
@@ -149,27 +148,19 @@ struct NaviClearState : public NaviState {
  *
  * @note Size: 0x30.
  */
-struct NaviContainerState : public NaviState, virtual public ContainerWin::Listener, virtual public GmWin::CloseListener {
+struct NaviContainerState : public NaviState {
 	NaviContainerState();
 
 	virtual void init(Navi*);                       // _38
 	virtual void exec(Navi*);                       // _3C
 	virtual void cleanup(Navi*);                    // _40
 	virtual bool invincible(Navi*) { return true; } // _50
-	virtual void informWin(int signedPikiCount);    // _54
-	virtual void onCloseWindow();                   // _58
 
 	void enterPikis(Navi*, int);
 	void exitPikis(Navi*, int);
 
 	// _00     = VTBL
 	// _00-_10 = NaviState
-	// _10     = ContainerWin::Listener ptr
-	// _14     = GmWin::CloseListener ptr
-	int mContainerWinEvent; // _18
-	int mContainerWinCount; // _1C
-	                        // ContainerWin::Listener
-	                        // GmWin::CloseListener
 };
 
 /**
