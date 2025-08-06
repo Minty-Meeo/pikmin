@@ -7,7 +7,6 @@
 #include "Interactions.h"
 #include "Interface.h"
 #include "KMath.h"
-#include "KeyConfig.h"
 #include "Kontroller.h"
 #include "MapCode.h"
 #include "MoviePlayer.h"
@@ -651,7 +650,7 @@ void NaviWalkState::exec(Navi* navi)
 		return;
 	}
 
-	if (navi->mKontroller->keyClick(KeyConfig::_instance->mDisbandKey.mBind)) {
+	if (navi->mKontroller->keyClick(KBBTN_X)) {
 		transit(navi, NAVISTATE_Release);
 	}
 
@@ -666,8 +665,8 @@ void NaviWalkState::exec(Navi* navi)
 		}
 	}
 
-	if (navi->mKontroller->keyClick(KeyConfig::_instance->mSetCursorKey.mBind)) {
-		if (KeyConfig::_instance->mSetCursorKey.mBind == KeyConfig::_instance->mExtractKey.mBind) {
+	if (navi->mKontroller->keyClick(KBBTN_B)) {
+		if (KBBTN_B == KBBTN_A) {
 			if (navi->procActionButton() && navi->mIsCursorVisible) {
 				transit(navi, NAVISTATE_Gather);
 			}
@@ -678,10 +677,10 @@ void NaviWalkState::exec(Navi* navi)
 		return;
 	}
 
-	if (navi->mKontroller->keyClick(KeyConfig::_instance->mThrowKey.mBind)) {
+	if (navi->mKontroller->keyClick(KBBTN_A)) {
 
 		if (AIConstant::_instance->mConstants._E4()) {
-			if (KeyConfig::_instance->mThrowKey.mBind == KeyConfig::_instance->mExtractKey.mBind) {
+			if (KBBTN_A == KBBTN_A) {
 				if (!navi->procActionButton()) {
 					transit(navi, NAVISTATE_ThrowWait);
 					return;
@@ -715,7 +714,7 @@ void NaviWalkState::exec(Navi* navi)
 			nearestPiki->mFSM->transit(nearestPiki, PIKISTATE_Bullet);
 			return;
 		}
-		if (KeyConfig::_instance->mThrowKey.mBind == KeyConfig::_instance->mAttackKey.mBind) {
+		if (KBBTN_A == KBBTN_A) {
 			Iterator tekiIter(tekiMgr);
 			CI_LOOP(tekiIter)
 			{
@@ -1617,7 +1616,7 @@ void NaviGatherState::exec(Navi* navi)
 			STACK_PAD_TERNARY(coll, 6);
 			Vector3f diff = coll->mCentre - navi->getCentre();
 			f32 test      = diff.length();
-			if (test <= navi->getSize() + coll->mRadius && navi->mKontroller->keyClick(KeyConfig::_instance->mSetCursorKey.mBind)) {
+			if (test <= navi->getSize() + coll->mRadius && navi->mKontroller->keyClick(KBBTN_B)) {
 				navi->mGoalItem = onyon;
 				transit(navi, NAVISTATE_Container);
 				return;
@@ -1626,15 +1625,15 @@ void NaviGatherState::exec(Navi* navi)
 	}
 
 	STACK_PAD_INLINE(3);
-	bool down = navi->mKontroller->keyDown(KeyConfig::_instance->mSetCursorKey.mBind);
-	bool up   = navi->mKontroller->keyUp(KeyConfig::_instance->mSetCursorKey.mBind);
+	bool down = navi->mKontroller->keyDown(KBBTN_B);
+	bool up   = navi->mKontroller->keyUp(KBBTN_B);
 	navi->makeVelocity(false);
 
 	if (_10 == 0) {
 		return;
 	}
 
-	if (navi->mKontroller->keyClick(KeyConfig::_instance->mSetCursorKey.mBind)) {
+	if (navi->mKontroller->keyClick(KBBTN_B)) {
 		navi->_AB8 = 0.0f;
 		navi->_ABC = 0;
 		transit(navi, NAVISTATE_Gather);
@@ -1690,7 +1689,7 @@ void NaviGatherState::exec(Navi* navi)
 		navi->callDebugs(_14);
 	}
 
-	if (navi->mKontroller->keyClick(KeyConfig::_instance->mSetCursorKey.mBind)) {
+	if (navi->mKontroller->keyClick(KBBTN_B)) {
 		navi->_AB8 = 0.0f;
 		navi->_ABC = 0;
 		transit(navi, NAVISTATE_Gather);
@@ -1781,7 +1780,7 @@ void NaviReleaseState::exec(Navi* navi)
 
 	navi->makeVelocity(false);
 
-	if (_10 == true && navi->mKontroller->keyClick(KeyConfig::_instance->mSetCursorKey.mBind)) {
+	if (_10 == true && navi->mKontroller->keyClick(KBBTN_B)) {
 		transit(navi, NAVISTATE_Gather);
 	}
 }
@@ -1937,7 +1936,7 @@ void NaviThrowWaitState::exec(Navi* navi)
 				transit(navi, NAVISTATE_Walk);
 				return;
 			}
-			if (navi->mKontroller->keyClick(KeyConfig::_instance->mSetCursorKey.mBind)) {
+			if (navi->mKontroller->keyClick(KBBTN_B)) {
 				transit(navi, NAVISTATE_Walk);
 				return;
 			}
@@ -1974,7 +1973,7 @@ void NaviThrowWaitState::exec(Navi* navi)
 		}
 	}
 
-	if (navi->mKontroller->keyUp(KeyConfig::_instance->mThrowKey.mBind)) {
+	if (navi->mKontroller->keyUp(KBBTN_A)) {
 		sortPikis(navi);
 		navi->_800 = _18 / 3.0f * C_NAVI_PROP(navi)._14C();
 		transit(navi, NAVISTATE_Throw);
@@ -2098,13 +2097,13 @@ void NaviThrowState::exec(Navi* navi)
 {
 	navi->makeVelocity(false);
 
-	if (navi->mKontroller->keyDown(KeyConfig::_instance->mSetCursorKey.mBind)) {
+	if (navi->mKontroller->keyDown(KBBTN_B)) {
 		_11 = true;
 	}
 
 	navi->findNextThrowPiki();
 
-	if (_10 && navi->mKontroller->keyClick(KeyConfig::_instance->mThrowKey.mBind)) {
+	if (_10 && navi->mKontroller->keyClick(KBBTN_A)) {
 		if (navi->procActionButton()) {
 			return;
 		}
@@ -2112,7 +2111,7 @@ void NaviThrowState::exec(Navi* navi)
 		return;
 	}
 
-	if (_10 && navi->mKontroller->keyClick(KeyConfig::_instance->mSetCursorKey.mBind)) {
+	if (_10 && navi->mKontroller->keyClick(KBBTN_B)) {
 		transit(navi, NAVISTATE_Gather);
 	}
 }
@@ -2342,11 +2341,11 @@ void NaviNukuState::exec(Navi* navi)
 	navi->mVelocity.set(0.0f, 0.0f, 0.0f);
 	navi->mTargetVelocity.set(0.0f, 0.0f, 0.0f);
 
-	if (!_13 && navi->mKontroller->keyUp(KeyConfig::_instance->mExtractKey.mBind)) {
+	if (!_13 && navi->mKontroller->keyUp(KBBTN_A)) {
 		_13 = true;
 	}
 
-	if (_13 && navi->mKontroller->keyDown(KeyConfig::_instance->mExtractKey.mBind)) {
+	if (_13 && navi->mKontroller->keyDown(KBBTN_A)) {
 		_14 = true;
 		navi->mIsPlucking;
 		navi->mFastPluckKeyTaps++;
@@ -2712,7 +2711,7 @@ void NaviAttackState::exec(Navi* navi)
 	navi->makeVelocity(false);
 	//_18 += gsys->getFrameTime();
 
-	if (navi->mKontroller->keyClick(KeyConfig::_instance->mSetCursorKey.mBind)) {
+	if (navi->mKontroller->keyClick(KBBTN_B)) {
 		_12 = true;
 	}
 

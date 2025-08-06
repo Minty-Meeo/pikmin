@@ -19,7 +19,6 @@
 #include "Graphics.h"
 #include "Interface.h"
 #include "ItemMgr.h"
-#include "KeyConfig.h"
 #include "Kontroller.h"
 #include "MemStat.h"
 #include "Menu.h"
@@ -763,7 +762,6 @@ void GameCoreSection::exitStage()
 	GenTypeFactory::factory   = nullptr;
 	GenAreaFactory::factory   = nullptr;
 	AIConstant::_instance     = nullptr;
-	KeyConfig::_instance      = nullptr;
 	GlobalShape::exitCourse();
 	PikiShapeObject::exitCourse();
 	seMgr->setPikiNum(0);
@@ -1306,9 +1304,6 @@ GameCoreSection::GameCoreSection(Controller* controller, MapMgr* mgr, Camera& ca
 
 	AIConstant::createInstance();
 	gameflow.addGenNode("AI定数", AIConstant::_instance); // 'AI Constants'
-
-	KeyConfig::createInstance();
-	gameflow.addGenNode("Key Setting", KeyConfig::_instance);
 
 	mSearchSystem = new SearchSystem();
 
