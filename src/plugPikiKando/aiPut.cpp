@@ -343,20 +343,14 @@ int ActPutBomb::exeThrow()
 
 	if (mAnimationFinished) {
 		if (mPiki->isHolding()) {
-			Vector3f centre = mTarget->getCentre();
-			Vector3f vel(mTarget->mVelocity);
-			Vector3f catchPos;
 			CollPart* beat = nullptr;
 			if (mTarget->mCollInfo && mTarget->mCollInfo->hasInfo()) {
 				beat = mTarget->mCollInfo->getSphere('beat');
 				PRINT("beat found !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!\n");
 			}
-			if (beat) {
-				centre = beat->mCentre;
-			}
-
-			catchPos          = mPiki->getCatchPos(mPiki->getHoldCreature());
-			Vector3f throwVel = getThrowVelocity(catchPos, C_PIKI_PROP(mPiki).mBombThrowSpeed(), centre, vel);
+			Vector3f centre   = beat ? beat->mCentre : mTarget->getCentre();
+			Vector3f catchPos = mPiki->getCatchPos(mPiki->getHoldCreature());
+			Vector3f throwVel = getThrowVelocity(catchPos, C_PIKI_PROP(mPiki).mBombThrowSpeed(), centre, mTarget->mVelocity);
 			InteractRelease release(mPiki, 1.0f);
 			Creature* held = mPiki->getHoldCreature();
 			held->stimulate(release);

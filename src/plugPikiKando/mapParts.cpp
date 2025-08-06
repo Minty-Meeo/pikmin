@@ -145,9 +145,7 @@ void MapSlider::update()
 	} else {
 		mFaceDirection += gsys->getFrameTime();
 		mRotation.z = mFaceDirection * 0.5f;
-		mPosition.x = mSliderPosition.x;
-		mPosition.y = mSliderPosition.y;
-		mPosition.z = mSliderPosition.z;
+		mPosition   = mSliderPosition;
 	}
 
 	DynCollShape::update();

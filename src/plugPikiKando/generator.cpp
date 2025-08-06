@@ -349,9 +349,7 @@ void GenArea::doWrite(RandomAccessStream& output)
  */
 void GenArea::doRead(RandomAccessStream& input)
 {
-	_18.x = input.readFloat();
-	_18.y = input.readFloat();
-	_18.z = input.readFloat();
+	_18.read(input);
 }
 
 /**
@@ -741,17 +739,13 @@ void Generator::read(RandomAccessStream& input)
 		mGenPosition.y = input.readShort();
 		mGenPosition.z = input.readShort();
 	} else {
-		mGenPosition.x = input.readFloat();
-		mGenPosition.y = input.readFloat();
-		mGenPosition.z = input.readFloat();
+		mGenPosition.read(input);
 	}
 
 	if (ramMode) {
 		mGenOffset.set(0.0f, 0.0f, 0.0f);
 	} else {
-		mGenOffset.x = input.readFloat();
-		mGenOffset.y = input.readFloat();
-		mGenOffset.z = input.readFloat();
+		mGenOffset.read(input);
 	}
 
 	mGenObject = nullptr;
@@ -940,9 +934,7 @@ void GeneratorMgr::read(RandomAccessStream& input, bool p2)
 		PRINT("OLD VERSION !!!! %x\n", mGeneratorVersionId.mId);
 	}
 
-	mNaviPos.x = input.readFloat();
-	mNaviPos.y = input.readFloat();
-	mNaviPos.z = input.readFloat();
+	mNaviPos.read(input);
 
 	if (mGeneratorVersionId == 'v0.1') {
 		mNaviDirection = input.readFloat();

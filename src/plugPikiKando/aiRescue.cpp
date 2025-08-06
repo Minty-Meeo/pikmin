@@ -234,9 +234,7 @@ int ActRescue::exeThrow()
 		Vector3f dir = mDrowningPiki->mSRT.t - mPiki->mSRT.t;
 		f32 dist     = dir.length();
 		if (dist < 15.0f) {
-			Vector3f vec1(0.0f, 0.0f, 0.0f);
-			Vector3f throwVel;
-			throwVel = getThrowVelocity(mPiki->mSRT.t, 200.0f, mRescueTargetPosition, vec1);
+			Vector3f throwVel = getThrowVelocity(mPiki->mSRT.t, 200.0f, mRescueTargetPosition, Vector3f(0.0f, 0.0f, 0.0f));
 			mDrowningPiki->mFSM->transit(mDrowningPiki, PIKISTATE_Flying);
 			mDrowningPiki->mVelocity       = throwVel;
 			mDrowningPiki->mTargetVelocity = throwVel;

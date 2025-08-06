@@ -56,13 +56,8 @@ void GenObjectMapParts::doRead(RandomAccessStream& input)
 	mShapeIndex     = input.readInt();
 	mUseStartOffset = input.readInt();
 	if (mUseStartOffset == 1) {
-		mStartPosition.x = input.readFloat();
-		mStartPosition.y = input.readFloat();
-		mStartPosition.z = input.readFloat();
-
-		mEndPosition.x = input.readFloat();
-		mEndPosition.y = input.readFloat();
-		mEndPosition.z = input.readFloat();
+		mStartPosition.read(input);
+		mEndPosition.read(input);
 	}
 }
 

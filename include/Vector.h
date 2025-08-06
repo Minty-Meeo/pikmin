@@ -19,7 +19,7 @@ struct Quat;
 struct Vector3f {
 	Vector3f() { x = y = z = 0.0f; }
 
-	Vector3f(const f32& _x, const f32& _y, const f32& _z)
+	Vector3f(f32 _x, f32 _y, f32 _z)
 	    : x(_x)
 	    , y(_y)
 	    , z(_z)
@@ -51,11 +51,11 @@ struct Vector3f {
 		stream.writeFloat(z);
 	}
 
-	void set(const f32& pX, const f32& pY, const f32& pZ)
+	void set(f32 _x, f32 _y, f32 _z)
 	{
-		x = pX;
-		y = pY;
-		z = pZ;
+		x = _x;
+		y = _y;
+		z = _z;
 	}
 
 	void set(const Vector3f& other) { set(other.x, other.y, other.z); }

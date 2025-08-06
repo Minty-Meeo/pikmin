@@ -73,10 +73,7 @@ void Creature::load(RandomAccessStream& stream, bool doLoadPosition)
 	PRINT("* loading creature %s\n", ObjType::getName(mObjType));
 	int startPos = stream.getPosition();
 	if (doLoadPosition) {
-		// idk why they didn't use the Vector3f::read inline here, but they didn't
-		mSRT.t.x = stream.readFloat();
-		mSRT.t.y = stream.readFloat();
-		mSRT.t.z = stream.readFloat();
+		mSRT.t.read(stream);
 	}
 
 	doLoad(stream);

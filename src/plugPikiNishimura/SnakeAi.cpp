@@ -206,10 +206,7 @@ void SnakeAi::setEveryFrame()
  */
 void SnakeAi::setInitPosition()
 {
-	Vector3f* initPos = mSnake->getInitPosition();
-	mSnake->mSRT.t.x  = initPos->x;
-	mSnake->mSRT.t.y  = initPos->y;
-	mSnake->mSRT.t.z  = initPos->z;
+	mSnake->mSRT.t = *mSnake->getInitPosition();
 }
 
 /**

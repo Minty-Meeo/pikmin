@@ -265,10 +265,7 @@ void PomAi::calcSwayAndScale()
  */
 void PomAi::setInitPosition()
 {
-	Vector3f* pos  = mPom->getInitPosition();
-	mPom->mSRT.t.x = pos->x;
-	mPom->mSRT.t.y = pos->y;
-	mPom->mSRT.t.z = pos->z;
+	mPom->mSRT.t = *mPom->getInitPosition();
 }
 
 /**
