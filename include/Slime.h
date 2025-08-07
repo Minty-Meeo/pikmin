@@ -302,11 +302,7 @@ struct Slime : public Boss {
 					weightPos.z = (farPos.z + nearPos.z) / 2.0f;
 
 					for (int k = 0; k < 4; k++) {
-						// why this isn't a vector distance, i have no clue.
-						f32 x = weightPos.x - mSlime->mSlimeCreatures[k]->mSRT.t.x;
-						f32 y = weightPos.y - mSlime->mSlimeCreatures[k]->mSRT.t.y;
-						f32 z = weightPos.z - mSlime->mSlimeCreatures[k]->mSRT.t.z;
-						score += mSlime->mAppearanceScale / std::sqrtf(SQUARE(x) + SQUARE(y) + SQUARE(z));
+						score += mSlime->mAppearanceScale / weightPos.distance(mSlime->mSlimeCreatures[k]->mSRT.t);
 					}
 
 					// closer to other stick slimes = higher score

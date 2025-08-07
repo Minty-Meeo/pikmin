@@ -127,21 +127,8 @@ void PathFinder::releaseHandle(u32 handle)
 	}
 	mClientCount--;
 
-	// No idea why we couldnt just use a normal mClient[i] = mClient[i+1] but ok
 	for (int i = idx; i < mClientCount; i++) {
-		Client& a = mClient[i];
-		Client& b = mClient[i + 1];
-
-		a.mBuffer              = b.mBuffer;
-		a.mStartWpIdx          = b.mStartWpIdx;
-		a.mDestWpIdx           = b.mDestWpIdx;
-		a.mIncludeBlockedPaths = b.mIncludeBlockedPaths;
-		a.mHandle              = b.mHandle;
-		a.mMode                = b.mMode;
-		a.mCurrentBufIdx       = b.mCurrentBufIdx;
-		a.mStatus              = b.mStatus;
-		a.mIsBacktracking      = b.mIsBacktracking;
-		a.mPathLength          = b.mPathLength;
+		mClient[i] = mClient[i + 1];
 	}
 }
 

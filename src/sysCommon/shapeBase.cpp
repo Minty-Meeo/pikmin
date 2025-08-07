@@ -2119,9 +2119,7 @@ void BaseShape::read(RandomAccessStream& stream)
 			stream.skipPadding(0x20);
 			mNBTList = reinterpret_cast<NBT*>(new (0x20) Vec[3 * mNBTCount]);
 			for (int i = 0; i < mNBTCount; i++) {
-				reinterpret_cast<Vector3f*>(mNBTList)[3 * i].read(stream);
-				reinterpret_cast<Vector3f*>(mNBTList)[3 * i + 1].read(stream);
-				reinterpret_cast<Vector3f*>(mNBTList)[3 * i + 2].read(stream);
+				mNBTList[i].read(stream);
 			}
 
 			after = gsys->getHeap(SYSHEAP_App)->getFree();

@@ -94,7 +94,6 @@ ASM f32 PSVECSquareMag(register Vec* v) {
     lfs f4, Vec.z(v)
     ps_madd f5, f4, f4, f3
     ps_sum0 f1, f5, f3, f3 // return square mag in f1
-    blr //! whoops! an extra blr is added by the compiler since 1 is added automatically.
 #endif // clang-format on
 }
 
