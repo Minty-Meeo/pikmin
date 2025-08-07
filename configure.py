@@ -570,7 +570,6 @@ config.libs = [
             Object(Matching, "plugPikiKando/pikiMgr.cpp"),
             Object(Matching, "plugPikiKando/pikiState.cpp"),
             Object(Matching, "plugPikiKando/viewPiki.cpp"),
-            Object(Matching, "plugPikiKando/conditions.cpp"),
             Object(Matching, "plugPikiKando/generator.cpp"),
             Object(Matching, "plugPikiKando/generatorCache.cpp"),
             Object(Matching, "plugPikiKando/objectMgr.cpp"),
