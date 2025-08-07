@@ -807,9 +807,6 @@ void Pellet::initPellet(PelletShapeObject* shapeObj, PelletConfig* config)
 	mShapeObject    = shapeObj;
 	if (shapeObj->isMotionFlag(PelletMotionFlags::UsePiston)) {
 		setMotionFlag(PelletMotionFlags::UsePiston);
-		if (!isMotionFlag(PelletMotionFlags::UsePiston)) {
-			ERROR("WHYYYYYYYYYYY\n"); // same kando
-		}
 	}
 
 	mConfig   = config;
