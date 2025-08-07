@@ -936,10 +936,15 @@ void Creature::collisionCheck(f32 _unused)
 		return;
 	}
 
-	Iterator iter(&mSearchBuffer, &CndIsAtari());
+	Iterator iter(&mSearchBuffer);
 	CI_LOOP(iter)
 	{
 		Creature* collider = *iter;
+
+		// don't worry about non-atari creatures.
+		if (!collider->isAtari()) {
+			continue;
+		}
 
 		// don't worry about dead creatures.
 		if (!collider->isAlive()) {

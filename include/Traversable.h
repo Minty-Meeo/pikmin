@@ -28,10 +28,9 @@ struct Traversable {
  * @brief An iterator for traversing a Traversable object.
  */
 struct Iterator {
-	Iterator(Traversable* trav, Condition* condition = nullptr)
+	Iterator(Traversable* trav)
+	    : mTrav(trav)
 	{
-		mTrav      = trav;
-		mCondition = condition;
 	}
 
 	Creature* operator*()
@@ -43,37 +42,9 @@ struct Iterator {
 		return mTrav->getCreature(mIndex);
 	}
 
-	void first()
-	{
-		if (mCondition) {
-			mIndex = mTrav->getFirst();
-			while (!isDone()) {
-				if (mCondition->satisfy(mTrav->getCreature(mIndex))) {
-					break;
-				}
-				mIndex = mTrav->getNext(mIndex);
-			}
-			return;
-		}
+	void first() { mIndex = mTrav->getFirst(); }
 
-		mIndex = mTrav->getFirst();
-	}
-
-	void next()
-	{
-		if (mCondition) {
-			mIndex = mTrav->getNext(mIndex);
-			while (!isDone()) {
-				if (mCondition->satisfy(mTrav->getCreature(mIndex))) {
-					break;
-				}
-				mIndex = mTrav->getNext(mIndex);
-			}
-			return;
-		}
-
-		mIndex = mTrav->getNext(mIndex);
-	}
+	void next() { mIndex = mTrav->getNext(mIndex); }
 
 	void dec()
 	{
@@ -97,7 +68,6 @@ struct Iterator {
 
 	int mIndex;            // _00
 	Traversable* mTrav;    // _04
-	Condition* mCondition; // _08
 };
 
 #define CI_LOOP(iter) for (iter.first(); !iter.isDone(); iter.next())
