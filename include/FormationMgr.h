@@ -35,26 +35,6 @@ struct Rope {
 };
 
 /**
- * @brief Stripped struct.
- */
-struct Spine {
-	Spine(); // unused/inlined
-
-	// unused/inlined:
-	void init(Creature*);
-	void preMove();
-	void postMove();
-	void move();
-	void refresh(Graphics&);
-
-	u8 _00[0x4];                        // _00, unknown
-	int mLinkCount;                     // _04
-	Rope* mRope;                        // _08
-	SmartPtr<Creature> mTargetCreature; // _0C
-	Vector3f _UNUSED10;                 // _10
-};
-
-/**
  * @brief TODO
  */
 struct FormPoint {
