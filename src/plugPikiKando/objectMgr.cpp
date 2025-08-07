@@ -91,7 +91,7 @@ void ObjectMgr::killAll()
 	{
 		Creature* obj = *it;
 		if (obj->isAlive()) {
-			obj->kill(true);
+			obj->kill();
 			obj->exitCourse();
 			it.dec();
 		}
@@ -102,7 +102,7 @@ void ObjectMgr::killAll()
 	{
 		Creature* obj = *it;
 		if (obj->isAlive()) {
-			obj->kill(true);
+			obj->kill();
 			obj->exitCourse();
 			ERROR("xamasita");
 			it.dec();

@@ -451,7 +451,7 @@ int Boss::getStickNoMouthPikiCount()
  */
 void Boss::killStickToMouthPiki()
 {
-	killStickers(this, &CndStickMouthKill(this), 0);
+	killStickers(this, &CndStickMouthKill(this));
 }
 
 /**

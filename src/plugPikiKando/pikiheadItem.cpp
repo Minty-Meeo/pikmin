@@ -273,7 +273,7 @@ bool PikiHeadItem::interactBikkuri(immut InteractBikkuri& act)
 		PikiMgr::meNukiMode = false;
 		piki->mFSM->transit(piki, PIKISTATE_AutoNuki);
 
-		kill(false);
+		kill();
 		return true;
 	}
 	return false;
@@ -295,7 +295,7 @@ bool PikiHeadItem::interactSwallow(immut InteractSwallow& act)
 		piki->setFlower(mFlowerStage);
 		piki->resetPosition(mSRT.t);
 		piki->mFSM->transit(piki, PIKISTATE_AutoNuki);
-		kill(false);
+		kill();
 
 		return act.actPiki(piki);
 	}

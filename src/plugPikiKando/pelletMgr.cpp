@@ -1420,11 +1420,11 @@ bool InteractKill::actPellet(Pellet* pellet) immut
 		Iterator iter(&stuckList);
 		CI_LOOP(iter)
 		{
-			(*iter)->kill(false);
+			(*iter)->kill();
 			iter.dec();
 		}
 	}
-	pellet->kill(false);
+	pellet->kill();
 	return true;
 }
 

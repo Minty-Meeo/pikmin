@@ -518,7 +518,7 @@ void Weed::update()
 	if (mIsPulled == 1) {
 		mPulloutTimer++;
 		if (mPulloutTimer > 30) {
-			kill(false);
+			kill();
 		} else {
 			f32 s = (1.0f - mPulloutTimer / 30.0f);
 			s *= 0.1f;

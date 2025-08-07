@@ -494,7 +494,7 @@ void Creature::detachGenerator()
 /**
  * @todo: Documentation
  */
-void Creature::kill(bool)
+void Creature::kill()
 {
 	finishWaterEffect();
 

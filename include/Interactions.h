@@ -338,10 +338,9 @@ struct InteractHitEffect : public Interaction {
  * @brief TODO
  */
 struct InteractKill : public Interaction {
-	InteractKill(Creature* owner, int p2)
+	InteractKill(Creature* owner)
 	    : Interaction(owner)
 	{
-		_08 = p2;
 	}
 
 	virtual bool actPiki(Piki*) immut;     // _0C
@@ -350,7 +349,6 @@ struct InteractKill : public Interaction {
 
 	// _00     = VTBL
 	// _00-_08 = Interaction
-	int _08; // _08
 };
 
 /**

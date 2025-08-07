@@ -618,7 +618,7 @@ void PikiDrownState::procAnimMsg(Piki* piki, MsgAnim* msg)
 		// Advance phase on animation completion: struggle loops, sinking kills.
 		if (mState == DS_Sinking) {
 			seSystem->playSoundDirect(5, SEW_PIKI_DEAD, piki->mSRT.t);
-			piki->kill(false);
+			piki->kill();
 			break;
 		}
 
@@ -1326,7 +1326,7 @@ void PikiFallMeckState::procBounceMsg(Piki* piki, MsgBounce*)
 			sprout->_3E0 = nullptr;
 			C_SAI(sprout)->start(sprout, PikiHeadAI::PIKIHEAD_Unk5);
 			piki->setEraseKill();
-			piki->kill(true);
+			piki->kill();
 			STACK_PAD_VAR(1);
 			return;
 		}
@@ -2666,7 +2666,7 @@ void PikiBuryState::exec(Piki* piki)
 		sprout->_3E0 = nullptr;
 		C_SAI(sprout)->start(sprout, PikiHeadAI::PIKIHEAD_Unk5);
 		piki->setEraseKill();
-		piki->kill(true);
+		piki->kill();
 		STACK_PAD_VAR(1);
 		return;
 	}
@@ -3058,7 +3058,7 @@ void PikiDeadState::exec(Piki* piki)
 	piki->mTargetVelocity.set(0.0f, 0.0f, 0.0f);
 	piki->mVelocity.set(0.0f, 0.0f, 0.0f);
 	if (piki->mDeathTimer < 0.0f) {
-		piki->kill(false);
+		piki->kill();
 	}
 }
 

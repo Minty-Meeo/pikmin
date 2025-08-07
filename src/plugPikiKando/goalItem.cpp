@@ -341,7 +341,7 @@ void GoalItem::enterGoal(Piki* piki)
 	pikiInfMgr.incPiki(piki);
 	mHeldPikis[piki->mHappa]++;
 	piki->setEraseKill();
-	piki->kill(false);
+	piki->kill();
 	GameStat::containerPikis.inc(piki->mColor);
 	GameStat::update();
 	if (old == 1) {

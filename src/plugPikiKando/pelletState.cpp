@@ -350,7 +350,7 @@ void PelletGoalState::exec(Pellet* pelt)
 		}
 
 		pelt->mIsAlive = false;
-		pelt->kill(false);
+		pelt->kill();
 		transit(pelt, PELSTATE_Dead);
 	}
 }

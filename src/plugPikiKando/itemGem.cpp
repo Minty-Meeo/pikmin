@@ -277,7 +277,7 @@ void GemItem::split()
 	if (splitAmount > 0) {
 		PRINT("gem type %d split !\n", mGemType);
 		_3E4 = 0;
-		kill(false);
+		kill();
 		int objType;
 		if (mGemType == 1) {
 			objType = OBJTYPE_Gem1;

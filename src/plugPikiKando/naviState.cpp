@@ -132,7 +132,7 @@ void NaviPelletState::exec(Navi* navi)
 
 	if (!mIsFinished && (!navi->mPellet || !navi->mPellet->isAlive())) {
 		if (navi->mPellet) {
-			navi->mPellet->kill(false);
+			navi->mPellet->kill();
 		}
 		mIsFinished = true;
 		navi->setPellet(false);
@@ -148,7 +148,7 @@ void NaviPelletState::exec(Navi* navi)
 	        || navi->mKontroller->keyDown(KBBTN_CSTICK_DOWN))) {
 		mIsFinished = true;
 		if (navi->mPellet) {
-			navi->mPellet->kill(false);
+			navi->mPellet->kill();
 		}
 
 		PRINT("GETUP MOTION START\n");
@@ -179,7 +179,7 @@ void NaviPelletState::procAnimMsg(Navi* navi, MsgAnim* msg)
 void NaviPelletState::cleanup(Navi* navi)
 {
 	if (navi->mPellet) {
-		navi->mPellet->kill(false);
+		navi->mPellet->kill();
 	}
 
 	navi->setPellet(false);
@@ -2469,7 +2469,7 @@ void NaviNukuAdjustState::exec(Navi* navi)
 			piki->changeMode(PikiMode::FormationMode, navi);
 			pikiMgr->meNukiMode = false;
 			navi->_7C0->finishWaterEffect();
-			navi->_7C0->kill(false);
+			navi->_7C0->kill();
 			navi->_7C0 = nullptr;
 			navi->_7BC = piki;
 			navi->_7BC->stimulate(InteractPullout(navi));

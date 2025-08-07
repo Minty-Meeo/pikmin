@@ -176,7 +176,7 @@ public:
 	void resetStateGrabbed();
 	void turnTo(immut Vector3f&);
 	void detachGenerator();
-	void kill(bool);
+	void kill();
 	void updateStatic();
 	void updateAI();
 	void moveVelocity();
@@ -185,7 +185,7 @@ public:
 	void moveNew(f32);
 	Plane* getNearestPlane(CollTriInfo*);
 	void interactStickers(Creature*, immut Interaction&, immut Condition*);
-	void killStickers(Creature*, immut Condition*, int);
+	void killStickers(Creature*, immut Condition*);
 	void startClimb();
 	void endClimb();
 	bool isStickToPlatform();

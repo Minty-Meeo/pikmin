@@ -286,10 +286,10 @@ int PomAi::killStickPiki()
 		if (stuck && stuck->isAlive() && stuck->mObjType == OBJTYPE_Piki) {
 			Piki* piki = static_cast<Piki*>(*iter);
 			if (C_POM_PROP(mPom).mDoKillSameColorPiki() && piki->mColor == mPom->mColor) {
-				piki->kill(false);
+				piki->kill();
 			} else {
 				piki->setEraseKill();
-				piki->kill(false);
+				piki->kill();
 				seedCount++;
 			}
 
@@ -520,7 +520,7 @@ void PomAi::initWait(int nextState)
 		if (stuck && stuck->isAlive() && stuck->mObjType == OBJTYPE_Piki) {
 			Piki* stuckPiki = static_cast<Piki*>(*iter);
 			if (stuckPiki->mColor == mPom->mColor) {
-				stuck->kill(false);
+				stuck->kill();
 				iter.dec();
 			}
 		}

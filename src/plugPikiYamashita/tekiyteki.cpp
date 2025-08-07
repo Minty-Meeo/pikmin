@@ -173,7 +173,7 @@ void YTeki::killStickToMouthPiki()
 	{
 		Creature* stuck = *iter;
 		if (stuck && stuck->isStickToMouth()) {
-			stuck->stimulate(InteractKill(this, 0));
+			stuck->stimulate(InteractKill(this));
 			effectMgr->create(EffectMgr::EFF_Piki_HitA, stuck->getPosition(), nullptr, nullptr);
 			effectMgr->create(EffectMgr::EFF_Piki_HitB, stuck->getPosition(), nullptr, nullptr);
 			iter.dec();

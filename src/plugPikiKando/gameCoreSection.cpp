@@ -352,7 +352,7 @@ void GameCoreSection::exitDayEnd()
 				item->enterGoal(piki);
 				entered++;
 			} else {
-				piki->kill(false);
+				piki->kill();
 				killed++;
 			}
 		}
@@ -410,7 +410,7 @@ void GameCoreSection::clearDeadlyPikmins()
 		}
 
 		if (kill || !piki->isAlive()) {
-			piki->kill(false);
+			piki->kill();
 			killed++;
 		}
 	}
@@ -581,7 +581,7 @@ void GameCoreSection::cleanupDayEnd()
 				GameStat::deadPikis.inc(piki->mColor);
 #endif
 				piki->setEraseKill();
-				piki->kill(false);
+				piki->kill();
 				it.dec();
 				killed++;
 			} else {
@@ -626,7 +626,7 @@ void GameCoreSection::cleanupDayEnd()
 						GameStat::deadPikis.inc(piki->mColor);
 #endif
 						piki->setEraseKill();
-						piki->kill(false);
+						piki->kill();
 						it.dec();
 						killed++;
 					}
@@ -648,7 +648,7 @@ void GameCoreSection::cleanupDayEnd()
 		Creature* obj = *it;
 		if (obj->mObjType != OBJTYPE_Pikihead && obj->mObjType != OBJTYPE_Goal && obj->mObjType != OBJTYPE_Fulcrum
 		    && obj->mObjType != OBJTYPE_Rope) {
-			obj->kill(false);
+			obj->kill();
 		}
 	}
 
@@ -719,7 +719,7 @@ void GameCoreSection::cleanupDayEnd()
 					PRINT(">>> @@@@ FREE = %d ACTIVE = %d\n", inf->mBPikiInfMgr.getFreeNum(), inf->mBPikiInfMgr.getActiveNum());
 				}
 			}
-			obj->kill(false);
+			obj->kill();
 			ph_it.dec();
 		}
 		playerState->updateFinalResult();
@@ -743,7 +743,7 @@ void GameCoreSection::prepareBadEnd()
 	{
 		PikiHeadItem* obj = (PikiHeadItem*)*ph_it;
 		obj->setPermanentEffects(false);
-		obj->kill(false);
+		obj->kill();
 		ph_it.dec();
 	}
 }

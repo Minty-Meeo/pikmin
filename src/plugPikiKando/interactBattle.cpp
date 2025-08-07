@@ -425,7 +425,7 @@ bool InteractSwallow::actPiki(Piki* piki) immut
 	piki->mMode = 0;
 	if (!mMouthPart) {
 		piki->playEventSound(mOwner, SE_PIKI_EATEN);
-		piki->kill(false);
+		piki->kill();
 		return true;
 	}
 
@@ -511,11 +511,7 @@ bool InteractSwallow::actPiki(Piki* piki) immut
  */
 bool InteractKill::actPiki(Piki* piki) immut
 {
-	if (_08 == 1) {
-		piki->kill(true);
-	} else {
-		piki->kill(false);
-	}
+	piki->kill();
 	return true;
 }
 
@@ -524,7 +520,7 @@ bool InteractKill::actPiki(Piki* piki) immut
  */
 bool InteractKill::actNavi(Navi* navi) immut
 {
-	navi->kill(false);
+	navi->kill();
 	return true;
 }
 

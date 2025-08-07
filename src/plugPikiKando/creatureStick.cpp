@@ -42,9 +42,9 @@ void Creature::interactStickers(Creature* stuckTo, immut Interaction& interactio
 /**
  * @todo: Documentation
  */
-void Creature::killStickers(Creature* stuckTo, immut Condition* cond, int p3)
+void Creature::killStickers(Creature* stuckTo, immut Condition* cond)
 {
-	InteractKill kill(stuckTo, p3);
+	InteractKill kill(stuckTo);
 	interactStickers(stuckTo, kill, cond);
 }
 
