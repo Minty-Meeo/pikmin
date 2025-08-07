@@ -132,7 +132,7 @@ void BTeki::viewDraw(Graphics& gfx, immut Matrix4f& mat)
  */
 void BTeki::viewKill()
 {
-	kill(false);
+	kill();
 }
 
 /**
@@ -627,7 +627,7 @@ void BTeki::dieSoon()
 	if (mDeadState == 2) {
 		becomeCorpse();
 	} else {
-		kill(false);
+		kill();
 	}
 }
 

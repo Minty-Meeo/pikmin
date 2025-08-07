@@ -1060,7 +1060,7 @@ void Navi::callPikis(f32 radius)
 					piki->setFlower(sprout->mFlowerStage);
 					piki->resetPosition(sprout->mSRT.t);
 					piki->mFSM->transit(piki, PIKISTATE_AutoNuki);
-					sprout->kill(false);
+					sprout->kill();
 				}
 			}
 		}
@@ -1420,7 +1420,7 @@ bool Navi::procActionButton()
 			piki->resetPosition(closestSprout->mSRT.t);
 			piki->changeMode(PikiMode::FreeMode, this);
 			piki->mFSM->transit(piki, PIKISTATE_NukareWait);
-			closestSprout->kill(false);
+			closestSprout->kill();
 
 			mPressedTimer = 0.0f;
 			startMotion(PaniMotionInfo(PIKIANIM_Asibumi), PaniMotionInfo(PIKIANIM_Asibumi));
@@ -1594,7 +1594,7 @@ void Navi::collisionCallback(immut CollEvent& event)
 			Event event(2, collider->getGeneratorID());
 			informEvent(event);
 			mCurrKeyCount++;
-			collider->kill(false);
+			collider->kill();
 			break;
 		}
 		case OBJTYPE_Gate:

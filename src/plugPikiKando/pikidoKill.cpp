@@ -79,7 +79,7 @@ void Piki::doKill()
 					} else {
 						PRINT("空きがないので残しません!\n"); // I won't leave it because there's no space left.
 					}
-					item->kill(false);
+					item->kill();
 				}
 			}
 		}

@@ -130,7 +130,7 @@ void Creature::moveNew(f32 deltaTime)
 			pellet->mSRT.t.y = mapMgr->getMinY(pellet->mSRT.t.x, pellet->mSRT.t.z, true) + 30.0f;
 
 		} else {
-			kill(false);
+			kill();
 		}
 
 		return;

@@ -66,7 +66,7 @@ Vector3f SlimeCreature::getCentre()
  */
 void SlimeCreature::doKill()
 {
-	kill(false);
+	kill();
 }
 
 /**

@@ -166,7 +166,7 @@ void ActFlower::animationKeyUpdated(immut PaniAnimKeyEvent& event)
 	{
 		Creature* held = mPiki->getHoldCreature();
 		held->stimulate(InteractRelease(mPiki, 1.0f));
-		held->kill(false);
+		held->kill();
 		mPiki->mFloweringTimer++;
 		if (mPiki->mFloweringTimer >= C_PIKI_PROP(mPiki).mFlowerEnergyRequirement()) {
 			mPiki->setFlower(Flower);

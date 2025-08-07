@@ -1286,7 +1286,7 @@ bool TaiCollecPuttingPelletAction::act(Teki& teki)
 	if (teki.animationFinished()) {
 		teki.flickUpper();
 		Pellet* pellet = (Pellet*)target;
-		pellet->stimulate(InteractKill(&teki, 0));
+		pellet->stimulate(InteractKill(&teki));
 		teki.clearCreaturePointer(2);
 		teki.stopParticleGenerator(2);
 	}

@@ -106,9 +106,9 @@ bool TaiAnimationSwallowingAction::act(Teki& teki)
 			numSlots = mouth->getChildCount();
 		}
 
-		InteractKill NRef kill = InteractKill(&teki, 0);
-		bool check1            = false;
-		Navi* navi             = naviMgr->getNavi();
+		InteractKill NRef kill = InteractKill(&teki);
+		bool check1        = false;
+		Navi* navi         = naviMgr->getNavi();
 
 		if (andCond3.satisfy(navi)) {
 			navi->stimulate(InteractSwallow(&teki, nullptr, 0));
@@ -173,7 +173,7 @@ bool TaiAnimationSwallowingAction::act(Teki& teki)
 
 			if (stuck->isStickToMouth()) {
 				PRINT_NAKATA("TaiAnimationSwallowingAction::act:ACTION_1:kill:%08x:%08x\n", &teki, stuck);
-				stuck->stimulate(InteractKill(&teki, 0));
+				stuck->stimulate(InteractKill(&teki));
 				iter.dec();
 			}
 		}

@@ -377,7 +377,7 @@ void NaviDemoSunsetState::setActors(Navi* navi)
 		Piki* piki = (Piki*)*iterPiki;
 		if (piki->mMode != PikiMode::FormationMode || piki->getState() == PIKISTATE_Flying) {
 			piki->mEraseOnKill = true;
-			piki->kill(false);
+			piki->kill();
 			iterPiki.dec();
 		}
 	}
@@ -393,7 +393,7 @@ void NaviDemoSunsetState::setActors(Navi* navi)
 		Creature* item = *iterItem;
 		if (item->mObjType != OBJTYPE_Pikihead && item->mObjType != OBJTYPE_Goal && item->mObjType != OBJTYPE_Fulcrum
 		    && item->mObjType != OBJTYPE_Rope) {
-			item->kill(false);
+			item->kill();
 		}
 	}
 }

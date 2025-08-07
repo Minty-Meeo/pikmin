@@ -505,7 +505,7 @@ protected:
 		{
 			Creature* piki = *iter;
 			if (piki && part->mCentre.distance(piki->getPosition()) < range) {
-				piki->stimulate(InteractKill(&teki, 0));
+				piki->stimulate(InteractKill(&teki));
 				iter.dec();
 			}
 		}

@@ -399,7 +399,7 @@ void PikiHeadAI::KaretaExec::act(AICreature* item)
  */
 void PikiHeadAI::Dead::act(AICreature* item)
 {
-	item->kill(false);
+	item->kill();
 }
 
 /**
@@ -663,7 +663,7 @@ void BombAI::DieExec::act(AICreature* item)
 	item->setMotionSpeed(0.0f);
 	item->mCurrentItemHealth -= time;
 	if (item->mCurrentItemHealth <= 0.0f) {
-		item->kill(false);
+		item->kill();
 	}
 }
 
@@ -783,7 +783,7 @@ void GoalAI::BootEmit::act(AICreature* item)
 		itemMgr->getContainer(oldSeed->mSeedColor)->mHeldPikis[Leaf]++;
 		GameStat::containerPikis.inc(oldSeed->mSeedColor);
 		GameStat::update();
-		oldSeed->kill(false);
+		oldSeed->kill();
 		GameStat::workPikis.dec(oldSeed->mSeedColor);
 		PRINT("far mePiki was killed\n");
 	} else {
@@ -810,7 +810,7 @@ void GoalAI::BootEmit::act(AICreature* item)
 			GameStat::update();
 			PRINT("far Piki was killed ** color%d\n", oldPiki->mColor);
 			oldPiki->setEraseKill();
-			oldPiki->kill(false);
+			oldPiki->kill();
 		} else {
 			ERROR("the end\n");
 		}
@@ -1001,7 +1001,7 @@ void GemAI::Die::act(AICreature* item)
 		C_SAI(goal)->procMsg(goal, &msg);
 	}
 	obj->mIsAlive = false;
-	item->kill(false);
+	item->kill();
 	STACK_PAD_VAR(1);
 }
 
@@ -1045,7 +1045,7 @@ bool WaterAI::CollideChar::satisfy(AICreature* item)
  */
 void WaterAI::Die::act(AICreature* item)
 {
-	item->kill(false);
+	item->kill();
 }
 
 /**
@@ -1095,5 +1095,5 @@ void FallWaterAI::EmitInit::act(AICreature* item)
  */
 void FallWaterAI::DisappearInit::act(AICreature* item)
 {
-	item->kill(false);
+	item->kill();
 }

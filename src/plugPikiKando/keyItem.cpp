@@ -216,7 +216,7 @@ void DoorItem::update()
 
 		if (mFadeTimer < 0.0f) {
 			mStateId = DoorState::Killed;
-			kill(false);
+			kill();
 		}
 	} else {
 		ItemCreature::update();

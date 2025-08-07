@@ -753,7 +753,7 @@ void BossMgr::kill(Creature* target)
 				mActiveBossCounts[i]--;
 				bNode->del();
 				mFreeNodes[i].add(bNode);
-				bNode->mBoss->kill(false);
+				bNode->mBoss->kill();
 				return;
 			}
 		}
@@ -778,7 +778,7 @@ void BossMgr::killAll()
 			mActiveBossCounts[i]--;
 			bNode->del();
 			mFreeNodes[i].add(bNode);
-			bNode->mBoss->kill(true);
+			bNode->mBoss->kill();
 			bNode->mBoss->exitCourse();
 			node = next;
 		}
