@@ -13,63 +13,6 @@ struct EffectSimpleParticleRegistration;
 
 /**
  * @brief TODO
- */
-struct SmokeEmitter : public Node {
-
-	/**
-	 * @brief TODO
-	 *
-	 * @note Size: 0x38.
-	 */
-	struct Smoke {
-		Smoke() { mNext = mPrev = nullptr; }
-
-		void insertAfter(Smoke* newSmoke)
-		{
-			newSmoke->mNext = mNext;
-			newSmoke->mPrev = this;
-			mNext->mPrev    = newSmoke;
-			mNext           = newSmoke;
-		}
-		void remove()
-		{
-			mNext->mPrev = mPrev;
-			mPrev->mNext = mNext;
-		}
-
-		Vector3f mPosition; // _00
-		f32 mSize;          // _0C
-		Smoke* mNext;       // _10
-		Smoke* mPrev;       // _14
-		f32 mLifeTimer;     // _18
-		f32 mExpandRate;    // _1C
-		f32 mAlpha;         // _20
-		f32 mAlphaIncRate;  // _24
-		f32 mMaxSize;       // _28
-		Vector3f mVelocity; // _2C
-	};
-
-	SmokeEmitter(int, Texture*); // unused/inlined
-
-	virtual void draw(Graphics&); // _14
-
-	// unused/inlined:
-	Smoke* emit(immut Vector3f&, immut Vector3f&);
-	void update(f32);
-
-	// _00     = VTBL
-	// _00-_20 = Node
-	Smoke* mSmokes;            // _20
-	int mSmokeCount;           // _24
-	int mBlendMode;            // _28
-	Smoke* mActiveSmokeList;   // _2C
-	Smoke* mInactiveSmokeList; // _30
-	Texture* mTexture;         // _34
-	Shape* mModel;             // _38
-};
-
-/**
- * @brief TODO
  *
  * @note Size: 0x28.
  */
