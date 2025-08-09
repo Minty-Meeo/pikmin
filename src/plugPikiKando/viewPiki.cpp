@@ -480,7 +480,7 @@ void ViewPiki::demoDraw(Graphics& gfx, immut Matrix4f* mtx)
 				gfx.setColour(COLOUR_WHITE, 1);
 			}
 
-			const char* strs[6] = { "A", "B", "C", "D", "E", "F" };
+			static const char* strs[6] = { "A", "B", "C", "D", "E", "F" };
 			char buf[256];
 			int formMode = act->mMode;
 			int cb       = gfx.setCBlending(0);

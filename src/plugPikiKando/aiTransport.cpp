@@ -1421,11 +1421,11 @@ void ActTransport::draw(Graphics& gfx)
 		return;
 	}
 
-	const char* stateNames[] = {
+	static const char* stateNames[] = {
 		"go", "wait", "lift", "move", "guru", "goal", "put",
 	};
 
-	const char* type[] = {
+	static const char* type[] = {
 		"tube",
 		"vert",
 		"other",

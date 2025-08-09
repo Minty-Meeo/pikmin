@@ -114,8 +114,8 @@ void AIPerf::addMenu(Menu* menu)
 	sprintf(modeText, "%s", AIPerf::generatorMode ? "Generator Mode" : "Game Mode");
 	menu->addOption(0, modeText, new Delegate1<AIPerf, Menu&>(this, &AIPerf::toggleGeneratorMode), true);
 
-	char* moveTypeText      = new char[0x40];
-	const char* moveTypes[] = { "stop", "no stop", "slip" };
+	char* moveTypeText             = new char[0x40];
+	static const char* moveTypes[] = { "stop", "no stop", "slip" };
 	sprintf(moveTypeText, "%s", moveTypes[AIPerf::moveType]);
 	menu->addOption(0, moveTypeText, new Delegate1<AIPerf, Menu&>(this, &AIPerf::toggleMoveType), true);
 
@@ -161,7 +161,7 @@ void AIPerf::toggleMoveType(Menu& menu)
 {
 	AIPerf::moveType = (AIPerf::moveType + 1) % 3;
 
-	const char* types[] = { "stop", "no stop", "slip" };
+	static const char* types[] = { "stop", "no stop", "slip" };
 	sprintf(menu.mCurrentItem->mName, "%s", types[AIPerf::moveType]);
 }
 

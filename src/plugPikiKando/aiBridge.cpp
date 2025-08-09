@@ -57,7 +57,7 @@ void ActBridge::init(Creature* creature)
  */
 void ActBridge::dump()
 {
-	const char* stateNames[] = { "approach", "detour", "go", "work" };
+	static const char* stateNames[] = { "approach", "detour", "go", "work" };
 	PRINT("state : %s  bridge stage : %d\n", stateNames[mState], mStageIdx);
 	Vector3f stagePos = mBridge->getStagePos(mStageIdx);
 	Vector3f sep      = stagePos - mPiki->mSRT.t;
