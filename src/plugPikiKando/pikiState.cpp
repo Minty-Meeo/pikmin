@@ -2935,8 +2935,8 @@ PikiAutoNukiState::PikiAutoNukiState()
  */
 void PikiAutoNukiState::init(Piki* piki)
 {
-	immut Choice motionChoice[1] = { PIKIANIM_Kaifuku, 1.0f }; // lol
-	int motionIdx                = selectRandomly(motionChoice, 1);
+	static immut Choice motionChoice[1] = { PIKIANIM_Kaifuku, 1.0f }; // lol
+	int motionIdx                       = selectRandomly(motionChoice, 1);
 	piki->mPikiAnimMgr.startMotion(PaniMotionInfo(motionIdx, piki), PaniMotionInfo(motionIdx));
 	mToCreateEffect = false;
 	piki->mVelocity.set(0.0f, 0.0f, 0.0f);
@@ -3070,7 +3070,7 @@ PikiDyingState::PikiDyingState()
 void PikiDyingState::init(Piki* piki)
 {
 	piki->mActiveAction->abandon(nullptr);
-	immut Choice motionChoices[3] = {
+	static immut Choice motionChoices[3] = {
 		{ PIKIANIM_Dead, 0.33f },
 		{ PIKIANIM_Dead2, 0.33f },
 		{ PIKIANIM_Dead3, 0.33f },
@@ -3188,12 +3188,12 @@ void PikiEmotionState::init(Piki* piki)
 	switch (piki->mEmotion) {
 	case PikiEmotion::Excited:
 	{
-		immut Choice motionChoices[2] = {
+		static immut Choice motionChoices[2] = {
 			{ PIKIANIM_Jump_B1, 0.5f },
 			{ PIKIANIM_Gattu, 0.5f },
 		};
 
-		int soundChoices[2] = {
+		static immut int soundChoices[2] = {
 			SEF_PIKI_JUMP1,
 			SEF_PIKI_ANGRY1,
 		};
@@ -3208,13 +3208,13 @@ void PikiEmotionState::init(Piki* piki)
 	}
 	case PikiEmotion::Happy:
 	{
-		immut Choice motionChoices[3] = {
+		static immut Choice motionChoices[3] = {
 			{ PIKIANIM_Jump_B1, 0.33f },
 			{ PIKIANIM_Jump, 0.33f },
 			{ PIKIANIM_RotJump, 0.33f },
 		};
 
-		int soundChoices[3] = {
+		static immut int soundChoices[3] = {
 			SEF_PIKI_JUMP1,
 			SEF_PIKI_JUMP2,
 			SEF_PIKI_JUMP3,
@@ -3229,7 +3229,7 @@ void PikiEmotionState::init(Piki* piki)
 	}
 	case PikiEmotion::Searching:
 	{
-		immut Choice motionChoices[2] = {
+		static immut Choice motionChoices[2] = {
 			{ PIKIANIM_Sagasu, 0.5f },
 			{ PIKIANIM_Sagasu2, 0.5f },
 		};
@@ -3241,12 +3241,12 @@ void PikiEmotionState::init(Piki* piki)
 	}
 	case PikiEmotion::Confused:
 	{
-		immut Choice motionChoices[2] = {
+		static immut Choice motionChoices[2] = {
 			{ PIKIANIM_Gakkari, 0.5f },
 			{ PIKIANIM_Sagasu2, 0.5f },
 		};
 
-		int soundChoices[2] = {
+		static immut int soundChoices[2] = {
 			SEF_PIKI_GAKKARI,
 			SEF_PIKI_SNEEZE,
 		};
@@ -3288,12 +3288,12 @@ void PikiEmotionState::init(Piki* piki)
 	}
 	case PikiEmotion::ShipPartCheer:
 	{
-		immut Choice motionChoices[5] = {
+		static immut Choice motionChoices[5] = {
 			{ PIKIANIM_Jump, 0.2f },   { PIKIANIM_Jump_B1, 0.2f }, { PIKIANIM_RotJump, 0.2f },
 			{ PIKIANIM_Rinbow, 0.2f }, { PIKIANIM_Gattu, 0.2f },
 		};
 
-		int soundChoices[5] = {
+		static immut int soundChoices[5] = {
 			SEF_PIKI_JUMP1, SEF_PIKI_JUMP2, SEF_PIKI_JUMP3, SEF_PIKI_NOBI, SEF_PIKI_YATTA,
 		};
 
