@@ -435,27 +435,30 @@ public:
 
 	bool animationFinished() { return mTekiAnimator->isFinishing(); }
 
-	// this is basically two static enums smh
-	static const int TEKI_OPTION_VISIBLE;
-	static const int TEKI_OPTION_SHADOW_VISIBLE;
-	static const int TEKI_OPTION_LIFE_GAUGE_VISIBLE;
-	static const int TEKI_OPTION_ATARI;
-	static const int TEKI_OPTION_ALIVE;
-	static const int TEKI_OPTION_ORGANIC;
-	static const int TEKI_OPTION_MANUAL_ANIMATION;
-	static const int TEKI_OPTION_GRAVITATABLE;
-	static const int TEKI_OPTION_INVINCIBLE;
-	static const int TEKI_OPTION_PRESSED;
-	static const int TEKI_OPTION_DRAWED;
-	static const int TEKI_OPTION_SHAPE_VISIBLE;
-	static const int TEKI_OPTION_DAMAGE_COUNTABLE;
+	enum TekiOption {
+		TEKI_OPTION_VISIBLE            = 1 << 0,
+		TEKI_OPTION_SHADOW_VISIBLE     = 1 << 1,
+		TEKI_OPTION_LIFE_GAUGE_VISIBLE = 1 << 2,
+		TEKI_OPTION_ATARI              = 1 << 3,
+		TEKI_OPTION_ALIVE              = 1 << 4,
+		TEKI_OPTION_ORGANIC            = 1 << 5,
+		TEKI_OPTION_MANUAL_ANIMATION   = 1 << 7,
+		TEKI_OPTION_GRAVITATABLE       = 1 << 8,
+		TEKI_OPTION_INVINCIBLE         = 1 << 9,
+		TEKI_OPTION_PRESSED            = 1 << 10,
+		TEKI_OPTION_DRAWED             = 1 << 13,
+		TEKI_OPTION_SHAPE_VISIBLE      = 1 << 14,
+		TEKI_OPTION_DAMAGE_COUNTABLE   = 1 << 15,
+	};
 
-	static const int ANIMATION_KEY_OPTION_FINISHED;
-	static const int ANIMATION_KEY_OPTION_ACTION_0;
-	static const int ANIMATION_KEY_OPTION_ACTION_1;
-	static const int ANIMATION_KEY_OPTION_ACTION_2;
-	static const int ANIMATION_KEY_OPTION_LOOPSTART;
-	static const int ANIMATION_KEY_OPTION_LOOPEND;
+	enum AnimationKeyOption {
+		ANIMATION_KEY_OPTION_FINISHED  = 1 << KEY_Finished,
+		ANIMATION_KEY_OPTION_ACTION_0  = 1 << KEY_Action0,
+		ANIMATION_KEY_OPTION_ACTION_1  = 1 << KEY_Action1,
+		ANIMATION_KEY_OPTION_ACTION_2  = 1 << KEY_Action2,
+		ANIMATION_KEY_OPTION_LOOPSTART = 1 << KEY_LoopStart,
+		ANIMATION_KEY_OPTION_LOOPEND   = 1 << KEY_LoopEnd,
+	};
 
 	// This was already public up above, but in case you forgot.  This class cannot possibly have been encapsulated properly.
 public:
