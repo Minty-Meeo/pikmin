@@ -139,7 +139,7 @@ config.objdiff_path = args.objdiff
 config.binutils_path = args.binutils
 config.compilers_path = args.compilers
 config.generate_map = args.map
-config.non_matching = args.non_matching
+config.non_matching = True
 config.sjiswrap_path = args.sjiswrap
 config.generate_compile_commands = False
 config.progress = args.progress
@@ -272,14 +272,12 @@ cflags_runtime = [
     "-inline auto",
 ]
 
-config.linker_version = "GC/1.2.5"
+config.linker_version = "GC/2.6"
 
 
 # Helper function for Dolphin libraries
 def DolphinLib(lib_name: str, objects: List[Object]) -> Dict[str, Any]:
-    mw_version = "GC/1.2.5"
-    if version_num == 0 or version_num == 7: # JPN demo and PAL
-        mw_version = "GC/1.2.5n"
+    mw_version = "GC/2.6"
     return {
         "lib": lib_name,
         "mw_version": mw_version,
@@ -305,7 +303,7 @@ config.libs = [
     {
         "lib": "sysBootup",
         "cflags": cflags_pikmin,
-        "mw_version": "GC/1.2.5n",
+        "mw_version": "GC/2.6",
         "progress_category" : "game",
         "objects": [
             Object(Matching, "sysBootup.cpp"),
@@ -314,7 +312,7 @@ config.libs = [
     {
         "lib": "jaudio",
         "cflags": cflags_jaudio,
-        "mw_version": "GC/1.2.5n",
+        "mw_version": "GC/2.6",
         "progress_category" : "jaudio",
         "objects": [
             Object(Matching, "jaudio/dummyprobe.c"),
@@ -382,7 +380,7 @@ config.libs = [
     {
         "lib": "hvqm4dec",
         "cflags": cflags_base,
-        "mw_version": "GC/1.2.5",
+        "mw_version": "GC/2.6",
         "progress_category" : "hvqm4dec",
         "objects": [
             Object(Matching, "hvqm4dec/hvqm4dec.c"),
@@ -391,7 +389,7 @@ config.libs = [
     {
         "lib": "sysCommon",
         "cflags": cflags_pikmin,
-        "mw_version": "GC/1.2.5n",
+        "mw_version": "GC/2.6",
         "progress_category" : "game",
         "objects": [
             Object(Matching, "sysCommon/ayuStack.cpp"),
@@ -420,7 +418,7 @@ config.libs = [
     {
         "lib": "sysDolphin",
         "cflags": cflags_pikmin,
-        "mw_version": "GC/1.2.5n",
+        "mw_version": "GC/2.6",
         "progress_category" : "game",
         "objects": [
             Object(Equivalent, "sysDolphin/texture.cpp"),
@@ -434,7 +432,7 @@ config.libs = [
     {
         "lib": "plugPikiColin",
         "cflags": cflags_pikmin,
-        "mw_version": "GC/1.2.5n",
+        "mw_version": "GC/2.6",
         "progress_category" : "game",
         "objects": [
             Object(Equivalent, "plugPikiColin/cardutil.cpp"),
@@ -468,7 +466,7 @@ config.libs = [
     {
         "lib": "plugPikiKando",
         "cflags": cflags_pikmin,
-        "mw_version": "GC/1.2.5n",
+        "mw_version": "GC/2.6",
         "progress_category" : "game",
         "objects": [
             Object(Matching, "plugPikiKando/omake.cpp"),
@@ -608,7 +606,7 @@ config.libs = [
     {
         "lib": "plugPikiNakata",
         "cflags": cflags_pikmin,
-        "mw_version": "GC/1.2.5n",
+        "mw_version": "GC/2.6",
         "progress_category" : "game",
         "objects": [
             Object(Matching, "plugPikiNakata/genteki.cpp"),
@@ -671,7 +669,7 @@ config.libs = [
     {
         "lib": "plugPikiNishimura",
         "cflags": cflags_pikmin,
-        "mw_version": "GC/1.2.5n",
+        "mw_version": "GC/2.6",
         "progress_category" : "game",
         "objects": [
             Object(Matching, "plugPikiNishimura/genBoss.cpp"),
@@ -713,7 +711,7 @@ config.libs = [
     {
         "lib": "plugPikiOgawa",
         "cflags": cflags_pikmin,
-        "mw_version": "GC/1.2.5n",
+        "mw_version": "GC/2.6",
         "progress_category" : "game",
         "objects": [
             Object(Matching, "plugPikiOgawa/ogTest.cpp"),
@@ -745,7 +743,7 @@ config.libs = [
     {
         "lib": "plugPikiYamashita",
         "cflags": cflags_pikmin,
-        "mw_version": "GC/1.2.5n",
+        "mw_version": "GC/2.6",
         "progress_category" : "game",
         "objects": [
             Object(not MatchingFor("G98E01_PIKIDEMO"), "plugPikiYamashita/gameCourseClear.cpp"),
@@ -876,7 +874,7 @@ config.libs = [
     ),
     {
         "lib": "mtx",
-        "mw_version": "GC/1.2.5",
+        "mw_version": "GC/2.6",
         "cflags": cflags_base,
         "progress_category": "sdk",
         "objects": [
@@ -993,7 +991,7 @@ config.libs = [
     ),
     {
         "lib": "Runtime.PPCEABI.H",
-        "mw_version": "GC/1.2.5",
+        "mw_version": "GC/2.6",
         "progress_category" : "sdk",
         "cflags": [*cflags_runtime, "-inline deferred"],
         "objects": [
@@ -1010,7 +1008,7 @@ config.libs = [
     },
     {
         "lib": "MSL_C.PPCEABI.bare.H",
-        "mw_version": "GC/1.2.5",
+        "mw_version": "GC/2.6",
         "progress_category" : "sdk",
         "cflags": [*cflags_base, "-fp_contract on", "-inline auto,deferred", "-str pool,readonly"],
         "objects": [
@@ -1085,7 +1083,7 @@ config.libs = [
     },
     {
         "lib": "amcExi2",
-        "mw_version": "GC/1.2.5",
+        "mw_version": "GC/2.6",
         "progress_category" : "sdk",
         "cflags": cflags_base,
         "objects": [
@@ -1095,7 +1093,7 @@ config.libs = [
     },
     {
         "lib": "amcnotstub",
-        "mw_version": "GC/1.2.5",
+        "mw_version": "GC/2.6",
         "progress_category" : "sdk",
         "cflags": cflags_base,
         "objects": [
@@ -1104,7 +1102,7 @@ config.libs = [
     },
     {
         "lib": "OdemuExi2",
-        "mw_version": "GC/1.2.5",
+        "mw_version": "GC/2.6",
         "progress_category" : "sdk",
         "cflags": cflags_base,
         "objects": [
@@ -1113,7 +1111,7 @@ config.libs = [
     },
     {
         "lib": "odenotstub",
-        "mw_version": "GC/1.2.5",
+        "mw_version": "GC/2.6",
         "progress_category" : "sdk",
         "cflags": cflags_base,
         "objects": [
