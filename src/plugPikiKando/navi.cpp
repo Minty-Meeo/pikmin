@@ -498,24 +498,7 @@ Navi::Navi(CreatureProp* props, int naviID)
 }
 
 /**
- * @todo: Documentation
- * @note UNUSED Size: 0000F8
- */
-void Navi::Locus::update()
-{
-	// UNUSED FUNCTION (matching by size)
-	f32 time = gsys->getFrameTime() * 2.4f;
-	_00      = _00 + _0C * time;
-	_18.updatePos(_00);
-	if (_00.y < mapMgr->getMinY(_00.x, _00.z, true)) {
-		_28 = 1;
-		_18.kill();
-	}
-	_0C.y -= AIConstant::_instance->mConstants.mGravity() * time;
-}
-
-/**
- * @todo: Documentation
+ * @TODO: Documentation
  */
 void Navi::startKontroller()
 {

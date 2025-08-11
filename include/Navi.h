@@ -30,17 +30,6 @@ struct PikiHeadItem;
  */
 struct Navi : public Creature, public PaniAnimKeyListener, public PelletView {
 public:
-	struct Locus {
-		Locus() { _28 = 1; }; // Only the DLL has it, so it was probably inline.
-
-		void update();
-
-		Vector3f _00;        // _00
-		Vector3f _0C;        // _0C
-		PermanentEffect _18; // _18
-		int _28;             // _28
-	};
-
 	Navi(CreatureProp*, int);
 
 	virtual void viewKill();                                   // _154
