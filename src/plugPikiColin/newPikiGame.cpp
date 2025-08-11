@@ -879,11 +879,9 @@ ModeState* RunningModeState::update(u32& result)
 			if (playerState->happyEndable()) {
 				// we got at least 25 parts!
 				flowCont.mEndingType = ENDING_Neutral;
-				gameflow.mGameInterface->message(MOVIECMD_TextDemo, zen::ogScrTutorialMgr::TUT_BadEnding);
-			} else {
-				// uh oh - olimin time
-				gameflow.mGameInterface->message(MOVIECMD_TextDemo, zen::ogScrTutorialMgr::TUT_BadEnding);
 			}
+			// uh oh - olimin time
+			gameflow.mGameInterface->message(MOVIECMD_TextDemo, zen::ogScrTutorialMgr::TUT_BadEnding);
 		}
 	}
 

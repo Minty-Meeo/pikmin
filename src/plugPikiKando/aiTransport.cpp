@@ -946,11 +946,7 @@ int ActTransport::moveGuruGuru()
 			mWaitTimer -= TAU;
 			if (!gameflow.mMoviePlayer->mIsActive && !playerState->mDemoFlags.isFlag(DEMOFLAG_CarryPathBlocked)) {
 				playerState->mDemoFlags.setFlagOnly(DEMOFLAG_CarryPathBlocked);
-				if (pel->aiCullable()) {
-					gameflow.mGameInterface->message(MOVIECMD_TextDemo, zen::ogScrTutorialMgr::TUT_Rute);
-				} else {
-					GameCoreSection::startTextDemo(pel, zen::ogScrTutorialMgr::TUT_Rute);
-				}
+				gameflow.mGameInterface->message(MOVIECMD_TextDemo, zen::ogScrTutorialMgr::TUT_Rute);
 			}
 		}
 

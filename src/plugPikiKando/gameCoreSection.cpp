@@ -80,14 +80,6 @@ DEFINE_PRINT("gameCoreSection")
 /**
  * @todo: Documentation
  */
-void GameCoreSection::startTextDemo(Creature*, int textDemoID)
-{
-	gameflow.mGameInterface->message(MOVIECMD_TextDemo, textDemoID);
-}
-
-/**
- * @todo: Documentation
- */
 void GameCoreSection::updateTextDemo()
 {
 	if (gameflow.mIsUIOverlayActive) {
