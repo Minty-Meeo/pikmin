@@ -30,17 +30,6 @@ struct PikiHeadItem;
  */
 struct Navi : public Creature, public PaniAnimKeyListener, public PelletView {
 public:
-	struct Locus {
-		Locus() { mIsInactive = true; }; // Only the DLL has it, so it was probably inline.
-
-		void update();
-
-		Vector3f mPosition;      // _00
-		Vector3f mVelocity;      // _0C
-		PermanentEffect mEffect; // _18
-		int mIsInactive;         // _28
-	};
-
 	Navi(CreatureProp*, int);
 
 	virtual void viewKill();                                   // _154

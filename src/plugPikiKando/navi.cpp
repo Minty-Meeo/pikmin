@@ -500,24 +500,6 @@ Navi::Navi(CreatureProp* props, int naviID)
 
 /**
  * @todo: Documentation
- * @note UNUSED Size: 0000F8 (Matching by size)
- */
-void Navi::Locus::update()
-{
-	f32 speed = gsys->getFrameTime() * 2.4f;
-	mPosition = mPosition + mVelocity * speed;
-	mEffect.updatePos(mPosition);
-
-	if (mPosition.y < mapMgr->getMinY(mPosition.x, mPosition.z, true)) {
-		mIsInactive = true;
-		mEffect.kill();
-	}
-
-	mVelocity.y -= AIConstant::_instance->mConstants.mGravity() * speed;
-}
-
-/**
- * @todo: Documentation
  */
 void Navi::startKontroller()
 {
