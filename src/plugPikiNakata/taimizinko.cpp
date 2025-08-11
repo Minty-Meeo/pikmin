@@ -483,11 +483,7 @@ void TaiMizinkoStrategy::start(Teki& teki)
  */
 void TaiMizinkoStrategy::draw(Teki& teki, Graphics& gfx)
 {
-	if (hasWater(teki)) { // amazing
-		TekiStrategy::draw(teki, gfx);
-	} else {
-		TekiStrategy::draw(teki, gfx);
-	}
+	TekiStrategy::draw(teki, gfx);
 
 	if (!teki.mParticleGenerators[0]) {
 		return;

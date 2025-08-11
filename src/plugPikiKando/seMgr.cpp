@@ -158,10 +158,5 @@ void SeMgr::leaveBattle()
  */
 void SeMgr::setPikiNum(int pikiNum)
 {
-	if (pikiNum == 0) {
-		// idk why we need this check but whatever.
-		Jac_Piki_Number(0);
-	} else {
-		Jac_Piki_Number(pikiNum);
-	}
+	Jac_Piki_Number(pikiNum);
 }

@@ -931,11 +931,7 @@ int ActTransport::moveGuruGuru()
 			mWaitTimer -= TAU;
 			if (!gameflow.mMoviePlayer->mIsActive && !playerState->mDemoFlags.isFlag(DEMOFLAG_CarryPathBlocked)) {
 				playerState->mDemoFlags.setFlagOnly(DEMOFLAG_CarryPathBlocked);
-				if (pel->aiCullable()) {
-					gameflow.mGameInterface->message(MOVIECMD_TextDemo, 23);
-				} else {
-					GameCoreSection::startTextDemo(pel, 23);
-				}
+				gameflow.mGameInterface->message(MOVIECMD_TextDemo, 23);
 			}
 		}
 

@@ -565,10 +565,8 @@ ModeState* RunningModeState::update(u32& result)
 		if (playerState->getCurrParts() != MAX_UFO_PARTS && gameflow.mWorldClock.mCurrentDay == MAX_DAYS) {
 			if (playerState->happyEndable()) {
 				flowCont._244 = 1;
-				gameflow.mGameInterface->message(MOVIECMD_TextDemo, 28);
-			} else {
-				gameflow.mGameInterface->message(MOVIECMD_TextDemo, 28);
 			}
+			gameflow.mGameInterface->message(MOVIECMD_TextDemo, 28);
 		}
 	}
 

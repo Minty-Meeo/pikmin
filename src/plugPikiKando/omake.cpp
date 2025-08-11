@@ -81,12 +81,7 @@ void AttentionCamera::update()
 		}
 		mTarget->mFaceDirection = roundAng(getCameraSafeAngle(mTarget->mSRT.t, 600.0f, 400.0f));
 
-		// lol.
-		if (mTarget->mObjType != OBJTYPE_Navi) {
-			cameraMgr->mCamera->startCamera(mTarget);
-		} else {
-			cameraMgr->mCamera->startCamera(mTarget);
-		}
+		cameraMgr->mCamera->startCamera(mTarget);
 
 		mFadeState = 2;
 		mActiveFader->initFadeIn();

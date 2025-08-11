@@ -69,8 +69,6 @@ struct GameCoreSection : public Node {
 	void draw1D(Graphics&);
 	void draw2D(Graphics&);
 
-	static void startTextDemo(Creature*, int);
-
 	// unused/inlined:
 	bool hideTeki();
 	bool hideAllPellet();
