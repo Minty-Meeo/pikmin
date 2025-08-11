@@ -469,33 +469,6 @@ struct DefaultFader : public AttentionCamera::Fader {
 	f32 mFadeDuration; // _0C
 };
 
-/**
- * @brief TODO
- *
- * @note Completely inlined struct, possibly needed in omake.cpp
- */
-struct NoiseFunction {
-	void init(int);
-	f32 getValue(f32);
-
-	int mCount;   // _00
-	f32* mValues; // _04
-};
-
-/**
- * @brief TODO
- *
- * @note Completely inlined struct, possibly needed in omake.cpp
- */
-struct TurbulenceFun : public NoiseFunction {
-	void init(int, int);
-	f32 getValue(f32);
-
-	// _00-_08 = NoiseFunction
-	int _08;        // _08
-	f32 mFrequency; // _0C
-};
-
 extern AttentionCamera* attentionCamera;
 
 #endif
