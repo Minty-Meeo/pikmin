@@ -14,6 +14,10 @@ struct CollPart;
  */
 struct TAIAeffCloudOfDust : public TaiAction {
 public:
+	enum RumbleType {
+		RUMBLE_NONE = -1,
+	};
+
 	TAIAeffCloudOfDust(int nextState, EffectMgr::effTypeTable effID, f32 sinkThreshold, int footNum, int jointID0, int jointID1,
 	                   int jointID2, int jointID3)
 	    : TaiAction(nextState)
@@ -45,8 +49,6 @@ protected:
 	          int jointID1, int jointID2, int jointID3);
 	void createCloudOfDust(Teki&, int);
 	CollPart* getCollPart(Teki&, int);
-
-	static const int RUMBLE_NONE;
 
 	// _04     = VTBL
 	// _00-_08 = TaiAction

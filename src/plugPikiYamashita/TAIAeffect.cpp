@@ -17,8 +17,6 @@ DEFINE_ERROR(14)
  */
 DEFINE_PRINT("TAIAeffect")
 
-const int TAIAeffCloudOfDust::RUMBLE_NONE = -1;
-
 /**
  * @todo: Documentation
  */
