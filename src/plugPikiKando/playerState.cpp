@@ -18,8 +18,6 @@
 #include "gameflow.h"
 #include "sysNew.h"
 
-int PlayerState::totalUfoParts = MAX_UFO_PARTS;
-
 bool preloadUFO = false;
 PlayerState* playerState;
 
@@ -169,7 +167,7 @@ void PlayerState::initGame()
 	mDisplayPikiFlag       = 0;
 	mShipEffectPartFlag    = 8;
 	mTotalRegisteredParts  = 0;
-	mTotalParts            = totalUfoParts;
+	mTotalParts            = MAX_UFO_PARTS;
 	mRequiredUfoPartCount  = 0;
 	mCurrParts             = 0;
 	mCurrentRepairingPart  = nullptr;
@@ -219,7 +217,7 @@ PlayerState::PlayerState()
 	mDisplayPikiFlag       = 0;
 	mShipEffectPartFlag    = 8;
 	mTotalRegisteredParts  = 0;
-	mTotalParts            = totalUfoParts;
+	mTotalParts            = MAX_UFO_PARTS;
 
 	mUfoParts             = new UfoParts[mTotalParts];
 	mRequiredUfoPartCount = 0;

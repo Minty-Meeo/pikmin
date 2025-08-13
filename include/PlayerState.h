@@ -198,8 +198,6 @@ public:
 protected:
 	UfoParts* findUfoParts(u32); // Was it really necessary to make this protected?
 
-	static int totalUfoParts;
-
 public:
 	int mSproutedNum;                     // _00
 	int mLostBattlePikis;                 // _04
