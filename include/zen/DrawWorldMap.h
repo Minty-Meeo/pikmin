@@ -251,6 +251,11 @@ public:
 		LINK_COUNT, // 4
 	};
 
+	enum EventType {
+		EVENT_NONE          = 0,
+		EVENT_APPEAR_FINISH = 1,
+	};
+
 	WorldMapCoursePoint()
 	{
 		mAppearState   = CourseAppearState::Ready;
@@ -409,9 +414,6 @@ public:
 
 	WorldMapCoursePoint* getLinkCoursePointPtr(linkFlag id) { return mLinkPoints[id]; }
 
-	static const int EVENT_NONE;          // 0
-	static const int EVENT_APPEAR_FINISH; // 1
-
 protected:
 	u32 mEventFlag;                               // _00
 	int mAppearState;                             // _04
@@ -482,6 +484,8 @@ struct WorldMapPartsInfoMgr;
  */
 struct WorldMapTitleMgr {
 public:
+	enum { OBJ_NUM = 5 };
+
 	WorldMapTitleMgr()
 	{
 		mTitleObjects      = new WorldMapTitleObj[OBJ_NUM];
@@ -534,8 +538,6 @@ public:
 	}
 
 protected:
-	static const int OBJ_NUM;
-
 	WorldMapTitleObj* mTitleObjects; // _00, array of OBJ_NUM objects
 	int mCurrentTitleIndex;          // _04
 };
