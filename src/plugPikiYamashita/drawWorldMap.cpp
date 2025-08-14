@@ -1711,8 +1711,6 @@ protected:
 
 } // namespace zen
 
-const int zen::WorldMapTitleMgr::OBJ_NUM = 5;
-
 // probably need to move these around later for ordering
 f32 zen::WorldMapCursorOnyon::bottomLengthMin     = 10.0f;
 f32 zen::WorldMapCursorOnyon::bottomLengthDefault = 15.0f;
@@ -1723,9 +1721,6 @@ const f32 zen::WorldMapCursorMgr::ONYON_POS_RADIUS = 60.0f;
 const f32 zen::WorldMapCursorMgr::ONYON_OFFSET_X   = 0.0f;
 const f32 zen::WorldMapCursorMgr::ONYON_OFFSET_Y   = 20.0f;
 const f32 zen::WorldMapCursorMgr::ONYON_OFFSET_Z   = 0.0f;
-
-const int WorldMapCoursePoint::EVENT_NONE          = 0;
-const int WorldMapCoursePoint::EVENT_APPEAR_FINISH = 1;
 
 /**
  * @todo: Documentation
