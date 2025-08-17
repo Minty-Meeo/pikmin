@@ -49,28 +49,4 @@ protected:
 	bool mIsDynamicsSimpleFixed;  // _43F
 };
 
-/**
- * @brief TODO
- */
-struct PelCreature : public DualCreature {
-public:
-	PelCreature(int, ItemShapeObject*, CreatureProp*, MapMgr*);
-
-	virtual void init(immut Vector3f&);          // _28
-	virtual void startAI(int);                   // _34
-	virtual f32 getiMass();                      // _38
-	virtual bool isAlive();                      // _88
-	virtual void doRender(Graphics&, Matrix4f&); // _118
-	virtual void doCreateColls(Graphics&);       // _11C
-
-protected:
-	// _00      = VTBL
-	// _00-_440 = DualCreature
-	PaniItemAnimator mItemAnimator; // _440
-	ItemShapeObject* mItemShape;    // _494
-	CollInfo mItemCollInfo;         // _498
-	CollPart mItemParts[10];        // _4AC
-	u32 mPartIDs[10];               // _8BC
-};
-
 #endif
