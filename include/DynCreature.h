@@ -52,7 +52,6 @@ public:
 	Vector3f mAngularMomentum;       // _2B8
 	Vector3f mAngularVelocity;       // _2C4
 	f32 mPickOffset;                 // _2D0
-	u16 mParticleCount;              // _2D4, might be s16
 	DynParticle* mParticleList;      // _2D8
 	Vector3f mAngularImpulseAccum;   // _2DC
 	Vector3f mCenterOfMass;          // _2E8

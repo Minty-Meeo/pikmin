@@ -382,5 +382,4 @@ bool GemItem::isAlive()
  */
 void GemItem::setRouteTracer(RouteTracer* routeTracer)
 {
-	mRouteTracer = routeTracer;
 }

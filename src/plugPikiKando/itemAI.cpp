@@ -752,7 +752,6 @@ void GoalAI::BootEmit::act(AICreature* item)
 		pos.y += 110.0f;
 		seed->init(pos);
 		seed->setColor(obj->mOnionColour);
-		rand();
 		f32 dir = obj->mFaceDirection;
 		seed->mVelocity.set(sinf(dir) * 290.0f, 800.0f, cosf(dir) * 290.0f);
 		item->playEventSound(item, SE_CONTAINER_PIKIBORN);
@@ -836,13 +835,6 @@ void GoalAI::EmitPiki::act(AICreature* item)
 	GoalItem* obj = (GoalItem*)item;
 
 	if (item->mCounter > 0) {
-		Vector3f pos = item->mSRT.t;
-		pos.y += 110.0f;
-
-		f32 unused1 = gsys->getRand(1.0f) * PI * 2;
-		f32 unused2 = 145.0f;
-		f32 unused3 = 400.0f;
-
 		effectMgr->create(EffectMgr::EFF_Onyon_FireworkTrail, item->mSRT.t, nullptr, nullptr);
 		effectMgr->create(EffectMgr::EFF_Onyon_FireworkMain, item->mSRT.t, nullptr, nullptr);
 		effectMgr->create(EffectMgr::EFF_Onyon_FireworkKisek, item->mSRT.t, nullptr, nullptr);

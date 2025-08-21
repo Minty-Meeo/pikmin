@@ -175,8 +175,6 @@ public:
 	int mConeEffectId;                                    // _52C
 	Vector3f mPca1FxPosition;                             // _530
 	Vector3f mPca2FxPosition;                             // _53C
-	bool mIsPca1FxActive;                                 // _548
-	bool mIsPca2FxActive;                                 // _549
 	Vector3f mSpotlightPosition;                          // _54C
 	int mWaypointID;                                      // _558
 	UfoShapeObject* mShipModel;                           // _55C

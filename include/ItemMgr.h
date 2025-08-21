@@ -69,7 +69,6 @@ public:
 	SearchData mItemSearchData[8];     // _30C
 	PaniItemAnimator mItemAnimator;    // _36C
 	ItemShapeObject* mItemShapeObject; // _3C0
-	bool _3C4;                         // _3C4
 };
 
 /**

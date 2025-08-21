@@ -311,7 +311,6 @@ protected:
 	void corpse(Teki& teki)
 	{
 		int typeID = TekiMgr::getTypeId(teki.mTekiType);
-		ID32 unused(typeID);
 		teki.becomePellet(typeID, teki.getCentre(), teki.mFaceDirection);
 		if (!teki.mPellet) {
 			ERROR("?dieSoon:%08x:pellet==null\n", this);

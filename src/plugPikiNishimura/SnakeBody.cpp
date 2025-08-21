@@ -1076,7 +1076,6 @@ void SnakeBody::setDeadScale(Matrix4f* animMatrices)
  */
 void SnakeBody::returnJoint(BossShapeObject* shapeObj, Graphics& gfx, immut Matrix4f* animMatrices)
 {
-	Matrix4f mtx1; // unused? lol.
 	Matrix4f inv8;
 	Matrix4f inv7;
 	Matrix4f inv11;

@@ -590,7 +590,6 @@ void ItemCreature::init(immut Vector3f& pos)
 	if (mItemShapeObject) {
 		mItemAnimator.init(&mItemShapeObject->mAnimContext, mItemShapeObject->mAnimMgr, itemMgr->mItemMotionTable);
 	}
-	_3C4 = true;
 }
 
 /**
@@ -720,7 +719,6 @@ void ItemCreature::refresh(Graphics& gfx)
 	}
 
 	if (mItemShapeObject) {
-		_3C4 = false;
 		Matrix4f mtx;
 		mWorldMtx.makeSRT(mSRT.s, mSRT.r, mSRT.t);
 		gfx.mCamera->mLookAtMtx.multiplyTo(mWorldMtx, mtx);
@@ -988,7 +986,6 @@ void BuildingItem::startAI(int)
 	mItemShapeObject->mShape->makeInstance(mAnimatedMaterials, 0);
 	mCounter    = 0;
 	mCurrAnimId = 0;
-	_3C4        = true;
 	mSeContext  = &mBuildSFX;
 	mSeContext->setContext(this, JACEVENT_Build);
 	PRINT("*** \n");
@@ -1093,7 +1090,6 @@ void BuildingItem::refresh(Graphics& gfx)
 	}
 
 	if (mItemShapeObject) {
-		_3C4 = false;
 		Matrix4f mtx;
 		mWorldMtx.makeSRT(mSRT.s, mSRT.r, mSRT.t);
 		gfx.mCamera->mLookAtMtx.multiplyTo(mWorldMtx, mtx);
