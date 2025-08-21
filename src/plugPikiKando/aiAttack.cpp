@@ -51,7 +51,6 @@ void ActAttack::init(Creature* creature)
 
 	mPiki->mActionState = 0;
 	mPiki->mEmotion     = PikiEmotion::Excited;
-	mPiki->getState(); // this is also just like this in the DLL lol
 
 	if (!creature) {
 		PRINT("commander is 0 karl gotti!!!!!!!!!!1\n"); // lol

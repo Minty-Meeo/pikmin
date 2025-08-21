@@ -131,7 +131,6 @@ DynCreature::DynCreature()
     : Creature(nullptr)
 {
 	mParticleList  = nullptr;
-	mParticleCount = 0;
 	mMass          = 0.0f;
 	mPickOffset    = 0.0f;
 	mAngularImpulseAccum.set(0.0f, 0.0f, 0.0f);
@@ -181,7 +180,6 @@ void DynCreature::addParticle(f32 mass, immut Vector3f& position)
 		}
 
 		mMass += mass;
-		mParticleCount++;
 	} else {
 #if defined(VERSION_GPIE01_00) || defined(VERSION_GPIE01_01) || defined(VERSION_GPIP01_00)
 #else

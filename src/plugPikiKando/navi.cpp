@@ -899,9 +899,6 @@ void Navi::update()
  */
 void Navi::animationKeyUpdated(immut PaniAnimKeyEvent& event)
 {
-	// sure kando.
-	int lowerMotionID = mNaviAnimMgr.getLowerAnimator().getCurrentMotionIndex();
-	int upperMotionID = mNaviAnimMgr.getUpperAnimator().getCurrentMotionIndex();
 	if (event.mEventType == KEY_PlaySound) {
 		int attr = ATTR_Solid;
 		if (mGroundTriangle) {
@@ -949,7 +946,6 @@ void Navi::animationKeyUpdated(immut PaniAnimKeyEvent& event)
  */
 void Navi::callPikis(f32 radius)
 {
-	Vector3f unused = mCursorWorldPos - mSRT.t;
 	STACK_PAD_VAR(4);
 
 	Iterator iterPiki(pikiMgr);

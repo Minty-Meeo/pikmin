@@ -178,7 +178,6 @@ void AyuStack::pop()
 void AyuHeap::init(immut char* name, int allocFlags, void* stackBase, int stackSizeBytes)
 {
 	create(name, allocFlags, stackBase, stackSizeBytes, false);
-	_24 = 0;
 }
 
 /**

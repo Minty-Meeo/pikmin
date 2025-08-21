@@ -103,7 +103,6 @@ struct AyuHeap : public AyuStack {
 	void init(immut char* name, int allocFlags, void* stackBase, int stackSizeBytes);
 
 	// _00-_24 = AyuStack
-	u8 _24; // _24
 };
 
 #endif

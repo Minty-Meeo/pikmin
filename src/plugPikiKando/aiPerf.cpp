@@ -82,7 +82,6 @@ void AIPerf::clearCounts()
  */
 void AIPerf::addMenu(Menu* menu)
 {
-	char* unused = new char[0x40];
 	menu->addKeyEvent(Menu::KeyEventType::SpecialRelease, KBBTN_B, new Delegate1<Menu, Menu&>(menu, &Menu::menuCloseMenu));
 
 	char* bridgeText = new char[0x40];

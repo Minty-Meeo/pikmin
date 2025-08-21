@@ -328,7 +328,6 @@ private:
 	f32 mMoveSpeed;                                               ///< _20
 	Vector3f mFootPosList[2];                                     ///< _24
 	Vector3f mOldFootPosList[2];                                  ///< _3C
-	Vector3f _UNUSED54;                                           ///< _54
 	Vector3f mNormalisedJointDir;                                 ///< _60
 	Vector3f mMouthPos;                                           ///< _6C, TODO: these need confirmation (someone?)
 	Vector3f mEyePositions[2];                                    ///< _78, TODO: these need confirmation (someone?)

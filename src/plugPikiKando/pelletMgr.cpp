@@ -234,10 +234,7 @@ bool Pellet::isUfoPartsID(u32 partsID)
  */
 void Pellet::startWaterEffect()
 {
-	EffectParm unused(&mSRT.t); // lol.
-	EffectParm parm(mSRT.t);
-	unused.mScale = 2.0f; // this is so dumb
-	UtEffectMgr::cast(KandoEffect::Bubbles, parm);
+	UtEffectMgr::cast(KandoEffect::Bubbles, EffectParm(mSRT.t));
 }
 
 /**

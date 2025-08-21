@@ -291,7 +291,6 @@ protected:
 	bool mIsDebugDraw;         // _18
 	bool mIsSuspended;         // _19
 	bool mIsAnimating;         // _1A
-	int _1C;                   // _1C
 	Creature* mTarget;         // _20
 	int _24;                   // _24
 	u32 _28;                   // _28, unknown

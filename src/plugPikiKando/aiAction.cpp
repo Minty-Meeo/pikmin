@@ -273,8 +273,6 @@ TopAction::TopAction(Piki* piki)
 	            new ActBou(piki), nullptr           //
 	);
 
-	_1C = -1;
-
 	memStat->end("topaction");
 }
 

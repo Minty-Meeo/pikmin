@@ -266,9 +266,6 @@ void PlantMgr::initialise()
 		char shapeFile[256];
 		sprintf(shapeFile, "objects/plants/%s.mod", name);
 
-		char unused[256];
-		sprintf(unused, "%s", name);
-
 		char plantFileName[256];
 		sprintf(plantFileName, "%s.bin", name);
 

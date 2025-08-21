@@ -870,7 +870,6 @@ void UfoItem::update()
  */
 void UfoItem::setPca1Effect(bool set)
 {
-	mIsPca1FxActive = set;
 	if (set) {
 		Vector3f dir(1.0f, 0.0f, 0.0f);
 		dir.rotate(mWorldMtx);
@@ -890,7 +889,6 @@ void UfoItem::setPca1Effect(bool set)
  */
 void UfoItem::setPca2Effect(bool set)
 {
-	mIsPca2FxActive = set;
 	if (set) {
 		Vector3f dir(-1.0f, 0.0f, 0.0f);
 		dir.rotate(mWorldMtx);

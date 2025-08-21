@@ -222,7 +222,6 @@ void KingBody::init(King* king)
 		mOldFootPosList[i].set(0.0f, 0.0f, 0.0f);
 	}
 
-	_UNUSED54.set(0.0f, 0.0f, 0.0f);
 	setSalivaEffect();
 }
 

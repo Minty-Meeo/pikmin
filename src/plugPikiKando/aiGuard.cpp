@@ -64,8 +64,6 @@ void ActGuard::cleanup()
 
 	mIsGuardable = false;
 
-	// this isn't elaborated on in the DLL either.
-	rand();
 	STACK_PAD_VAR(4);
 }
 

@@ -351,10 +351,6 @@ int ActPutBomb::exeThrow()
 				beat = mTarget->mCollInfo->getSphere('beat');
 				PRINT("beat found !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!\n");
 			}
-			if (!beat) {
-				// sir
-				CollPart* unused = mTarget->getRandomCollPart('****');
-			}
 			if (beat) {
 				centre = beat->mCentre;
 			}
