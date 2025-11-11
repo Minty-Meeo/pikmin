@@ -222,7 +222,7 @@ void ActWeed::animationKeyUpdated(PaniAnimKeyEvent& event)
 			}
 			mGrassGen->killGrass();
 
-			if (gsys->getRand(1.0f) > (1.0f - GRASS_NECTAR_CHANCE)) {
+			if (!mGrassGen->isAlive() || gsys->getRand(1.0f) > (1.0f - GRASS_NECTAR_CHANCE)) {
 				MizuItem* nectar = static_cast<MizuItem*>(itemMgr->birth(OBJTYPE_FallWater));
 				if (nectar) {
 					Vector3f nectarPos(mCurrGrass->mPosition);
