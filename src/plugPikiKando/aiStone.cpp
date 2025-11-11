@@ -205,7 +205,7 @@ void ActStone::animationKeyUpdated(immut PaniAnimKeyEvent& event)
 			UtEffectMgr::cast(KandoEffect::PikiGrowup2, parm);
 			mRockGen->killPebble();
 			mPiki->playEventSound(mRockGen, SEB_STONE_BREAK);
-			if (gsys->getRand(1.0f) > (1.0f - STONE_NECTAR_CHANCE)) {
+			if (!mRockGen->isAlive() || gsys->getRand(1.0f) > (1.0f - STONE_NECTAR_CHANCE)) {
 				MizuItem* nectar = static_cast<MizuItem*>(itemMgr->birth(OBJTYPE_FallWater));
 				if (nectar) {
 					Vector3f nectarPos(effectPos);
