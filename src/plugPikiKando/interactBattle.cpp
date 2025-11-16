@@ -603,13 +603,3 @@ bool InteractPress::actPiki(Piki* piki)
 	piki->mTargetVelocity.set(0.0f, 0.0f, 0.0f);
 	return true;
 }
-
-/*
- * --INFO--
- * Address:	8007C84C
- * Size:	000008
- */
-bool InteractFlute::actTeki(Teki*)
-{
-	return true;
-}

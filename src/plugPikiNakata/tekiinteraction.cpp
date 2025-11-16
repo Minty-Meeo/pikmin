@@ -81,6 +81,17 @@ bool InteractPress::actTeki(Teki* teki)
 
 /*
  * --INFO--
+ * Address:	8007C84C
+ * Size:	000008
+ */
+bool InteractFlute::actTeki(Teki* teki)
+{
+	teki->eventPerformed(TekiEvent(TekiEventType::WakeUpCall, teki, mOwner));
+	return true;
+}
+
+/*
+ * --INFO--
  * Address:	8014A584
  * Size:	000008
  */
