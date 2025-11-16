@@ -69,6 +69,15 @@ bool InteractPress::actTeki(Teki* teki) immut
 /**
  * @todo: Documentation
  */
+bool InteractFlute::actTeki(Teki* teki) immut
+{
+	teki->eventPerformed(TekiEvent(TekiEventType::WakeUpCall, teki, mOwner));
+	return true;
+}
+
+/**
+ * @todo: Documentation
+ */
 bool InteractFlick::actTeki(Teki*) immut
 {
 	return true;

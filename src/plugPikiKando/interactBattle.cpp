@@ -559,11 +559,3 @@ bool InteractPress::actPiki(Piki* piki) immut
 	piki->mTargetVelocity.set(0.0f, 0.0f, 0.0f);
 	return true;
 }
-
-/**
- * @todo: Documentation
- */
-bool InteractFlute::actTeki(Teki*) immut
-{
-	return true;
-}
