@@ -946,7 +946,7 @@ void Navi::animationKeyUpdated(immut PaniAnimKeyEvent& event)
 		}
 		}
 
-		Jac_Orima_Walk(soundType, 0);
+		Jac_Orima_Walk(soundType);
 	}
 
 	MsgAnim msg(&event);

@@ -50,7 +50,7 @@ void Jac_UpdatePikiGaya();
 BEGIN_SCOPE_EXTERN_C
 
 //////////// JAUDIO PIKMIN DEMO FUNCTIONS (C) ////////////
-void Jac_Orima_Walk(s32 groundSoundID, u32 p2); // args uncertain
+void Jac_Orima_Walk(s32 groundSoundID);         // args
 void Jac_Orima_Formation(s32, s32);             // args
 void Jac_PlayOrimaSe(u32 orimaSoundID);         // args
 void Jac_StopOrimaSe(s32 orimaSoundID);         // args
