@@ -1004,10 +1004,10 @@ void PlayerState::ufoAssignStart()
  */
 void PlayerState::startSpecialMotions()
 {
-	startUfoPartsMotion(UFOID_Bowsprit, PelletMotion::Special, false);
-	startUfoPartsMotion(UFOID_WhimsicalRadar, PelletMotion::Special, false);
-	startUfoPartsMotion(UFOID_InterstellarRadio, PelletMotion::Special, false);
-	startUfoPartsMotion(UFOID_GuardSatellite, PelletMotion::Special, false);
+	startUfoPartsMotion(UFOID_Bowsprit, PelletMotion::Special);
+	startUfoPartsMotion(UFOID_WhimsicalRadar, PelletMotion::Special);
+	startUfoPartsMotion(UFOID_InterstellarRadio, PelletMotion::Special);
+	startUfoPartsMotion(UFOID_GuardSatellite, PelletMotion::Special);
 }
 
 /**
@@ -1028,16 +1028,12 @@ void PlayerState::startAfterMotions()
 /**
  * @todo: Documentation
  */
-void PlayerState::startUfoPartsMotion(u32 id, int anim, bool wantPassiveMotion)
+void PlayerState::startUfoPartsMotion(u32 id, int anim)
 {
 	UfoParts* part = findUfoParts(id);
 	if (part) {
 		if (part->mPelletShape->isMotionFlag(PelletMotionFlags::UsePiston)) {
-			if (wantPassiveMotion) {
-				part->startMotion(anim, PelletMotion::Piston);
-			} else {
-				part->startMotion(anim, anim);
-			}
+			part->startMotion(anim, anim);
 			part->setMotionSpeed(30.0f);
 		} else {
 			part->startMotion(anim);

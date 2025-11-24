@@ -158,7 +158,7 @@ public:
 	void ufoAssignStart();
 	void startSpecialMotions();
 	void startAfterMotions();
-	void startUfoPartsMotion(u32, int, bool);
+	void startUfoPartsMotion(u32, int);
 	void getUfoParts(u32, bool);
 	int getNextPowerupNumber();
 	void preloadHenkaMovie();

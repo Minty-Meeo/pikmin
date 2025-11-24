@@ -929,7 +929,7 @@ void Navi::animationKeyUpdated(immut PaniAnimKeyEvent& event)
 			break;
 		}
 
-		Jac_Orima_Walk(soundType, 0);
+		Jac_Orima_Walk(soundType);
 	}
 
 	MsgAnim msg(&event);
