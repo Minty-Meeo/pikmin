@@ -48,13 +48,12 @@ struct PaniAnimKeyListener {
  * @note Size: 0x8.
  */
 struct PaniMotion {
-	PaniMotion(int);
-	PaniMotion(int, int); // unused/inlined
+	PaniMotion(int id)
+	    : mAnimID(id)
+	{
+	}
 
-	void init(int, int);
-
-	int mAnimID;   // _00
-	int _UNUSED04; // _04
+	int mAnimID; // _00
 };
 
 /**
