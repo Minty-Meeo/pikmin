@@ -47,33 +47,6 @@ void PaniMotionInfo::init(int motionIdx, PaniAnimKeyListener* listener)
 /**
  * @todo: Documentation
  */
-PaniMotion::PaniMotion(int animID)
-{
-	init(animID, 1);
-}
-
-/**
- * @todo: Documentation
- * @note UNUSED Size: 000030
- */
-PaniMotion::PaniMotion(int animID, int p2)
-{
-	init(animID, p2);
-	// UNUSED FUNCTION
-}
-
-/**
- * @todo: Documentation
- */
-void PaniMotion::init(int id, int p2)
-{
-	mAnimID   = id;
-	_UNUSED04 = p2;
-}
-
-/**
- * @todo: Documentation
- */
 PaniMotionTable::PaniMotionTable(int count)
 {
 	mMotionCount = count;
