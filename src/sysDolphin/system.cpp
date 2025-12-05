@@ -413,7 +413,8 @@ static void ParseMapFile()
 				int classNameOffset = 0;
 				int fileInfoOffset  = 0;
 				int fileInfoLength  = 0;
-				for (i = 0; i < strlen(cmds->mCurrentToken); i++) {
+				int tokenLength     = strlen(cmds->mCurrentToken);
+				for (i = 0; i < tokenLength; i++) {
 					char currChar = cmds->mCurrentToken[i];
 
 					if (currChar != ' ' && currChar != '_') {
@@ -454,10 +455,10 @@ static void ParseMapFile()
 								classNameOffset = i + 3;
 							}
 
-							for (int j = i; j < strlen(cmds->mCurrentToken); j++) {
+							for (int j = i; j < tokenLength; j++) {
 								if (cmds->mCurrentToken[j] == ' ') {
 									fileInfoOffset = j + 1;
-									fileInfoLength = strlen(cmds->mCurrentToken) - fileInfoOffset;
+									fileInfoLength = tokenLength - fileInfoOffset;
 									break;
 								}
 							}

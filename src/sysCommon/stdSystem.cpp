@@ -196,11 +196,10 @@ Shape* StdSystem::loadShape(immut char* modelPath, bool checkCache)
 
 	if (!result) {
 		char shapePathBuffer[256];
-		sprintf(shapePathBuffer, "%s", modelPath);
 
 		// Isolate the first and second half of the path
 		immut char* remainingPath = nullptr;
-		for (int i = strlen(shapePathBuffer) - 1; i >= 0; i--) {
+		for (int i = sprintf(shapePathBuffer, "%s", modelPath) - 1; i >= 0; i--) {
 			u8 target = '?';
 			if ((u8)modelPath[i] != target) {
 				continue;
