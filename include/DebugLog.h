@@ -9,23 +9,23 @@
 #include <stdio.h>
 #include <string.h>
 
-#define DEFINE_PRINT(_NAME)                        \
-	static void _Print(immut char* fmt, ...)       \
-	{                                              \
-		va_list args;                              \
-		va_start(args, fmt);                       \
-		char dest[1024];                           \
-                                                   \
-		if (sysCon) {                              \
-			if (_NAME)                             \
-				sysCon->print("%s: ", _NAME);      \
-                                                   \
-			vsprintf(dest, fmt, args);             \
-			if (strlen(dest)) {                    \
-				sysCon->write(dest, strlen(dest)); \
-			}                                      \
-		}                                          \
-		va_end(args);                              \
+#define DEFINE_PRINT(_NAME)                   \
+	static void _Print(immut char* fmt, ...)  \
+	{                                         \
+		va_list args;                         \
+		va_start(args, fmt);                  \
+		char dest[1024];                      \
+                                              \
+		if (sysCon) {                         \
+			if (_NAME)                        \
+				sysCon->print("%s: ", _NAME); \
+                                              \
+			vsprintf(dest, fmt, args);        \
+			if (size_t len = strlen(dest)) {  \
+				sysCon->write(dest, len);     \
+			}                                 \
+		}                                     \
+		va_end(args);                         \
 	}
 
 // Size - 0x9C

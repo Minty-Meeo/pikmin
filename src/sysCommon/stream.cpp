@@ -164,8 +164,8 @@ void Stream::print(immut char* fmt, ...)
 	va_list args;
 	va_start(args, fmt);
 	vsprintf(dest, fmt, args);
-	if (strlen(dest)) {
-		write(dest, strlen(dest));
+	if (size_t len = strlen(dest)) {
+		write(dest, len);
 	}
 }
 

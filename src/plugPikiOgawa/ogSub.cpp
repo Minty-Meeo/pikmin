@@ -738,14 +738,12 @@ void cnvSpecialNumber(char* str)
 						int num = SpecialNumber[idx];
 						tmp += 4;
 						sprintf(work, formatStr, num);
-						sprintf(numStrBuf, formatStr, num);
-						work += strlen(numStrBuf);
+						work += sprintf(numStrBuf, formatStr, num);
 					} else {
 						int num = SpecialNumber[c - '0'];
 						tmp += 3;
 						sprintf(work, formatStr, num);
-						sprintf(numStrBuf, formatStr, num);
-						work += strlen(numStrBuf);
+						work += sprintf(numStrBuf, formatStr, num);
 					}
 				} else {
 					tmp += 2;

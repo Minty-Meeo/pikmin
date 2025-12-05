@@ -242,11 +242,12 @@ char CmdStream::nextChar()
  */
 bool CmdStream::isToken(immut char* str)
 {
-	if (strlen(mCurrentToken) == 0 || strlen(mCurrentToken) != strlen(str)) {
+	size_t currTokLen = strlen(mCurrentToken);
+	if (currTokLen == 0 || currTokLen != strlen(str)) {
 		return false;
 	}
 
-	for (s32 i = 0; i < (s32)strlen(mCurrentToken); i++) {
+	for (size_t i = 0; i < currTokLen; i++) {
 		if (mCurrentToken[i] != str[i]) {
 			return false;
 		}

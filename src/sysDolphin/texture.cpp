@@ -151,14 +151,14 @@ u8 Texture::getRed(int, int)
  */
 void Texture::read(RandomAccessStream& input)
 {
-	if (strcmp(input.mPath + (strlen(input.mPath) - 3), "txe") == 0) {
+	size_t len = strlen(input.mPath);
+	if (strcmp(input.mPath + len - 3, "txe") == 0) {
 		TexImg* img = new TexImg;
 		img->importTxe(this, input);
-	} else if (strcmp(input.mPath + (strlen(input.mPath) - 3), "bti") == 0) {
+	} else if (strcmp(input.mPath + len - 3, "bti") == 0) {
 		TexImg* img = new TexImg;
 		img->importBti(this, input, nullptr);
 	} else {
-		size_t len = strlen(input.mPath);
 		ERROR("Unknown texture extension (%s)!!\n", input.mPath - 3 + len);
 	}
 	gsys->addTexture(this, input.mPath);

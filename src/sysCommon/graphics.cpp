@@ -715,10 +715,9 @@ static s16 searchKanjiCode(u16 code)
 	codeBytes[0] = u16(code >> 8) & 0xFF;
 	codeBytes[1] = code & 0xFF;
 
-	s16 len = strlen(kanji_convert_table) >> 1;
 	s16 res = -1;
 
-	for (s16 i = 0; i < len; i++) {
+	for (s16 i = 0; i < (sizeof(kanji_convert_table) - 1) >> 1; i++) {
 		if (kanji_convert_table[2 * i] == codeBytes[0] && kanji_convert_table[2 * i + 1] == codeBytes[1]) {
 			res = i;
 			break;
@@ -1308,11 +1307,11 @@ void Graphics::perspPrintf(Font* font, immut Vector3f& pos, int p3, int p4, immu
 	char buf[PATH_MAX];
 	va_list vlist;
 	va_start(vlist, fmt);
-	vsprintf(buf, fmt, vlist);
+	int len = vsprintf(buf, fmt, vlist);
 	useTexture(font->mTexture, GX_TEXMAP0);
 	int x = p3;
 	int y = p4;
-	for (int i = 0; i < (int)strlen(buf); i++) {
+	for (int i = 0; i < len; i++) {
 		RectArea rect(x - font->mChars[buf[i] - 32].mLeftOffset, font->mChars[buf[i] - 32].mHeight + y,
 		              (x - font->mChars[buf[i] - 32].mLeftOffset) + font->mChars[buf[i] - 32].mWidth, y);
 		drawRectangle(rect, font->mChars[buf[i] - 32].mTextureCoords, &pos);
