@@ -2786,11 +2786,6 @@ void PikiNukareState::cleanup(Piki* piki)
 		playerState->mResultFlags.setOn(RESFLAG_MeetBluePikmin);
 		playerState->setContainer(Blue);
 		playerState->setDisplayPikiCount(Blue);
-
-		// plucking a blue pikmin just. force unlocks the first 3 maps? sure.
-		gameflow.mGamePrefs.openStage(STAGE_Practice);
-		gameflow.mGamePrefs.openStage(STAGE_Forest);
-		gameflow.mGamePrefs.openStage(STAGE_Cave);
 	}
 
 	gameflow.mGameInterface->message(MOVIECMD_SetInputEnabled, TRUE);
