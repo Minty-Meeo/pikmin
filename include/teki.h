@@ -472,7 +472,7 @@ public:
 	TekiTypes mTekiType;                          // _320
 	volatile int mStateID;                        // _324
 	bool mIsStateReady;                           // _328
-	STRUCT_PAD(_329, 0x330 - 0x329);              // _329, TODO: work out members
+	STRUCT_PAD(7);                                // _329, TODO: work out members
 	int mReturnStateID;                           // _330
 	int mCurrentQueueId;                          // _334
 	int mActionStateId;                           // _338
@@ -523,7 +523,7 @@ public:
 
 	// _00       = VTBL
 	// _000-_454 = BTeki
-	STRUCT_PAD(_454, 0x45C - 0x454);           // _454, TODO: work out members
+	STRUCT_PAD(8);                             // _454, TODO: work out members
 	PeveParabolaEvent* mParabolaEvent;         // _45C
 	PeveAccelerationEvent* mAccelEvent;        // _460
 	PeveCircleMoveEvent* mCircleMoveEvent;     // _464
@@ -706,7 +706,7 @@ protected:
 	f32 mSpeed;                              // _490, might just be flying speed?
 	f32 mTurnAngle;                          // _494
 	zen::particleGenerator* mPtclGenPtrs[8]; // _498, indexed by ptclIndexFlag
-	STRUCT_PAD(_4B8, 0x4);                   // _4B8, unknown
+	STRUCT_PAD(4);                           // _4B8, unknown
 	WorkObject* mWorkObject;                 // _4BC
 	f32 mDororoGravity;                      // _4C0
 	f32 mDororoBarkDesire;                   // _4C4

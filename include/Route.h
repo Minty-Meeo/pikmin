@@ -383,7 +383,7 @@ protected:
 
 	// TODO: members
 	Context mContext;             ///< _00
-	STRUCT_PAD(_30, 0x44 - 0x30); ///< _30, unknown, might be part of Context?
+	STRUCT_PAD(20);               ///< _30, unknown, might be part of Context?
 	Vector3f _44;                 ///< _44
 	Vector3f _50;                 ///< _50
 	Creature* _5C;                ///< _5C

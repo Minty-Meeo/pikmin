@@ -37,7 +37,7 @@ struct EffectParm {
 
 	Vector3f mPosition;           // _00
 	Vector3f mDirection;          // _0C
-	STRUCT_PAD(_18, 0x8);         // _18, unknown
+	STRUCT_PAD(8);                // _18, unknown
 	immut Vector3f* mPositionRef; // _20
 	f32 mScale;                   // _24
 	Creature* mOwner;             // _28

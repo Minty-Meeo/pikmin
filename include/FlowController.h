@@ -27,7 +27,7 @@ struct FlowController {
 	// TODO: members
 	StageInfo mRootInfo;           // _00
 	StageInfo* mCurrentStage;      // _A8
-	STRUCT_PAD(_AC, 0x4);          // _AC, unknown
+	STRUCT_PAD(4);                 // _AC, unknown
 	char mAnimationTestPath[0x80]; // _B0
 	char mStagePath1[0x80];        // _130
 	char mStagePath2[0x80];        // _1B0, identical to above

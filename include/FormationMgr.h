@@ -29,7 +29,7 @@ struct Rope {
 	Vector3f mPosition; // _18
 	Vector3f _24;       // _24
 	f32 mRadius;        // _30
-	STRUCT_PAD(_34, 0x4); // _34, unknown
+	STRUCT_PAD(4);      // _34, unknown
 	Rope* mPrevLink;    // _38
 	Rope* mNextLink;    // _3C
 };
@@ -47,7 +47,7 @@ struct Spine {
 	void move();
 	void refresh(Graphics&);
 
-	STRUCT_PAD(_00, 0x4);               // _00, unknown
+	STRUCT_PAD(4);                      // _00, unknown
 	int mLinkCount;                     // _04
 	Rope* mRope;                        // _08
 	SmartPtr<Creature> mTargetCreature; // _0C

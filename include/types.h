@@ -155,6 +155,110 @@ typedef u16 wchar_t;
 #define REPEAT14(x) REPEAT13(x); x
 #define REPEAT15(x) REPEAT14(x); x
 #define REPEAT16(x) REPEAT15(x); x
+#define REPEAT17(x) REPEAT16(x); x
+#define REPEAT18(x) REPEAT17(x); x
+#define REPEAT19(x) REPEAT18(x); x
+#define REPEAT20(x) REPEAT19(x); x
+#define REPEAT21(x) REPEAT20(x); x
+#define REPEAT22(x) REPEAT21(x); x
+#define REPEAT23(x) REPEAT22(x); x
+#define REPEAT24(x) REPEAT23(x); x
+#define REPEAT25(x) REPEAT24(x); x
+#define REPEAT26(x) REPEAT25(x); x
+#define REPEAT27(x) REPEAT26(x); x
+#define REPEAT28(x) REPEAT27(x); x
+#define REPEAT29(x) REPEAT28(x); x
+#define REPEAT30(x) REPEAT29(x); x
+#define REPEAT31(x) REPEAT30(x); x
+#define REPEAT32(x) REPEAT31(x); x
+#define REPEAT33(x) REPEAT32(x); x
+#define REPEAT34(x) REPEAT33(x); x
+#define REPEAT35(x) REPEAT34(x); x
+#define REPEAT36(x) REPEAT35(x); x
+#define REPEAT37(x) REPEAT36(x); x
+#define REPEAT38(x) REPEAT37(x); x
+#define REPEAT39(x) REPEAT38(x); x
+#define REPEAT40(x) REPEAT39(x); x
+#define REPEAT41(x) REPEAT40(x); x
+#define REPEAT42(x) REPEAT41(x); x
+#define REPEAT43(x) REPEAT42(x); x
+#define REPEAT44(x) REPEAT43(x); x
+#define REPEAT45(x) REPEAT44(x); x
+#define REPEAT46(x) REPEAT45(x); x
+#define REPEAT47(x) REPEAT46(x); x
+#define REPEAT48(x) REPEAT47(x); x
+#define REPEAT49(x) REPEAT48(x); x
+#define REPEAT50(x) REPEAT49(x); x
+#define REPEAT51(x) REPEAT50(x); x
+#define REPEAT52(x) REPEAT51(x); x
+#define REPEAT53(x) REPEAT52(x); x
+#define REPEAT54(x) REPEAT53(x); x
+#define REPEAT55(x) REPEAT54(x); x
+#define REPEAT56(x) REPEAT55(x); x
+#define REPEAT57(x) REPEAT56(x); x
+#define REPEAT58(x) REPEAT57(x); x
+#define REPEAT59(x) REPEAT58(x); x
+#define REPEAT60(x) REPEAT59(x); x
+#define REPEAT61(x) REPEAT60(x); x
+#define REPEAT62(x) REPEAT61(x); x
+#define REPEAT63(x) REPEAT62(x); x
+#define REPEAT64(x) REPEAT63(x); x
+#define REPEAT65(x) REPEAT64(x); x
+#define REPEAT66(x) REPEAT65(x); x
+#define REPEAT67(x) REPEAT66(x); x
+#define REPEAT68(x) REPEAT67(x); x
+#define REPEAT69(x) REPEAT68(x); x
+#define REPEAT70(x) REPEAT69(x); x
+#define REPEAT71(x) REPEAT70(x); x
+#define REPEAT72(x) REPEAT71(x); x
+#define REPEAT73(x) REPEAT72(x); x
+#define REPEAT74(x) REPEAT73(x); x
+#define REPEAT75(x) REPEAT74(x); x
+#define REPEAT76(x) REPEAT75(x); x
+#define REPEAT77(x) REPEAT76(x); x
+#define REPEAT78(x) REPEAT77(x); x
+#define REPEAT79(x) REPEAT78(x); x
+#define REPEAT80(x) REPEAT79(x); x
+#define REPEAT81(x) REPEAT80(x); x
+#define REPEAT82(x) REPEAT81(x); x
+#define REPEAT83(x) REPEAT82(x); x
+#define REPEAT84(x) REPEAT83(x); x
+#define REPEAT85(x) REPEAT84(x); x
+#define REPEAT86(x) REPEAT85(x); x
+#define REPEAT87(x) REPEAT86(x); x
+#define REPEAT88(x) REPEAT87(x); x
+#define REPEAT89(x) REPEAT88(x); x
+#define REPEAT90(x) REPEAT89(x); x
+#define REPEAT91(x) REPEAT90(x); x
+#define REPEAT92(x) REPEAT91(x); x
+#define REPEAT93(x) REPEAT92(x); x
+#define REPEAT94(x) REPEAT93(x); x
+#define REPEAT95(x) REPEAT94(x); x
+#define REPEAT96(x) REPEAT95(x); x
+#define REPEAT97(x) REPEAT96(x); x
+#define REPEAT98(x) REPEAT97(x); x
+#define REPEAT99(x) REPEAT98(x); x
+#define REPEAT100(x) REPEAT99(x); x
+#define REPEAT101(x) REPEAT100(x); x
+#define REPEAT102(x) REPEAT101(x); x
+#define REPEAT103(x) REPEAT102(x); x
+#define REPEAT104(x) REPEAT103(x); x
+#define REPEAT105(x) REPEAT104(x); x
+#define REPEAT106(x) REPEAT105(x); x
+#define REPEAT107(x) REPEAT106(x); x
+#define REPEAT108(x) REPEAT107(x); x
+#define REPEAT109(x) REPEAT108(x); x
+#define REPEAT110(x) REPEAT109(x); x
+#define REPEAT111(x) REPEAT110(x); x
+#define REPEAT112(x) REPEAT111(x); x
+#define REPEAT113(x) REPEAT112(x); x
+#define REPEAT114(x) REPEAT113(x); x
+#define REPEAT115(x) REPEAT114(x); x
+#define REPEAT116(x) REPEAT115(x); x
+#define REPEAT117(x) REPEAT116(x); x
+#define REPEAT118(x) REPEAT117(x); x
+#define REPEAT119(x) REPEAT118(x); x
+#define REPEAT120(x) REPEAT119(x); x
 // clang-format on
 
 #define REPEAT(x, n) REPEAT##n(x)
@@ -181,7 +285,7 @@ inline void padStack(void)
 
 // Add a member to a struct consisting of an array of bytes to pad for unknowable members
 // NOTE: DO NOT use this for any structs that are SERIALIZED or otherwise a FIXED SIZE
-#define STRUCT_PAD(name, n) u8 name[n]
+#define STRUCT_PAD(n) REPEAT(int : 8, n)
 
 // clang-format on
 

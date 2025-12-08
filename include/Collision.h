@@ -343,7 +343,7 @@ struct CollGroup {
 		mFarCulledTriDistances = nullptr;
 	}
 
-	STRUCT_PAD(_00, 0x4);          // _00, unknown
+	STRUCT_PAD(4);                 // _00, unknown
 	s16 mTriCount;                 // _04
 	s16 mFarCulledTriCount;        // _06
 	CollTriInfo** mTriangleList;   // _08
@@ -361,11 +361,11 @@ struct CollGroup {
 struct Collision {
 	Collision() { }
 
-	STRUCT_PAD(_00, 0x4);   // _00, unknown
+	STRUCT_PAD(4);          // _00, unknown
 	Vector3f mNormal;       // _04
 	Vector3f mContactPoint; // _10
 	RigidBody* mColliderRb; // _1C
-	STRUCT_PAD(_20, 0x4);   // _20, unknown
+	STRUCT_PAD(4);          // _20, unknown
 };
 
 /**

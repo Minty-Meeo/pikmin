@@ -398,7 +398,7 @@ public:
 	PelletView* mPelletView;              // _4A8
 	PelletAnimator mAnimator;             // _4AC
 	PelletShapeObject* mShapeObject;      // _554
-	STRUCT_PAD(_558, 0x4);                // _558, unknown
+	STRUCT_PAD(4);                        // _558, unknown
 	PelletConfig* mConfig;                // _55C
 	f32 mMotionSpeed;                     // _560
 	int mSlotFlags[3];                    // _564

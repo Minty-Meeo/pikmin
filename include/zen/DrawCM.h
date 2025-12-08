@@ -108,7 +108,7 @@ protected:
 	DrawCMscoreObj* mScoreObjs; // _00
 	int mMode;                  // _04
 	ModeFunc mModeFunction;     // _08
-	STRUCT_PAD(_14, 0x8);       // _14, unknown
+	STRUCT_PAD(8);              // _14, unknown
 	u32 mEventFlag;             // _1C
 };
 
@@ -330,9 +330,9 @@ protected:
 	DrawScreen* mScoreScreen;      // _04
 	DrawScreen* mBestScreen;       // _08
 	returnStatusFlag mReturnState; // _0C
-	STRUCT_PAD(_10, 0x4);          // _10, unknown
+	STRUCT_PAD(4);                 // _10, unknown
 	modeFlag mMode;                // _14
-	STRUCT_PAD(_18, 0x4);          // _18, unknown
+	STRUCT_PAD(4);                 // _18, unknown
 	DrawCMCSmenu* mMenu;           // _1C
 	DrawCMtitleObj mTitleObj;      // _20
 	DrawCMscoreMgr mScoreMgr;      // _4C

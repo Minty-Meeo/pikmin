@@ -318,7 +318,7 @@ struct GfxInfo {
 	void createCollData(immut Vector3f*, f32);
 
 	BoundBox mBox;           // _00
-	STRUCT_PAD(_18, 0x4);    // _18, unknown
+	STRUCT_PAD(4);           // _18, unknown
 	s16* _1C;                // _1C, this is probably actually a pointer to a struct
 	CollTriInfo* mTriangles; // _20
 };

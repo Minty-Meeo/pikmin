@@ -354,7 +354,7 @@ public:
 	SeContext* mSeContext;               // _2C
 	u8 _30;                              // _30
 	int mRebirthDay;                     // _34
-	STRUCT_PAD(_38, 0x40 - 0x38);        // _38, TODO: work out members
+	STRUCT_PAD(8);                       // _38, TODO: work out members
 	FastGrid mGrid;                      // _40
 	f32 mHealth;                         // _58
 	f32 mMaxHealth;                      // _5C

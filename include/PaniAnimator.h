@@ -143,7 +143,7 @@ struct PaniAnimator : public Animator {
 	// _00-_34 = Animator
 	PaniAnimKeyListener* mListener; // _34, unknown
 	int mCurrentKeyIndex;           // _38
-	STRUCT_PAD(_3C, 0x4);           // _3C, unknown
+	STRUCT_PAD(4);                  // _3C, unknown
 	u32 mPreviousKeyIndex;          // _40, unknown
 	int mMotionIdx;                 // _44
 	bool mIsFinished;               // _48

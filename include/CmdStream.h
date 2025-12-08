@@ -102,7 +102,7 @@ struct CmdStream {
 	int mBufferUsed;           // _10C
 	int mBufferOffset;         // _110
 	int mCurrentPosition;      // _114
-	STRUCT_PAD(_118, 0x4);     // _118, unknown
+	STRUCT_PAD(4);             // _118, unknown
 };
 
 #endif

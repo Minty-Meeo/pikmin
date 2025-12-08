@@ -503,7 +503,7 @@ struct SunIcon1CallBack : public P2DPaneCallBack, public SunAnim {
 	// _00     = VTBL
 	// _00-_04 = P2DPaneCallBack
 	// _04-_08 = SunAnim
-	STRUCT_PAD(_08, 0x4); // _08, unknown
+	STRUCT_PAD(4); // _08, unknown
 };
 
 /**
@@ -548,7 +548,7 @@ struct SunBaseCallBack : public SunMove, public P2DPaneCallBack {
 	// _10     = VTBL
 	// _00-_10 = SunMove
 	// _10-_14 = P2DPaneCallBack
-	STRUCT_PAD(_14, 0x10); // _14, unknown
+	STRUCT_PAD(16); // _14, unknown
 };
 
 /**

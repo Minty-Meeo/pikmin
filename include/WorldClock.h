@@ -19,7 +19,7 @@ struct WorldClock {
 	f32 mTimeScale;        // _00
 	f32 mHoursInDay;       // _04
 	f32 mTicksPerHour;     // _08
-	STRUCT_PAD(_0C, 0x4);  // _0C, unknown
+	STRUCT_PAD(4);         // _0C, unknown
 	f32 mLastRecordedTime; // _10
 	f32 mFractionalTime;   // _14
 	f32 mTimeOfDay;        // _18

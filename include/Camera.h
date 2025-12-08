@@ -121,7 +121,7 @@ struct CullFrustum {
 	int mViewPlaneIdx;               // _08
 	CullingPlane mCullPlanes[6];     // _0C
 	CullingPlane* mPlanePointers[6]; // _114, idk how many are in this
-	STRUCT_PAD(_12C, 0x154 - 0x12C); // _12C, unknown
+	STRUCT_PAD(40);                  // _12C, unknown
 	u8 mHasBoundOffset;              // _154
 	u8 _155;                         // _155
 	Vector3f mBoundOffset;           // _158

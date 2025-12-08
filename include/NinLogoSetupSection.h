@@ -104,10 +104,10 @@ struct NinLogoSetupSection : public Node {
 
 	// _00     = VTBL
 	// _00-_20 = Node
-	STRUCT_PAD(_20, 0x28 - 0x20); // _20, unknown
+	STRUCT_PAD(8);           // _20, unknown
 	Controller* mController; // _28
 	Menu* mMenu;             // _2C
-	STRUCT_PAD(_30, 0x50 - 0x30); // _30, unknown
+	STRUCT_PAD(32);          // _30, unknown
 };
 
 #endif

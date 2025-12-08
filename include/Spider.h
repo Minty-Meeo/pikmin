@@ -314,7 +314,7 @@ public:
 	f32 mShakeAngularVel;                                    // _84
 	f32 mLegSegmentLength[4][2];                             // _88
 	f32 mLegMotionProgress[4];                               // _A8
-	STRUCT_PAD(_B8, 0xC8 - 0xB8);                            // _B8, unknown
+	STRUCT_PAD(16);                                          // _B8, unknown
 	f32 mShakePhase;                                         // _C8
 	f32 mOscillationPhase;                                   // _CC
 	f32 mFootRaiseHeightList[4];                             // _D0

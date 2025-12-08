@@ -129,7 +129,7 @@ struct ItemMgr : public PolyObjectMgr {
 	PikiHeadMgr* mPikiHeadMgr;         // _64
 	MeltingPotMgr* mMeltingPotMgr;     // _68
 	UseNode mRootUseNode;              // _6C
-	STRUCT_PAD(_84, 0x4);              // _84, unknown
+	STRUCT_PAD(4);                     // _84, unknown
 	ItemShapeObject** mItemShapes;     // _88, array of 11 ItemShapeObject*
 	UfoShapeObject* mUfoShape;         // _8C
 	PaniMotionTable* mItemMotionTable; // _90

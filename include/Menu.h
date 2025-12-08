@@ -130,7 +130,7 @@ struct Menu : public Node {
 	RectArea mDefaultMargin;                    // _78
 	IDelegate1<Menu&>* mOnEnterCallBack;        // _88
 	IDelegate1<Menu&>* mOnExitCallBack;         // _8C
-	STRUCT_PAD(_90, 0x4);                       // _90, unknown
+	STRUCT_PAD(4);                              // _90, unknown
 	IDelegate1<Menu&>* mOnOptionChangeCallback; // _94
 	bool mIsMenuChanging;                       // _98
 	bool mIsOptionSelected;                     // _99

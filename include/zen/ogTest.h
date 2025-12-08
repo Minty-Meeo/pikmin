@@ -74,7 +74,7 @@ private:
 	s16 mSelectedMode;                   // _37C, mode setting cursor is on, see TestMode enum
 	s16 mTutorialMode;                   // _37E
 	s16 mDiaryMode;                      // _380
-	STRUCT_PAD(_382, 0x2);               // _382, unknown
+	STRUCT_PAD(2);                       // _382, unknown
 	s16 mMemChkMode;                     // _384
 	s16 mMapMode;                        // _386
 	s16 mSaveMode;                       // _388
@@ -92,7 +92,7 @@ private:
 	ogScrTotalScoreMgr* mTotalScoreMgr;  // _3AC
 	ogScrStartMgr* mStartMgr;            // _3B0
 	ogDrawSelectDiary* mDrawSelectDiary; // _3B4
-	STRUCT_PAD(_3B8, 0x8);               // _3B8, unknown
+	STRUCT_PAD(8);                       // _3B8, unknown
 };
 
 /**

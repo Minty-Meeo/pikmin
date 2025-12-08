@@ -133,7 +133,7 @@ struct Light : public CoreNode {
 	f32 mSpotQuadTerm;           // _40
 	f32 _44;                     // _44
 	f32 _48;                     // _48
-	STRUCT_PAD(_4C, 0x8);        // _4C, unknown
+	STRUCT_PAD(8);               // _4C, unknown
 	Vector3f mPosition;          // _54
 	Vector3f mDirection;         // _60
 	Colour mDiffuseColour;       // _6C
@@ -142,7 +142,7 @@ struct Light : public CoreNode {
 	u32 _78;                     // _78
 	u32 _7C;                     // _7C
 	CullingPlane mCullPlanes[6]; // _80
-	STRUCT_PAD(_188, 0x1C8 - 0x188); // _188, unknown
+	STRUCT_PAD(64);              // _188, unknown
 	u8 _1C8;                     // _1C8
 	u8 _1C9;                     // _1C9
 	Vector3f _1CC;               // _1CC
@@ -154,11 +154,12 @@ struct Light : public CoreNode {
 	Vector3f _214;               // _214
 	Vector3f _220;               // _220
 	Vector3f _22C;               // _22C
-	STRUCT_PAD(_238, 0x8);       // _238, unknown
+	STRUCT_PAD(8);               // _238, unknown
 	f32 _240;                    // _240
 	f32 _244;                    // _244
 	f32 _248;                    // _248
-	STRUCT_PAD(_24C, 0x2D4 - 0x24C); // _24C, unknown
+	STRUCT_PAD(120);             // _24C, unknown
+	STRUCT_PAD(16);              // Had to split it for macro too complex error
 };
 
 /**

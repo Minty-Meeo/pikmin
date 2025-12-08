@@ -1584,7 +1584,7 @@ struct NewPikiGameSetupSection : public BaseGameSection {
 	///< 00     = VTBL
 	///< 00-_44 = BaseGameSection
 	int _44;                       ///< 44
-	STRUCT_PAD(_48, 8);            ///< 48
+	STRUCT_PAD(8);                 ///< 48
 	Menu* mSectionMenu;            ///< 50
 	Controller* mSecondController; ///< 54
 	Font* mGameFont;               ///< 58
