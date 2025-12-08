@@ -382,14 +382,14 @@ protected:
 	void updateState();
 
 	// TODO: members
-	Context mContext;    ///< _00
-	u8 _30[0x44 - 0x30]; ///< _30, unknown, might be part of Context?
-	Vector3f _44;        ///< _44
-	Vector3f _50;        ///< _50
-	Creature* _5C;       ///< _5C
-	Vector3f _60;        ///< _60
-	Vector3f _6C;        ///< _6C
-	Vector3f _78;        ///< _78
+	Context mContext;             ///< _00
+	STRUCT_PAD(_30, 0x44 - 0x30); ///< _30, unknown, might be part of Context?
+	Vector3f _44;                 ///< _44
+	Vector3f _50;                 ///< _50
+	Creature* _5C;                ///< _5C
+	Vector3f _60;                 ///< _60
+	Vector3f _6C;                 ///< _6C
+	Vector3f _78;                 ///< _78
 };
 
 extern RouteMgr* routeMgr;

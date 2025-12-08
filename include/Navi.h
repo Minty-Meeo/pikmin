@@ -190,12 +190,12 @@ public:
 	int _71C;                            // _71C
 	int _720;                            // _720
 	bool _724;                           // _724
-	u8 _725[0x72C - 0x725];              // _725, TODO: work out members
+	STRUCT_PAD(_725, 0x72C - 0x725);     // _725, TODO: work out members
 	u32 _72C;                            // _72C, unknown
 	u32 _730;                            // _730, unknown
 	int mCurrKeyCount;                   // _734
 	f32 mNeutralTime;                    // _738, sleep button held timer?
-	u8 _73C[0x4];                        // _73C, TODO: work out members
+	STRUCT_PAD(_73C, 0x4);               // _73C, TODO: work out members
 	Vector3f _740;                       // _740
 	Vector3f _74C;                       // _74C
 	Vector3f _758;                       // _758
@@ -217,14 +217,14 @@ public:
 	PikiHeadItem* _7C0;                  // _7C0
 	Vector3f _7C4;                       // _7C4
 	f32 _7D0;                            // _7D0
-	u8 _7D4[0x7D8 - 0x7D4];              // _7D4, TODO: work out members
+	STRUCT_PAD(_7D4, 0x7D8 - 0x7D4);     // _7D4, TODO: work out members
 	SmartPtr<Creature> _7D8;             // _7D8
 	f32 _7DC;                            // _7DC
 	int mPreBlendLowerMotionID;          // _7E0
 	bool mIsPlucking;                    // _7E4
 	u8 mFastPluckKeyTaps;                // _7E5, number of times A has been pressed to continue (fast) plucking
 	u8 mNoPluckTimer;                    // _7E6, count after plucking stops to zoom out camera/stop fast pluck
-	u8 _7E7[0x7F8 - 0x7E7];              // _7E7, TODO: work out members
+	STRUCT_PAD(_7E7, 0x7F8 - 0x7E7);     // _7E7, TODO: work out members
 	Piki* mNextThrowPiki;                // _7F8
 	bool _7FC;                           // _7FC
 	f32 _800;                            // _800
@@ -252,7 +252,7 @@ public:
 	f32 _AC8;                            // _AC8
 	bool _ACC;                           // _ACC
 	CollTriInfo* _AD0;                   // _AD0
-	u8 _AD4[0x4];                        // _AD4, unknown
+	STRUCT_PAD(_AD4, 0x4);               // _AD4, unknown
 	f32 _AD8;                            // _AD8
 	AState<Navi>* mCurrState;            // _ADC
 };

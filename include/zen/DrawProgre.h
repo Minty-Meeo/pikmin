@@ -183,7 +183,7 @@ public:
 protected:
 	DrawMenu* mMenu;               // _00
 	returnStatusFlag mReturnState; // _04
-	u8 _08[0x4];                   // _08, unknown
+	STRUCT_PAD(_08, 0x4);          // _08, unknown
 	DrawProgreMes* mProgreMes;     // _0C
 };
 

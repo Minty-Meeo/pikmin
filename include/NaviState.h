@@ -492,7 +492,7 @@ struct NaviIdleState : public NaviState {
 
 	// _00     = VTBL
 	// _00-_10 = NaviState
-	u8 _10[0x4];         // _10, unknown
+	STRUCT_PAD(_10, 0x4); // _10, unknown
 	bool mStopBeingIdle; // _14
 };
 

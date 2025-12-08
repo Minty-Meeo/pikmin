@@ -430,7 +430,7 @@ struct GamePrefs : public CoreNode {
 	GameHiscores mHiscores; // _24
 	u32 _DC;                // _DC, unknown
 	u32 _E0;                // _E0
-	u8 _E4[0x108 - 0xE4];   // _E4, unknown
+	STRUCT_PAD(_E4, 0x108 - 0xE4); // _E4, unknown
 	u32 mFileNum;           // _108, unknown
 };
 
@@ -522,12 +522,12 @@ struct GameFlow : public Node {
 	int mNextSectionID;            // _1EC, see GameSectionID enum
 	int mGameSectionID;            // _1F0, see GameSectionID enum
 	s32 mNextOnePlayerSectionID;   // _1F4, see OnePlayerSectionID enum
-	u8 _1F8[0x4];                  // _1F8, unknown
+	STRUCT_PAD(_1F8, 0x4);         // _1F8, unknown
 	int mLevelIndex;               // _1FC, WHAT IS THIS???
 	u32 _200;                      // _200, unknown
 	Section* mGameSection;         // _204
 	LangMode mLangModes[2];        // _208
-	u8 _230[0x2A8 - 0x230];        // _230, unknown
+	STRUCT_PAD(_230, 0x2A8 - 0x230); // _230, unknown
 	int mLanguageIndex;            // _2A8
 	u32 mIntroMovieIdCycle;        // _2AC
 	u32 mIntroMovieId;             // _2B0, could be int
@@ -548,12 +548,12 @@ struct GameFlow : public Node {
 	f32 mLevelBannerFadeValue;     // _314
 	Texture* mLoadBannerTexture;   // _318
 	GameLoadIdler mGameLoadIdler;  // _31C
-	u8 _330[0x4];                  // _330
+	STRUCT_PAD(_330, 0x4);         // _330
 	BOOL mIsGameplayInputEnabled;  // _334
 	BOOL mIsUiOverlayActive;       // _338
 	BOOL _33C;                     // _33C
 	BOOL mIsTutorialActive;        // _340
-	u8 _344[0x4];                  // _344, unknown
+	STRUCT_PAD(_344, 0x4);         // _344, unknown
 	u32 _348;                      // _348, unknown
 	u32 _34C;                      // _34C, unknown
 	int mFilterType;               // _350

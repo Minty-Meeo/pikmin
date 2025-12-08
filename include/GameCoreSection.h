@@ -88,7 +88,7 @@ struct GameCoreSection : public Node {
 	// _00     = VTBL
 	// _00-_20 = Node
 	Controller* mController;          // _20
-	u8 _24[0x4];                      // _24, unknown
+	STRUCT_PAD(_24, 0x4);             // _24, unknown
 	int mDrawHideType;                // _28, enum todo
 	u32 mHideFlags;                   // _2C, see GameHideFlags enum
 	bool mUseMovieBackCamera;         // _30
@@ -98,11 +98,11 @@ struct GameCoreSection : public Node {
 	bool mIsTimePastQuarter2;         // _39
 	bool mIsTimePastQuarter3;         // _3A
 	Menu* mAiPerfDebugMenu;           // _3C, unknown
-	u8 _40[0x50 - 0x40];              // _40, unknown
+	STRUCT_PAD(_40, 0x50 - 0x40);     // _40, unknown
 	Shape* mPikiShape;                // _50, unknown
 	SearchSystem* mSearchSystem;      // _54
 	Navi* mNavi;                      // _58
-	u8 _5C[0x64 - 0x5C];              // _5C, unknown
+	STRUCT_PAD(_5C, 0x64 - 0x5C);     // _5C, unknown
 	MapMgr* mMapMgr;                  // _64
 	Texture* mShadowTexture;          // _68
 	Font* mBigFont;                   // _6C

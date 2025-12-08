@@ -515,7 +515,7 @@ protected:
 	Colour mChildColor;                                      // _120
 	u8 _124;                                                 // _124
 	u8 mChildSpawnInterval;                                  // _125
-	u8 _126[0x6];                                            // _126, unknown
+	STRUCT_PAD(_126, 0x6);                                   // _126, unknown
 	Vector3f mGravFieldAccel;                                // _12C
 	Vector3f mAirFieldVelocity;                              // _138
 	Vector3f mVortexCenter;                                  // _144

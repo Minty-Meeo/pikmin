@@ -185,9 +185,9 @@ struct NaviMgr : public MonoObjectMgr {
 	// _00     = VTBL 1
 	// _08     = VTBL 2
 	// _00-_3C = MonoObjectMgr
-	u8 _3C[0x4];                          // _3C, unknown
+	STRUCT_PAD(_3C, 0x4);                 // _3C, unknown
 	Shape* mNaviShape;                    // _40
-	u8 _44[0x4];                          // _44, unknown
+	STRUCT_PAD(_44, 0x4);                 // _44, unknown
 	PikiShapeObject* mNaviShapeObject[2]; // _48
 	PaniMotionTable* mMotionTable;        // _50
 	int mNaviID;                          // _54

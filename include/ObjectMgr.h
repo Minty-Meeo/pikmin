@@ -143,7 +143,7 @@ protected:
 	int mMaxSize;        // _28
 	int mPoolCapacity;   // _2C
 	int mActiveObjects;  // _30
-	u8 _34[0x4];         // _34
+	STRUCT_PAD(_34, 0x4); // _34
 	u8* mObjectPool;     // _38
 	int* mObjectIndices; // _3C
 	int mMaxClassLength; // _40

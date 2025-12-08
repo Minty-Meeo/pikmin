@@ -302,7 +302,7 @@ public:
 	int mFormationPriority;               // _4B8
 	Vector3f mPushTargetPos;              // _4BC
 	Vector3f _4C8;                        // _4C8
-	u8 _4D4[0x4];                         // _4D4, unknown
+	STRUCT_PAD(_4D4, 0x4);                // _4D4, unknown
 	int _4D8;                             // _4D8
 	Piki* mPushTargetPiki;                // _4DC
 	immut Plane* mWallPlane;              // _4E0

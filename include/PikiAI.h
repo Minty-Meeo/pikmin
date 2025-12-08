@@ -416,9 +416,9 @@ protected:
 	// _00     = VTBL
 	// _00-_14 = Action
 	// _14     = PaniAnimKeyListener
-	u16 mState;             // _18, see StateID enum
-	Creature* mBuildObject; // _1C
-	u8 _20[0x24 - 0x20];    // _20, unknown
+	u16 mState;                   // _18, see StateID enum
+	Creature* mBuildObject;       // _1C
+	STRUCT_PAD(_20, 0x24 - 0x20); // _20, unknown
 };
 
 /**
@@ -817,7 +817,7 @@ protected:
 	u32 _38;                      // _38, unknown
 	Vector3f _3C;                 // _3C
 	Vector3f _48;                 // _48
-	u8 _54[0x4];                  // _54, unknown
+	STRUCT_PAD(_54, 0x4);         // _54, unknown
 	int mCPlateSlotID;            // _58
 	int mTripLoopCounter;         // _5C
 	f32 _60;                      // _60
@@ -978,7 +978,7 @@ protected:
 	// _00-_14 = Action
 	SmartPtr<Creature> mTarget; // _14
 	f32 mEscapeTimer;           // _18
-	u8 _1C[0x4];                // _1C, unknown
+	STRUCT_PAD(_1C, 0x4);       // _1C, unknown
 	int mState;                 // _20
 	Vector3f mAvoidDirection;   // _24
 };
@@ -1264,13 +1264,13 @@ protected:
 	// _00     = VTBL
 	// _00-_14 = Action
 	// _14     = PaniAnimKeyListener
-	int mState;                 // _18
-	u8 _1C[0x20 - 0x1C];        // _1C, unknown
-	int mAttackState;           // _20
-	SmartPtr<Creature> mTarget; // _24
-	CollPart* mTargetCollider;  // _28
-	bool _2C;                   // _2C
-	bool mIsCriticalHit;        // _2D
+	int mState;                   // _18
+	STRUCT_PAD(_1C, 0x20 - 0x1C); // _1C, unknown
+	int mAttackState;             // _20
+	SmartPtr<Creature> mTarget;   // _24
+	CollPart* mTargetCollider;    // _28
+	bool _2C;                     // _2C
+	bool mIsCriticalHit;          // _2D
 };
 
 /**
@@ -1570,9 +1570,9 @@ protected:
 	HinderRock* mHinderRock; // _18
 	u8 mPushAnimationState;  // _1C
 	u16 mState;              // _1E
-	u8 _20[0x4];             // _20, unknown
+	STRUCT_PAD(_20, 0x4);    // _20, unknown
 	int _24;                 // _24
-	u8 _28[0x4];             // _28, unknown
+	STRUCT_PAD(_28, 0x4);    // _28, unknown
 	Vector3f _2C;            // _2C
 	f32 _38;                 // _38
 	bool mPushObjectStopped; // _3C
@@ -1937,11 +1937,11 @@ protected:
 	// _00     = VTBL
 	// _00-_14 = Action
 	// _14     = PaniAnimKeyListener
-	u16 mState;          // _18
-	u8 _1A[0x20 - 0x1A]; // _1A, unknown
-	Pebble* mCurrPebble; // _20, unknown
-	RockGen* mRockGen;   // _24
-	bool mIsAttackReady; // _28
+	u16 mState;                   // _18
+	STRUCT_PAD(_1A, 0x20 - 0x1A); // _1A, unknown
+	Pebble* mCurrPebble;          // _20, unknown
+	RockGen* mRockGen;            // _24
+	bool mIsAttackReady;          // _28
 };
 
 /**
@@ -2125,7 +2125,7 @@ protected:
 	// _00-_14 = Action
 	// _14     = PaniAnimKeyListener
 	u16 mState;              // _18
-	u8 _1A[0x6];             // _1A, unknown
+	STRUCT_PAD(_1A, 0x6);    // _1A, unknown
 	Grass* mCurrGrass;       // _20
 	GrassGen* mGrassGen;     // _24
 	u16 _28;                 // _28

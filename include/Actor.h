@@ -41,10 +41,10 @@ protected:
 
 	// _00      = VTBL
 	// _00-_304 = AICreature
-	PaniPikiAnimMgr mPikiAnimMgr; // _304
-	PikiShapeObject* mPikiShape;  // _3B0
-	u8 _3B4[0x3d8 - 0x3b4];       // _3B4
-	ActorMgr* mMgr;               // _3D8
+	PaniPikiAnimMgr mPikiAnimMgr;    // _304
+	PikiShapeObject* mPikiShape;     // _3B0
+	STRUCT_PAD(_3B4, 0x3d8 - 0x3b4); // _3B4
+	ActorMgr* mMgr;                  // _3D8
 };
 
 /**

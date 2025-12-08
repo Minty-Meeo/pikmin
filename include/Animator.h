@@ -632,7 +632,7 @@ struct AnimMgr : public CoreNode {
 struct FrameCacher : public CacheInfo {
 	// _00-_0C = CacheInfo
 	CacheInfo** mInfo;     // _0C
-	u8 _10[4];             // _10, unknown
+	STRUCT_PAD(_10, 4);    // _10, unknown
 	u32* mBoneMatricesEnd; // _14
 	u32* mBoneMtxList;     // _18
 	u32 mBoneMatrices[1];  // _1C
@@ -651,7 +651,7 @@ struct AnimFrameCacher {
 
 	AyuCache* mCache; // _00
 	CacheInfo mInfo;  // _04
-	u8 _10[0x8];      // _10, unknown
+	STRUCT_PAD(_10, 0x8); // _10, unknown
 };
 
 #endif

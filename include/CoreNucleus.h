@@ -80,10 +80,10 @@ public:
 private:
 	// _00      = VTBL
 	// _00-_3B8 = Boss
-	u8 _3B8[0x4];           // _3B8, unknown
+	STRUCT_PAD(_3B8, 0x4);  // _3B8, unknown
 	Slime* mSlime;          // _3BC
 	CoreNucleusAi* mCoreAi; // _3C0
-	u8 _3C4[0x4];           // _3C4, unknown
+	STRUCT_PAD(_3C4, 0x4);  // _3C4, unknown
 };
 
 /**

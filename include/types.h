@@ -179,6 +179,12 @@ inline void padStack(void)
 // Uses a ternary to pad the stack by some number of words
 #define STACK_PAD_TERNARY(expr, n) TERNARY_BUILD_MATCHING(REPEAT((expr) ? "fake" : "fake", n), (void)0)
 
+// Add a member to a struct consisting of an array of bytes to pad for unknowable members
+// NOTE: DO NOT use this for any structs that are SERIALIZED or otherwise a FIXED SIZE
+#define STRUCT_PAD(name, n) u8 name[n]
+
+// clang-format on
+
 #ifdef __MWERKS__
 #define WEAKFUNC        __declspec(weak)
 #define DECL_SECT(name) __declspec(section name)

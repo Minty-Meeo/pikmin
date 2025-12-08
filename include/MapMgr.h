@@ -325,7 +325,7 @@ struct MapMgr {
 	MapRoom* mMapRooms;                 // _14, array of 256 MapRooms
 	int mVertRayCount;                  // _18
 	int mGroundTriRayCount;             // _1C
-	u8 _20[0x60 - 0x20];                // _20, unknown
+	STRUCT_PAD(_20, 0x60 - 0x20);       // _20, unknown
 	Shape* mMapShape;                   // _60
 	ShapeDynMaterials mDynMaterials;    // _64
 	BaseShape* mPartShapes[5];          // _74
