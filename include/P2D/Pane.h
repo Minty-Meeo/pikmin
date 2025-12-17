@@ -178,9 +178,7 @@ public:
 protected:
 	virtual void drawSelf(int x, int y) // _2C
 	{
-		Matrix4f mtx;
-		mtx.makeIdentity();
-		drawSelf(x, y, &mtx);
+		drawSelf(x, y, &Matrix4f::ident);
 	}
 	virtual void drawSelf(int x, int y, immut Matrix4f* transform); // _30
 	virtual P2DPane* search(u32 tag, bool doPanicOnNull);           // _34

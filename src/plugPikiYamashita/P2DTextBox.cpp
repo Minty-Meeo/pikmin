@@ -82,9 +82,7 @@ P2DTextBox::P2DTextBox(P2DPane* pane, RandomAccessStream* ramStream, u16 param3)
  */
 void P2DTextBox::drawSelf(int param1, int param2)
 {
-	Matrix4f matrix;
-	matrix.makeIdentity();
-	drawSelf(param1, param2, &matrix);
+	drawSelf(param1, param2, &Matrix4f::ident);
 }
 
 /**
