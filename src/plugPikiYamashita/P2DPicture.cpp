@@ -153,9 +153,7 @@ void P2DPicture::initinfo()
  */
 void P2DPicture::drawSelf(int x, int y)
 {
-	Matrix4f mtx;
-	mtx.makeIdentity();
-	drawSelf(x, y, &mtx);
+	drawSelf(x, y, &Matrix4f::ident);
 }
 
 /**

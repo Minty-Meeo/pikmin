@@ -92,9 +92,7 @@ P2DWindow::P2DWindow(P2DPane* parent, RandomAccessStream* input, u16 paneType)
  */
 void P2DWindow::drawSelf(int x, int y)
 {
-	Matrix4f mtx;
-	mtx.makeIdentity();
-	drawSelf(x, y, &mtx);
+	drawSelf(x, y, &Matrix4f::ident);
 }
 
 /**
