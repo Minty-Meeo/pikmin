@@ -50,7 +50,7 @@ struct Matrix4f {
 	void makeReflection(Plane&);
 	void makeBillVector(Vector3f&, Matrix4f&, Vector3f&);
 
-	void makeSRT(SRT srt) { makeSRT(srt.s, srt.r, srt.t); }
+	void makeSRT(immut SRT& srt) { makeSRT(srt.s, srt.r, srt.t); }
 
 	inline void set(immut Matrix4f& other)
 	{

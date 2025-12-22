@@ -828,16 +828,15 @@ void AnimData::makeAnimSRT(int boneId, immut Matrix4f* parent, Matrix4f* output,
 	}
 
 	if (check) {
-		SRT& srt = info->mSRT;
 		extractSRT(info->mSRT, boneId, info, pos);
 		if ((info->mFlags & AnimDataFlags::AllComponentsStatic) == AnimDataFlags::AllComponentsStatic) {
 			boneTransform = &info->mMtx;
 			if (!(info->mFlags & AnimDataFlags::MatrixCalculated)) {
-				boneTransform->makeSRT(srt.s, srt.r, srt.t);
+				boneTransform->makeSRT(info->mSRT);
 				info->mFlags |= AnimDataFlags::MatrixCalculated;
 			}
 		} else {
-			output->makeConcatSRT(parent, *boneTransform, srt);
+			output->makeConcatSRT(parent, *boneTransform, info->mSRT);
 			return;
 		}
 	}
@@ -1519,17 +1518,16 @@ void AnimDck::extractSRT(SRT& srt, int, AnimDataInfo* anim, f32 time)
  */
 void AnimDck::makeAnimSRT(int a, immut Matrix4f* mtx1, Matrix4f* mtx2, AnimDataInfo* anim, f32 time)
 {
-	SRT& srt = anim->mSRT;
-	extractSRT(srt, a, anim, time);
+	extractSRT(anim->mSRT, a, anim, time);
 	if ((anim->mFlags & AnimDataFlags::AllComponentsStatic) == AnimDataFlags::AllComponentsStatic) {
 		if (!(anim->mFlags & AnimDataFlags::MatrixCalculated)) {
-			anim->mMtx.makeSRT(srt.s, srt.r, srt.t);
+			anim->mMtx.makeSRT(anim->mSRT);
 			anim->mFlags |= AnimDataFlags::MatrixCalculated;
 		}
 		PSMTXConcat(mtx1->mMtx, anim->mMtx.mMtx, mtx2->mMtx);
 	} else {
 		Matrix4f mtx;
-		mtx2->makeConcatSRT(mtx1, mtx, srt);
+		mtx2->makeConcatSRT(mtx1, mtx, anim->mSRT);
 	}
 }
 
