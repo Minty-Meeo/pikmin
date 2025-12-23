@@ -245,7 +245,7 @@ void OnePlayerSection::init()
 		case ONEPLAYER_GameSetup:
 		{
 			// loading section! (post-title screen, pre-file select)
-			PRINT("making new SETUP\n");
+			OSReport("making new SETUP\n");
 			gsys->startLoading(&gameflow.mGameLoadIdler, true, 60);
 #if defined(VERSION_PIKIDEMO)
 			// the demo has a single loading banner for the setup section
@@ -276,14 +276,14 @@ void OnePlayerSection::init()
 		case ONEPLAYER_CardSelect:
 		{
 			// file select section!
-			PRINT("making new CARDSELECT\n");
+			OSReport("making new CARDSELECT\n");
 			currentSection = new CardSelectSection();
 			break;
 		}
 		case ONEPLAYER_MapSelect:
 		{
 			// world map section!
-			PRINT("making new MAPSELECT\n");
+			OSReport("making new MAPSELECT\n");
 			currentSection = new MapSelectSection();
 			break;
 		}
@@ -374,7 +374,7 @@ void OnePlayerSection::init()
 		case ONEPLAYER_IntroGame:
 		{
 			// intro crash landing cutscene!
-			PRINT("making new INTRO\n");
+			OSReport("making new INTRO\n");
 			currentSection = new IntroGameSection();
 			break;
 		}
@@ -412,28 +412,28 @@ void OnePlayerSection::init()
 			} else {
 				gameflow.mLevelBannerTex = tex;
 			}
-			PRINT("making new MAINGAME\n");
+			OSReport("making new MAINGAME\n");
 			currentSection = new NewPikiGameSection();
 			break;
 		}
 		case ONEPLAYER_GameCourseClear:
 		{
 			// this is never actually hit during gameplay
-			PRINT("making new COURSECLEAR\n");
+			OSReport("making new COURSECLEAR\n");
 			currentSection = new GameCourseClearSection();
 			break;
 		}
 		case ONEPLAYER_GameStageClear:
 		{
 			// this is never actually hit during gameplay
-			PRINT("making new STAGECLEAR\n");
+			OSReport("making new STAGECLEAR\n");
 			currentSection = new GameStageClearSection();
 			break;
 		}
 		case ONEPLAYER_GameCredits:
 		{
 			// this is only hit during the E3 Demo
-			PRINT("making new CREDITS\n");
+			OSReport("making new CREDITS\n");
 			gsys->startLoading(nullptr, true, 60);
 			currentSection = new GameCreditsSection();
 			gsys->endLoading();
@@ -442,7 +442,7 @@ void OnePlayerSection::init()
 		case ONEPLAYER_GameExit:
 		{
 			// going back to title (or credits movie)!
-			PRINT("making new EXIT\n");
+			OSReport("making new EXIT\n");
 			currentSection = new GameExitSection();
 			break;
 		}

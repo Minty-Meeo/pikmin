@@ -311,7 +311,7 @@ struct TitleSetupSection : public Node {
 				gameflow.mCurrIntroMovieID = gameflow.mNextIntroMovieID;
 				gameflow.mNextIntroMovieID = (gameflow.mNextIntroMovieID + 1) & MOV_INTRO_CYCLE_MASK; // basically mod(4)
 
-				mNextSectionsFlag = PACK_NEXT_SECTION(SECTION_MovSample);
+				mNextSectionsFlag = PACK_NEXT_SECTION(SECTION_OgTest);
 				mState            = STATE_ExitPending;
 				gsys->setFade(0.0f);
 				return;
