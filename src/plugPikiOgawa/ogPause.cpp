@@ -110,14 +110,6 @@ zen::ogScrPauseMgr::PauseStatus zen::ogScrPauseMgr::update(Controller* controlle
 		return mState;
 	}
 
-	if (playerState->getCurrDay() == 0 || playerState->getCurrDay() == playerState->getTotalDays() - 1) {
-		// disable "Go to Sunset" menu option on day 1 (trapped in tutorial) and day 30 (can't die early)
-		mMainMenu->setMenuItemActiveSw(1, false);
-	} else {
-		// "Go to Sunset" option is active every other day
-		mMainMenu->setMenuItemActiveSw(1, true);
-	}
-
 	mParentScreen->update();
 	mMainMenu->update(controller);
 	mSubMenu->update(controller);
