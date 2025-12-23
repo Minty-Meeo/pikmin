@@ -110,12 +110,6 @@ zen::ogScrPauseMgr::PauseStatus zen::ogScrPauseMgr::update(Controller* controlle
 		return mState;
 	}
 
-	if (playerState->getCurrDay() == 0 || playerState->getCurrDay() == playerState->getTotalDays() - 1) {
-		mDrawMenu1->setMenuItemActiveSw(1, false);
-	} else {
-		mDrawMenu1->setMenuItemActiveSw(1, true);
-	}
-
 	mBlackScreen->update();
 	mDrawMenu1->update(controller);
 	mDrawMenu2->update(controller);
