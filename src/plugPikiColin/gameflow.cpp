@@ -15,6 +15,7 @@
 #include "OnePlayerSection.h"
 #include "PaniTestSection.h"
 #include "RumbleMgr.h"
+#include "SoundMgr.h"
 #include "Texture.h"
 #include "TitlesSection.h"
 #include "WorldClock.h"
@@ -553,6 +554,9 @@ void GameFlow::softReset()
 	BOOL togglePrint   = gsys->mTogglePrint;
 	gsys->mTogglePrint = FALSE;
 
+	OSReport("seSystem = nullptr!  You're on your own, now!\n");
+	seSystem = nullptr;
+
 	if (mGameSectionID != mNextSectionID) {
 		gsys->resetHeap(SYSHEAP_Ovl, AYU_STACK_GROW_UP);
 		gsys->getHeap(SYSHEAP_Ovl)->setAllocType(AYU_STACK_GROW_UP);
@@ -569,25 +573,32 @@ void GameFlow::softReset()
 
 		switch (mGameSectionID) {
 		case SECTION_NinLogo:
+			OSReport("mGameSection = new NinLogoSection();\n");
 			mGameSection = new NinLogoSection();
 			break;
 		case SECTION_Titles:
+			OSReport("mGameSection = new TitlesSection();\n");
 			mGameSection = new TitlesSection();
 			break;
 		case SECTION_MovSample:
+			OSReport("mGameSection = new MovSampleSection();\n");
 			mGameSection = new MovSampleSection();
 			break;
 		case SECTION_OnePlayer:
+			OSReport("mGameSection = new OnePlayerSection();\n");
 			mGameSection = new OnePlayerSection();
 			break;
 		case SECTION_PaniTest:
 #if defined(VERSION_GPIP01_00)
+			OSReport("mGameSection = new GameCourseClearSection();\n");
 			mGameSection = new GameCourseClearSection();
 #else
+			OSReport("mGameSection = new PaniTestSection();\n");
 			mGameSection = new PaniTestSection();
 #endif
 			break;
 		case SECTION_OgTest:
+			OSReport("GameSection = new zen::OgTestSection();\n");
 			mGameSection = new zen::OgTestSection();
 			break;
 		}

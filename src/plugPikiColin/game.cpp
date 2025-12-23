@@ -202,7 +202,7 @@ void OnePlayerSection::init()
 		int nextSectionType = gameflow.mNextOnePlayerSectionID;
 		switch (nextSectionType) {
 		case ONEPLAYER_GameSetup:
-			PRINT("making new SETUP\n");
+			OSReport("making new SETUP\n");
 			gsys->startLoading(&gameflow.mGameLoadIdler, true, 60);
 			if (gameflow.mLevelIndex >= 2 && gameflow.mLevelIndex <= 4) {
 				PRINT("setting banner!\n");
@@ -217,12 +217,12 @@ void OnePlayerSection::init()
 			break;
 
 		case ONEPLAYER_CardSelect:
-			PRINT("making new CARDSELECT\n");
+			OSReport("making new CARDSELECT\n");
 			currentSection = new CardSelectSection();
 			break;
 
 		case ONEPLAYER_MapSelect:
-			PRINT("making new MAPSELECT\n");
+			OSReport("making new MAPSELECT\n");
 			currentSection = new MapSelectSection();
 			break;
 
@@ -273,7 +273,7 @@ void OnePlayerSection::init()
 			break;
 
 		case ONEPLAYER_IntroGame:
-			PRINT("making new INTRO\n");
+			OSReport("making new INTRO\n");
 			currentSection = new IntroGameSection();
 			break;
 
@@ -300,29 +300,29 @@ void OnePlayerSection::init()
 			} else {
 				gameflow.mLevelBannerTexture = tex;
 			}
-			PRINT("making new MAINGAME\n");
+			OSReport("making new MAINGAME\n");
 			currentSection = new NewPikiGameSection();
 			break;
 
 		case ONEPLAYER_GameCourseClear:
-			PRINT("making new COURSECLEAR\n");
+			OSReport("making new COURSECLEAR\n");
 			currentSection = new GameCourseClearSection();
 			break;
 
 		case ONEPLAYER_GameStageClear:
-			PRINT("making new STAGECLEAR\n");
+			OSReport("making new STAGECLEAR\n");
 			currentSection = new GameStageClearSection();
 			break;
 
 		case ONEPLAYER_GameCredits:
-			PRINT("making new CREDITS\n");
+			OSReport("making new CREDITS\n");
 			gsys->startLoading(nullptr, true, 60);
 			currentSection = new GameCreditsSection();
 			gsys->endLoading();
 			break;
 
 		case ONEPLAYER_GameExit:
-			PRINT("making new EXIT\n");
+			OSReport("making new EXIT\n");
 			currentSection = new GameExitSection();
 			break;
 		}

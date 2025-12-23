@@ -180,7 +180,7 @@ struct TitleSetupSection : public Node {
 				mStartTransitionTimer       = 0.0f;
 				gameflow.mIntroMovieId      = gameflow.mIntroMovieIdCycle;
 				gameflow.mIntroMovieIdCycle = (gameflow.mIntroMovieIdCycle + 1) & 0x3;
-				mNextSectionId              = SECTION_MovSample << 16;
+				mNextSectionId              = SECTION_OgTest << 16;
 				mState                      = 1;
 				gsys->setFade(0.0f, 3.0f);
 				return;

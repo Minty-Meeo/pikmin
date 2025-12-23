@@ -74,6 +74,7 @@ void AyuStack::checkStack()
  */
 void AyuStack::reset(int resetFlags)
 {
+	OSReport("AyuStack::reset   heap name: %s\n", mName);
 	if (resetFlags & AYU_STACK_GROW_UP) {
 		int prev = setAllocType(resetFlags);
 		gsys->invalidateObjs(mInitialStackTop, mStackTop);
@@ -177,6 +178,7 @@ void AyuStack::pop()
  */
 void AyuHeap::init(immut char* name, int allocFlags, void* stackBase, int stackSizeBytes)
 {
+	OSReport("AyuHeap::init   heap name: %s\n", name);
 	create(name, allocFlags, stackBase, stackSizeBytes, false);
 	_24 = 0;
 }

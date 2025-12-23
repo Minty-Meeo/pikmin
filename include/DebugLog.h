@@ -40,7 +40,7 @@
 		va_end(args);                         \
 	}
 
-#if defined(DEVELOP)
+#if 0
 #define PRINT(...)        _Print(__VA_ARGS__)
 #define ERROR(...)        _Error(__VA_ARGS__)
 #define PRINT_GLOBAL(...) OSReport(__VA_ARGS__)

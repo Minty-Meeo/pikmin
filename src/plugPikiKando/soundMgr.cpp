@@ -965,6 +965,7 @@ void SeSystem::calcCameraPos(immut Vector3f& objectPos, Vector3f& normalisedCamD
  */
 int SeSystem::getJacID(int soundID)
 {
+	OSReport("SeSystem::getJacID   this = %x\n", this);
 	if (soundID < 0 || soundID > SE_COUNT) {
 		PRINT("soundID = %d\n", soundID);
 		ERROR("go to HELL!\n"); // rude.
@@ -978,6 +979,7 @@ int SeSystem::getJacID(int soundID)
  */
 immut char* SeSystem::getSoundName(int soundID)
 {
+	OSReport("SeSystem::getSoundName   this = %x\n", this);
 	if (soundID < 0 || soundID > SE_COUNT) {
 		PRINT("soundID = %d\n", soundID);
 		ERROR("go to HELL!\n"); // rude.
@@ -991,6 +993,7 @@ immut char* SeSystem::getSoundName(int soundID)
  */
 int SeSystem::getEventType(int soundID)
 {
+	OSReport("SeSystem::getEventType   this = %x\n", this);
 	if (soundID < 0 || soundID > SE_COUNT) {
 		PRINT("soundID = %d\n", soundID);
 		ERROR("go to HELL!\n"); // rude.
@@ -1004,6 +1007,7 @@ int SeSystem::getEventType(int soundID)
  */
 bool SeSystem::isLoopType(int soundID)
 {
+	OSReport("SeSystem::isLoopType   this = %x\n", this);
 	if (soundID < 0 || soundID > SE_COUNT) {
 		PRINT("soundID = %d\n", soundID);
 		ERROR("go to HELL!\n"); // rude.
