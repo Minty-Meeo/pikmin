@@ -502,6 +502,7 @@ config.libs = [
             Object(Matching, "plugPikiKando/resultFlag.cpp"),
             Object(Matching, "plugPikiKando/aiConstants.cpp"),
             Object(Matching, "plugPikiKando/kio.cpp"),
+            Object(Matching, "plugPikiKando/keyConfig.cpp"),  # Stubbed
             Object(Matching, "plugPikiKando/aiPerf.cpp"),
             Object(Matching, "plugPikiKando/courseDebug.cpp"),
             Object(Matching, "plugPikiKando/memStat.cpp"),
@@ -570,6 +571,7 @@ config.libs = [
             Object(Matching, "plugPikiKando/pikiMgr.cpp"),
             Object(Matching, "plugPikiKando/pikiState.cpp"),
             Object(Matching, "plugPikiKando/viewPiki.cpp"),
+            Object(Matching, "plugPikiKando/conditions.cpp"),  # Stubbed
             Object(Matching, "plugPikiKando/generator.cpp"),
             Object(Matching, "plugPikiKando/generatorCache.cpp"),
             Object(Matching, "plugPikiKando/objectMgr.cpp"),
@@ -598,6 +600,7 @@ config.libs = [
             Object(Matching, "plugPikiKando/naviState.cpp"),
             Object(Matching, "plugPikiKando/naviDemoState.cpp"),
             Object(Matching, "plugPikiKando/gameCoreSection.cpp"),
+            Object(Matching, "plugPikiKando/gmWin.cpp"),  # Stubbed
             Object(Matching, "plugPikiKando/gameStat.cpp"),
             Object(Matching, "plugPikiKando/kmath.cpp"),
             Object(Matching, "plugPikiKando/uteffect.cpp"),
