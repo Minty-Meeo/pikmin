@@ -44,9 +44,13 @@ struct Joint : public CoreNode {
 	Joint()
 	    : CoreNode(nullptr)
 	{
-		mFlags = 1;
-		_10C   = 0;
+		mFlags           = 1;
+		_10C             = 0;
+		mRenderPolys     = nullptr;
+		mRenderPolyCount = 0;
 	}
+
+	~Joint();
 
 	virtual void read(RandomAccessStream&); // _0C
 
@@ -75,6 +79,8 @@ struct Joint : public CoreNode {
 	int mMatPolyCount;           // _110
 	int mCullIndex;              // _114
 	BaseShape* mParentShape;     // _118
+	MatPoly** mRenderPolys;      // _11C, matpolys in render order (points into BaseShape::mMatpolyList)
+	int mRenderPolyCount;        // _120
 };
 
 #endif

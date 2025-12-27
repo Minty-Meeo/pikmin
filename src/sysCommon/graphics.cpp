@@ -461,10 +461,6 @@ void PVWTextureData::read(RandomAccessStream& stream)
 	mScaleInfo.mInfo.read(stream);
 	mRotationInfo.mInfo.read(stream);
 	mTranslationInfo.mInfo.read(stream);
-
-	if (mAnimationFactor != 0xFF) {
-		(mAnimationFactor); // fake
-	}
 }
 
 /**
@@ -624,16 +620,17 @@ void Font::setTexture(Texture* tex, int numRows, int numCols)
 
 			// This is ridiculous, seriously? why?
 			// so much indexing, this isn't even an inline function
-			mChars[charIndex].mCharSpacing         = baselinePos - baseline;
-			mChars[charIndex].mLeftOffset          = baseline - leftEdge;
-			mChars[charIndex].mTextureX            = leftEdge + j * mCharWidth;
-			mChars[charIndex].mWidth               = mCharWidth - leftEdge - rightEdge;
-			mChars[charIndex].mTextureY            = i * mCharHeight;
-			mChars[charIndex].mHeight              = mCharHeight - 1;
-			mChars[charIndex].mTextureCoords.mMinX = (s16)mChars[charIndex].mTextureX;
-			mChars[charIndex].mTextureCoords.mMinY = (s16)mChars[charIndex].mTextureY;
-			mChars[charIndex].mTextureCoords.mMaxX = (s16)mChars[charIndex].mTextureX + (s16)mChars[charIndex].mWidth;
-			mChars[charIndex].mTextureCoords.mMaxY = (s16)mChars[charIndex].mTextureY + (s16)mChars[charIndex].mHeight - 1;
+			FontChar& fc            = mChars[charIndex];
+			fc.mCharSpacing         = baselinePos - baseline;
+			fc.mLeftOffset          = baseline - leftEdge;
+			fc.mTextureX            = leftEdge + j * mCharWidth;
+			fc.mWidth               = mCharWidth - leftEdge - rightEdge;
+			fc.mTextureY            = i * mCharHeight;
+			fc.mHeight              = mCharHeight - 1;
+			fc.mTextureCoords.mMinX = (s16)fc.mTextureX;
+			fc.mTextureCoords.mMinY = (s16)fc.mTextureY;
+			fc.mTextureCoords.mMaxX = (s16)fc.mTextureX + (s16)fc.mWidth;
+			fc.mTextureCoords.mMaxY = (s16)fc.mTextureY + (s16)fc.mHeight - 1;
 
 			charIndex++;
 		}
@@ -897,8 +894,9 @@ void Graphics::cacheShape(BaseShape* shape, ShapeDynMaterials* mats)
 
 	CachedShape* cache = &mCachedShapes[mCachedShapeCount];
 	Vector3f pos(shape->getAnimMatrix(0).mMtx[0][3], shape->getAnimMatrix(0).mMtx[1][3], shape->getAnimMatrix(0).mMtx[2][3]);
-	cache->mDistanceFromOrigin = pos.length();
 
+	// NB: changed from `length`, we only want relative distances, not actual value, so forget the sqrt
+	cache->mDistanceFromOrigin = pos.squaredLength();
 	bool far = false;
 	for (CachedShape* i = mShapeCache.mPrev; i != &mShapeCache; i = i->mPrev) {
 		if (cache->mDistanceFromOrigin >= i->mDistanceFromOrigin) {
