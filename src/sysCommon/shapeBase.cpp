@@ -128,6 +128,13 @@ void Mesh::read(RandomAccessStream& stream)
 	}
 }
 
+Joint::~Joint()
+{
+	if (mRenderPolys) {
+		delete[] mRenderPolys;
+	}
+}
+
 /**
  * @todo: Documentation
  * @note UNUSED Size: 00006C
@@ -1886,16 +1893,15 @@ void BaseShape::drawculled(Graphics& gfx, Camera& cam, ShapeDynMaterials* dynMat
 	}
 
 	for (int i = 0; i < mJointCount; i++) {
-		BoundBox& box = mJointList[i].mBounds;
+		Joint& joint  = mJointList[i];
+		BoundBox& box = joint.mBounds;
 		if (cam.isBoundVisible(box, 0x8000 | 0x10 | 0x20 | 0x1 | 0x2 | 0x4 | 0x8)) {
-			for (int j = mTotalMatpolyCount - 1; j >= 0; j--) {
-				if (mMatpolyList[j]->mJointList == &mJointList[i]) {
-					gfx.drawSingleMatpoly((Shape*)this, mMatpolyList[j]);
-				}
+			for (int j = 0; j < joint.mRenderPolyCount; j++) {
+				gfx.drawSingleMatpoly((Shape*)this, joint.mRenderPolys[j]);
 			}
 		} else {
 			culledJointCount++;
-			mJointList[i].mCullIndex = -1;
+			joint.mCullIndex = -1;
 		}
 	}
 
@@ -2328,6 +2334,24 @@ void BaseShape::read(RandomAccessStream& stream)
 
 			for (int i = 0; i < mTotalMatpolyCount; i++) {
 				mMatpolyList[i]->mJointList = mMatpolyList[i]->mMesh->mJointList;
+			}
+
+			// Build per-joint render lists for O(1) lookup in drawculled
+			for (int i = 0; i < mJointCount; i++) {
+				mJointList[i].mRenderPolyCount = 0;
+			}
+			for (int i = 0; i < mTotalMatpolyCount; i++) {
+				mMatpolyList[i]->mJointList->mRenderPolyCount++;
+			}
+			for (int i = 0; i < mJointCount; i++) {
+				if (mJointList[i].mRenderPolyCount > 0) {
+					mJointList[i].mRenderPolys     = new Joint::MatPoly*[mJointList[i].mRenderPolyCount];
+					mJointList[i].mRenderPolyCount = 0; // Reset for filling
+				}
+			}
+			for (int i = mTotalMatpolyCount - 1; i >= 0; i--) { // Reverse to match original render order
+				Joint* joint                                   = mMatpolyList[i]->mJointList;
+				joint->mRenderPolys[joint->mRenderPolyCount++] = mMatpolyList[i];
 			}
 
 			after = gsys->getHeap(SYSHEAP_App)->getFree();
