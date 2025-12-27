@@ -978,6 +978,13 @@ void DGXGraphics::setMatMatrices(Material* mat, int p2)
  */
 void DGXGraphics::setMaterial(Material* mat, bool p2)
 {
+	// Early bail if material is already set (lean optimisation)
+	if (mat == mCurrentMaterial) {
+		return;
+	}
+
+	mCurrentMaterial = mat;
+
 	if (mat) {
 		gsys->mMaterialCount++;
 
