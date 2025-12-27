@@ -213,7 +213,7 @@ cflags_base = [
     "-maxerrors 1",
     "-nosyspath",
     "-RTTI off",
-    "-fp_contract off",
+    "-fp_contract on",
     "-str reuse",
     "-multibyte",
     "-i include",
