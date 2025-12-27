@@ -33,9 +33,6 @@ DEFINE_ERROR(23)
  */
 DEFINE_PRINT("shapeBase")
 
-Vector3f fnVerts[0x200];
-Vector3f fnNorms[0x200];
-Vector2f fnTexs[0x200];
 u8 matUsed[0x100];
 int matIndex;
 int usedIndex;
