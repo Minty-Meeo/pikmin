@@ -115,23 +115,21 @@ inline f128 fabsl(f128 x)
 	return __fabs((f64)x);
 }
 
-inline f32 sqrtf(f32 x)
+// 0 = Hardware (~5 bits, +/- 3.5%)
+// 1 = Low      (~10 bits, +/- 0.1%)
+// 2 = Mid      (~20 bits, +/- 0.0001%)
+// 3 = Full     (~46 bits, basically perfect for f32)
+#define SQRT_PRECISION (3)
+
+inline f64 sqrtf(f64 x)
 {
-	// these REALLY don't have to be static.
-	static const f64 _half  = .5;
-	static const f64 _three = 3.0;
-
-	vf32 y;
-	if (x > 0.0f) {
-
-		f64 guess = __frsqrte((f64)x);                            // returns an approximation to
-		guess     = _half * guess * (_three - guess * guess * x); // now have 12 sig bits
-		guess     = _half * guess * (_three - guess * guess * x); // now have 24 sig bits
-		guess     = _half * guess * (_three - guess * guess * x); // now have 32 sig bits
-		y         = (f32)(x * guess);
-		return y;
+	int i;
+	f64 guess = __frsqrte(x);
+	guess     = __fsel(-x, 0.0, guess);
+	for (i = 0; i < SQRT_PRECISION; i++) {
+		guess = 0.5 * guess * (3.0 - x * guess * guess);
 	}
-	return x;
+	return x * guess;
 }
 
 #ifdef __cplusplus
@@ -141,23 +139,15 @@ inline f32 sqrtf(f32 x)
 #ifdef __cplusplus
 namespace std {
 
-inline f32 sqrtf(f32 x)
+inline f64 sqrtf(f64 x)
 {
-	// these REALLY don't have to be static.
-	static const f64 _half  = 0.5;
-	static const f64 _three = 3.0;
-
-	vf32 y;
-	if (x > 0.0f) {
-
-		f64 guess = __frsqrte((f64)x);                            // returns an approximation to
-		guess     = _half * guess * (_three - guess * guess * x); // now have 12 sig bits
-		guess     = _half * guess * (_three - guess * guess * x); // now have 24 sig bits
-		guess     = _half * guess * (_three - guess * guess * x); // now have 32 sig bits
-		y         = (f32)(x * guess);
-		return y;
+	int i;
+	f64 guess = __frsqrte(x);
+	guess     = __fsel(-x, 0.0, guess);
+	for (i = 0; i < SQRT_PRECISION; i++) {
+		guess = 0.5 * guess * (3.0 - x * guess * guess);
 	}
-	return x;
+	return x * guess;
 }
 
 inline f32 fmodf(f32 x, f32 m)
@@ -179,5 +169,7 @@ inline f32 fmod(f32 x, f32 m)
 	return std::fmodf(x, m);
 }
 #endif
+
+#undef SQRT_PRECISION
 
 #endif
