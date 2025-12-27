@@ -88,10 +88,7 @@ void Creature::save(RandomAccessStream& stream, bool doSavePosition)
 	PRINT("* saving creature %s\n", ObjType::getName(mObjType));
 	int startPos = stream.getPosition();
 	if (doSavePosition) {
-		// idk why they didn't use the Vector3f::write inline here but they didn't
-		stream.writeFloat(mSRT.t.x);
-		stream.writeFloat(mSRT.t.y);
-		stream.writeFloat(mSRT.t.z);
+		mSRT.t.write(stream);
 	}
 
 	doSave(stream);
@@ -137,10 +134,13 @@ bool Creature::isBoss()
  */
 void Creature::enableStick()
 {
-	if (mCollInfo && mCollInfo->hasInfo()) {
+	if (!mCollInfo) {
+		PRINT("enableStick * mCollInfo is null\n");
+		return;
+	}
+
+	if (mCollInfo->hasInfo()) {
 		mCollInfo->enableStick();
-	} else {
-		PRINT("enableStick * nothing is done\n");
 	}
 }
 
@@ -149,10 +149,13 @@ void Creature::enableStick()
  */
 void Creature::disableStick()
 {
-	if (mCollInfo && mCollInfo->hasInfo()) {
+	if (!mCollInfo) {
+		PRINT("disableStick * mCollInfo is null\n");
+		return;
+	}
+
+	if (mCollInfo->hasInfo()) {
 		mCollInfo->disableStick();
-	} else {
-		PRINT("disableStick * nothing is done\n");
 	}
 }
 
@@ -164,6 +167,7 @@ CollPart* Creature::getNearestCollPart(immut Vector3f& pos, u32 tag)
 	if (mCollInfo && mCollInfo->hasInfo()) {
 		return mCollInfo->getNearestCollPart(pos, tag);
 	}
+
 	return nullptr;
 }
 
@@ -240,10 +244,7 @@ void Creature::stopEventSound(Creature* target, int soundID)
 bool Creature::insideSphere(immut Sphere& sphere)
 {
 	Vector3f diff = sphere.mCentre - mSRT.t;
-	if (diff.length() <= sphere.mRadius) {
-		return true;
-	}
-	return false;
+	return diff.length() <= sphere.mRadius;
 }
 
 /**
@@ -252,17 +253,17 @@ bool Creature::insideSphere(immut Sphere& sphere)
 Vector3f Creature::getCentre()
 {
 	if (mCollInfo && mCollInfo->hasInfo()) {
-		CollPart* spherePart = mCollInfo->getSphere('cent');
 		if (mObjType != OBJTYPE_Navi && !isPiki() && !aiCullable() && mGrid.aiCulling()) {
 			return mSRT.t;
 		}
+
+		CollPart* spherePart = mCollInfo->getSphere('cent');
 		if (spherePart) {
 			return spherePart->mCentre;
 		}
 	}
 
-	Vector3f pos = mSRT.t;
-	return pos;
+	return mSRT.t;
 }
 
 /**
@@ -276,6 +277,7 @@ f32 Creature::getCentreSize()
 			return spherePart->mRadius;
 		}
 	}
+
 	return getSize();
 }
 
@@ -284,33 +286,13 @@ f32 Creature::getCentreSize()
  */
 int Creature::getStandType()
 {
-	if (!mGroundTriangle) {
-		if (mCollPlatform) {
-			if (mCollPlatform->mCreature) {
-				// standing on a platform creature?
-				return STANDTYPE_TekiPlatform;
-			}
-
-			// standing on a platform with no creature?
-			return STANDTYPE_Platform;
-		}
-
-		// no platform
-		return STANDTYPE_Air;
-	}
-
+	// Are we on a platform? Is that platform a creature?
 	if (mCollPlatform) {
-		if (mCollPlatform->mCreature) {
-			// standing on a platform creature?
-			return STANDTYPE_TekiPlatform;
-		}
-
-		// standing on a platform with no creature?
-		return STANDTYPE_Platform;
+		return mCollPlatform->mCreature ? STANDTYPE_TekiPlatform : STANDTYPE_Platform;
 	}
 
-	// no platform
-	return STANDTYPE_Ground;
+	// No platform, so are we on floor?
+	return mGroundTriangle ? STANDTYPE_Ground : STANDTYPE_Air;
 }
 
 /**
@@ -646,10 +628,7 @@ void Creature::update()
 
 	// Update spatial grid positions
 	mGrid.updateGrid(mSRT.t);
-	bool isPikiOrNavi = false;
-	if (mObjType == OBJTYPE_Piki || mObjType == OBJTYPE_Navi) {
-		isPikiOrNavi = true;
-	}
+	const bool isPikiOrNavi = (mObjType == OBJTYPE_Piki || mObjType == OBJTYPE_Navi);
 	mGrid.updateAIGrid(mSRT.t, isPikiOrNavi);
 
 	// Skip AI updates for non-important and CULLED objects
@@ -657,36 +636,18 @@ void Creature::update()
 		if (isPiki()) {
 			ERROR("meck'n meck\n");
 		}
+
 		return;
 	}
 
 	mHasCollChangedVelocity = 0;
 	mCollisionOccurred      = 0;
 
-#if 0
-	bool wasNanBeforeUpdateAI = false;
-	if (mObjType == OBJTYPE_Teki) {
-		wasNanBeforeUpdateAI = isNan(mFaceDirection);
-	}
-#endif
-
 	// Handle AI and animations if not frozen
 	if (!mIsFrozen) {
 		doAnimation();
 		updateAI();
 	}
-
-#if 0
-	if (mObjType == OBJTYPE_Teki) {
-		if (isNan(mFaceDirection)) {
-			PRINT_GLOBAL("nan detected !");
-			dump();
-			if (!wasNanBeforeUpdateAI) {
-				PRINT_GLOBAL("after update AI");
-			}
-		}
-	}
-#endif
 
 	// Skip remaining updates if holding something
 	if (!mHoldingCreature.isNull()) {
@@ -754,6 +715,7 @@ void Creature::update()
 
 	// Apply movement in two passes - volatile (temporary) and normal velocity
 	f32 deltaTime = gsys->getFrameTime();
+	const f32 sinThirdPi = sinf(THIRD_PI);
 	MATCHING_START_TIMER("MOVENEW", true);
 	Vector3f originalVel(mVelocity);
 	mVelocity = mVolatileVelocity;
@@ -761,7 +723,7 @@ void Creature::update()
 
 	// Handle fixed position on non-slippery surfaces, with a slope < 60 degrees
 	if (mVolatileVelocity.length() > 0.0f && isCreatureFlag(CF_AllowFixPosition) && isCreatureFlag(CF_IsPositionFixed) && mGroundTriangle
-	    && MapCode::getSlipCode(mGroundTriangle) == 0 && mGroundTriangle->mTriangle.mNormal.y > sinf(THIRD_PI)) {
+	    && MapCode::getSlipCode(mGroundTriangle) == 0 && mGroundTriangle->mTriangle.mNormal.y > sinThirdPi) {
 		mFixedPosition = mSRT.t;
 	}
 
@@ -771,8 +733,7 @@ void Creature::update()
 	// Update the fixed position status
 	if (isCreatureFlag(CF_AllowFixPosition)) {
 		// If we're on the ground, it's not slippery, and the slope is < 60 degrees
-		if (mGroundTriangle && MapCode::getSlipCode(mGroundTriangle) == 0 && mGroundTriangle->mTriangle.mNormal.y > sinf(THIRD_PI)) {
-
+		if (mGroundTriangle && MapCode::getSlipCode(mGroundTriangle) == 0 && mGroundTriangle->mTriangle.mNormal.y > sinThirdPi) {
 			// If we're barely moving, just stay still
 			if (mTargetVelocity.length() < 0.01f) {
 				if (!isCreatureFlag(CF_IsPositionFixed)) {
@@ -820,11 +781,7 @@ void Creature::update()
  */
 void Creature::postUpdate(int unused, f32 deltaTime)
 {
-	bool isPikiOrNavi = false;
-	if (mObjType == OBJTYPE_Piki || mObjType == OBJTYPE_Navi) {
-		isPikiOrNavi = true;
-	}
-
+	const bool isPikiOrNavi = (mObjType == OBJTYPE_Piki || mObjType == OBJTYPE_Navi);
 	if (!isPikiOrNavi && mGrid.aiCulling() && !aiCullable()) {
 		return;
 	}
@@ -999,7 +956,6 @@ void Creature::collisionCheck(f32 _unused)
 				}
 				continue;
 			}
-			STACK_PAD_VAR(1); // there's an extra variable *somewhere* but idk where.
 
 			// we have info for both of us, so pass it off to CollInfo to do the work
 			CollPart* ourPart;
@@ -1017,10 +973,8 @@ void Creature::collisionCheck(f32 _unused)
 Vector3f Creature::getCatchPos(Creature* target)
 {
 	f32 rad = 0.95f * getSize();
-
 	Vector3f v(rad * sinf(mFaceDirection), 0.0f, rad * cosf(mFaceDirection));
-	v = v + mSRT.t;
-	return v;
+	return v + mSRT.t;
 }
 
 /**
@@ -1031,6 +985,7 @@ bool Creature::needShadow()
 	if (mObjType == OBJTYPE_Piki) {
 		PRINT(" ????????? piki uses Creature::needShadow \n"); // lol
 	}
+
 	return true;
 }
 
@@ -1190,7 +1145,6 @@ void Creature::drawShadow(Graphics& gfx)
 		tmpV3[5] = pos + (-vec3 + vec1);
 
 		gfx.drawOneTri(tmpV3, nullptr, tmpV2, 6);
-		STACK_PAD_VAR(1);
 		return;
 	}
 
@@ -1214,7 +1168,9 @@ f32 qdist2(Creature* c1, Creature* c2)
  */
 f32 circleDist(Creature* c1, Creature* c2)
 {
-	f32 dist = qdist2(c1->getCentre().x, c1->getCentre().z, c2->getCentre().x, c2->getCentre().z);
+	Vector3f c1Centre = c1->getCentre();
+	Vector3f c2Centre = c2->getCentre();
+	f32 dist          = qdist2(c1Centre.x, c1Centre.z, c2Centre.x, c2Centre.z);
 	return dist - c1->getCentreSize() - c2->getCentreSize();
 }
 
@@ -1223,10 +1179,10 @@ f32 circleDist(Creature* c1, Creature* c2)
  */
 void Creature::moveVelocity()
 {
+	const f32 dt = gsys->getFrameTime();
 	Vector3f vel(mTargetVelocity);
 	Vector3f vec(0.0f, 0.0f, 0.0f);
-	f32 y       = mVelocity.y;
-	bool unused = false;
+	f32 y = mVelocity.y;
 	if (mGroundTriangle) {
 		Vector3f normal(mGroundTriangle->mTriangle.mNormal);
 		f32 speed = vel.length();
@@ -1237,15 +1193,14 @@ void Creature::moveVelocity()
 		int slipCode = MapCode::getSlipCode(mGroundTriangle);
 		if (slipCode == 0) {
 			if (speed < 0.1f) {
-				Vector3f tmp1(0.0f, -(AIConstant::_instance->mConstants.mGravity() * gsys->getFrameTime()), 0.0f);
+				Vector3f tmp1(0.0f, -(AIConstant::_instance->mConstants.mGravity() * dt), 0.0f);
 				tmp1   = tmp1 - tmp1.DP(normal) * normal;
 				vec    = -tmp1;
 				vec    = vec * 1.0f;
-				unused = true;
 			}
 		} else {
 
-			Vector3f tmp1(0.0f, -(AIConstant::_instance->mConstants.mGravity() * gsys->getFrameTime()), 0.0f);
+			Vector3f tmp1(0.0f, -(AIConstant::_instance->mConstants.mGravity() * dt), 0.0f);
 			tmp1 = tmp1 - tmp1.DP(normal) * normal;
 			tmp1.normalise();
 
@@ -1260,8 +1215,7 @@ void Creature::moveVelocity()
 				PRINT("navi slip!\n");
 			}
 
-			vec    = tmp1 * AIConstant::_instance->mConstants.mGravity() * gsys->getFrameTime() * factor;
-			unused = true;
+			vec = tmp1 * AIConstant::_instance->mConstants.mGravity() * dt * factor;
 		}
 	}
 
@@ -1269,7 +1223,7 @@ void Creature::moveVelocity()
 	vec2  = vel + _B0 - mVelocity;
 	f32 d = vec2.length();
 
-	mVelocity = mVelocity + vec2 * gsys->getFrameTime() / mProps->mCreatureProps.mAcceleration();
+	mVelocity = mVelocity + vec2 * dt / mProps->mCreatureProps.mAcceleration();
 	mVelocity = mVelocity + vec;
 }
 
