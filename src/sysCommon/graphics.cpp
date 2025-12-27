@@ -894,8 +894,9 @@ void Graphics::cacheShape(BaseShape* shape, ShapeDynMaterials* mats)
 
 	CachedShape* cache = &mCachedShapes[mCachedShapeCount];
 	Vector3f pos(shape->getAnimMatrix(0).mMtx[0][3], shape->getAnimMatrix(0).mMtx[1][3], shape->getAnimMatrix(0).mMtx[2][3]);
-	cache->mDistanceFromOrigin = pos.length();
 
+	// NB: changed from `length`, we only want relative distances, not actual value, so forget the sqrt
+	cache->mDistanceFromOrigin = pos.squaredLength();
 	bool far = false;
 	for (CachedShape* i = mShapeCache.mPrev; i != &mShapeCache; i = i->mPrev) {
 		if (cache->mDistanceFromOrigin >= i->mDistanceFromOrigin) {
