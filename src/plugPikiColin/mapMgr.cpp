@@ -816,10 +816,6 @@ MapMgr::MapMgr(Controller* controller)
 	memStat->end("collparts");
 	mMapBounds.resetBound();
 
-	memStat->start("rooms");
-	mMapRooms = new MapRoom[256];
-	memStat->end("rooms");
-
 	memStat->start("dyncolshape");
 	mCollShape = new DynCollShape(nullptr);
 	memStat->end("dyncolshape");
