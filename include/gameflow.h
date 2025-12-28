@@ -493,7 +493,6 @@ struct GamePrefs : public CoreNode {
 		mHasSaveGame           = false;
 		mMemCardSaveIndex      = 0;
 		mSpareMemCardSaveIndex = 0;
-		_1F                    = 0;                           // unused
 		mChalCourseOpenFlags   = TERNARY_DEVELOP(0b11111, 0); // All stages are unlocked in the DLL
 		mChangesPending        = false;
 		mHiscores.Initialise();
@@ -566,7 +565,6 @@ struct GamePrefs : public CoreNode {
 	u8 mBgmVol;                  ///< _01C, max background volume level.
 	u8 mSfxVol;                  ///< _01D, max sound effects volume level.
 	bool mHasSaveGame;           ///< _01E, if player has made a save file on the memory card or not.
-	u8 _1F;                      ///< _01F, unknown/unused - set to 0 on init and never referenced.
 	u8 mMemCardSaveIndex;        ///< _020, index of save file on actual memory card + 1 (1-indexed).
 	u8 mSpareMemCardSaveIndex;   ///< _021, index of backup save file on actual memory card + 1 (1-indexed).
 	u8 mChalCourseOpenFlags;     ///< _022, bitflag of unlocked challenge mode maps, packed as (1 << stageID) - see `STAGE` defines.
