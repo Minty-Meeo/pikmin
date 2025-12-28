@@ -258,24 +258,6 @@ struct MapSlider : public MapParts {
 /**
  * @brief TODO
  *
- * @note Size: 0xC.
- */
-struct MapRoom {
-	MapRoom()
-	{
-		_08 = 0;
-		_04 = 1.0f;
-		_00 = 1.0f;
-	}
-
-	f32 _00; // _00, all unknown
-	f32 _04; // _04, all unknown
-	u32 _08; // _08, all unknown
-};
-
-/**
- * @brief TODO
- *
  * @note Fabricated. Has to be this structure, but no idea what it was called. Has no ctor.
  * @note Size: 0xC.
  */
@@ -322,7 +304,6 @@ struct MapMgr {
 	Controller* mController;            // _00
 	DayMgr* mDayMgr;                    // _04
 	Vector3f _UNUSED08;                 // _08
-	MapRoom* mMapRooms;                 // _14, array of 256 MapRooms
 	int mVertRayCount;                  // _18
 	int mGroundTriRayCount;             // _1C
 	u8 _20[0x60 - 0x20];                // _20, unknown
