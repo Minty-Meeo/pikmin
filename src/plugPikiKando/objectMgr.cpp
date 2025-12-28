@@ -437,58 +437,108 @@ void MonoObjectMgr::search(ObjectMgr* mgr)
 		return;
 	}
 
-	for (int i = 0; i < mMaxElements; i++) {
-		if (mEntryStatus[i] != 0) {
+	if (mNumObjects == 0) {
+		return;
+	}
+
+	const bool insQuick     = AIPerf::insQuick;
+	const bool useUpdateMgr = AIPerf::useUpdateMgr;
+	const bool useGrid      = AIPerf::useGrid;
+
+	Creature* active[512];
+	int activeCount = 0;
+
+	// Collect active objects into a temporary array (512 max)
+	for (int i = 0; i < mMaxElements && activeCount < 512; i++) {
+		if (mEntryStatus[i]) {
 			continue;
 		}
 
 		Creature* obj = mObjectList[i];
-		if (AIPerf::insQuick && !obj->mSearchContext.updatable()) {
+
+		// Pre-filter: skip objects that won't participate
+		if (insQuick && !obj->mSearchContext.updatable()) {
 			continue;
 		}
 
-		bool isPlayer = false;
-		if (obj->mObjType == OBJTYPE_Piki || obj->mObjType == OBJTYPE_Navi) {
-			isPlayer = true;
-		}
+		const bool isPlayer = (obj->mObjType == OBJTYPE_Piki || obj->mObjType == OBJTYPE_Navi);
 		if (!isPlayer && obj->mGrid.aiCulling() && !obj->aiCullable()) {
 			continue;
 		}
 
+		active[activeCount++] = obj;
+	}
+
+	// No active objects, nothing to do
+	if (activeCount == 0) {
+		return;
+	}
+
+	for (int i = 0; i < activeCount; i++) {
+		Creature* obj = active[i];
+
+		// Prefetch next active object
+		if (i + 1 < activeCount) {
+			asm volatile("dcbt 0, %0" : : "r"(active[i + 1]));
+		}
+
+		// Cache obj properties
+		Vector3f pos1         = obj->getCentre();
+		const f32 radius1     = obj->getBoundingSphereRadius();
+		const bool alive1     = obj->isAlive();
+		const bool avail1     = obj->mSearchBuffer.available();
+		const bool updatable1 = obj->mSearchContext.updatable();
+		FastGrid& grid1       = obj->mGrid;
+
+		// Iterate other manager
 		Iterator it(mgr);
 		CI_LOOP(it)
 		{
 			Creature* obj2 = *it;
-			if (AIPerf::useUpdateMgr) {
-				if (!obj->mSearchContext.updatable() && !obj2->mSearchContext.updatable()) {
+
+			// Update manager check
+			if (useUpdateMgr) {
+				if (!updatable1 && !obj2->mSearchContext.updatable()) {
 					continue;
 				}
 			}
 
-			bool isPlayer = false;
-			if (obj2->mObjType == OBJTYPE_Piki || obj2->mObjType == OBJTYPE_Navi) {
-				isPlayer = true;
-			}
-			if (!isPlayer && obj2->mGrid.aiCulling() && !obj2->aiCullable()) {
+			const int objType2   = obj2->mObjType;
+			const bool isPlayer2 = (objType2 == OBJTYPE_Piki || objType2 == OBJTYPE_Navi);
+			if (!isPlayer2 && obj2->mGrid.aiCulling() && !obj2->aiCullable()) {
 				continue;
 			}
-			if (AIPerf::useGrid) {
-				if (obj->mGrid.doCulling(obj2->mGrid, obj->getBoundingSphereRadius() + obj2->getBoundingSphereRadius())) {
+
+			const f32 radius2 = obj2->getBoundingSphereRadius();
+
+			// Grid cull
+			if (useGrid) {
+				if (grid1.doCulling(obj2->mGrid, radius1 + radius2)) {
 					continue;
 				}
 			}
-			f32 dist = centreDist(obj, obj2);
-			f32 s2   = obj->getBoundingSphereRadius() + obj2->getBoundingSphereRadius();
-			dist     = dist - s2;
 
-			if (dist <= 300.0f && obj->isAlive() && obj->mSearchBuffer.available()) {
-				if (!AIPerf::useUpdateMgr || obj->mSearchContext.updatable()) {
-					obj->mSearchBuffer.insert(obj2, dist);
-				}
+			Vector3f pos2       = obj2->getCentre();
+			const f32 distSq    = (pos1 - pos2).squaredLength();
+			const f32 threshold = 300.0f + radius1 + radius2;
+			if (distSq > SQUARE(threshold)) {
+				continue;
 			}
-			if (dist <= 300.0f && obj2->isAlive() && obj2->mSearchBuffer.available()) {
-				if (!AIPerf::useUpdateMgr || obj2->mSearchContext.updatable()) {
-					obj2->mSearchBuffer.insert(obj, dist);
+
+			// Only sqrt when in range
+			const f32 dist = sqrtf(distSq) - radius1 - radius2;
+			if (dist <= 300.0f) {
+				const bool updatable2 = obj2->mSearchContext.updatable();
+
+				if (alive1 && avail1) {
+					if (!useUpdateMgr || updatable1) {
+						obj->mSearchBuffer.insert(obj2, dist);
+					}
+				}
+				if (obj2->isAlive() && obj2->mSearchBuffer.available()) {
+					if (!useUpdateMgr || updatable2) {
+						obj2->mSearchBuffer.insert(obj, dist);
+					}
 				}
 			}
 		}
@@ -500,71 +550,113 @@ void MonoObjectMgr::search(ObjectMgr* mgr)
  */
 void MonoObjectMgr::searchSelf()
 {
-	bool mabiki = false;
-	for (int i = 0; i < mMaxElements - 1; i++) {
-		if (mEntryStatus[i] != 0) {
+	// Early out
+	if (mNumObjects < 2) {
+		return;
+	}
+
+	// Build active object list
+	Creature* active[512];
+	int activeCount = 0;
+
+	// Collect active objects into a temporary array (512 max)
+	for (int i = 0; i < mMaxElements && activeCount < 512; i++) {
+		if (mEntryStatus[i] == 0) {
+			active[activeCount++] = mObjectList[i];
+		}
+	}
+
+	if (activeCount < 2) {
+		return;
+	}
+
+	const bool useUpdateMgr = AIPerf::useUpdateMgr;
+	const bool useGrid      = AIPerf::useGrid;
+	const bool pikiMabiki   = AIPerf::pikiMabiki;
+	const f32 RANGE_SQ      = (300.0f + 100.0f) * (300.0f + 100.0f); // Max possible threshold squared
+
+	for (int i = 0; i < activeCount - 1; i++) {
+		Creature* obj = active[i];
+
+		// Prefetch next outer object
+		if (i + 1 < activeCount) {
+			asm volatile("dcbt 0, %0" : : "r"(active[i + 1]));
+		}
+
+		const int objType    = obj->mObjType;
+		const bool isPlayer1 = (objType == OBJTYPE_Piki || objType == OBJTYPE_Navi);
+		const bool mabiki    = pikiMabiki && (objType == OBJTYPE_Piki);
+		if (!isPlayer1 && obj->mGrid.aiCulling() && !obj->aiCullable()) {
 			continue;
 		}
 
-		Creature* obj = mObjectList[i];
+		Vector3f pos1         = obj->getCentre();
+		const f32 radius1     = obj->getBoundingSphereRadius();
+		const bool alive1     = obj->isAlive();
+		const bool avail1     = obj->mSearchBuffer.available();
+		const bool updatable1 = obj->mSearchContext.updatable();
+		FastGrid& grid1       = obj->mGrid;
 
-		bool isPlayer = false;
-		if (obj->mObjType == OBJTYPE_Piki || obj->mObjType == OBJTYPE_Navi) {
-			isPlayer = true;
-			if (AIPerf::pikiMabiki && obj->mObjType == OBJTYPE_Piki) {
-				mabiki = true;
+		for (int j = i + 1; j < activeCount; j++) {
+			Creature* obj2 = active[j];
+
+			// Prefetch next inner object
+			if (j + 4 < activeCount) {
+				asm volatile("dcbt 0, %0" : : "r"(active[j + 4]));
 			}
-		}
-		if (!isPlayer && obj->mGrid.aiCulling() && !obj->aiCullable()) {
-			continue;
-		}
 
-		for (int j = i + 1; j < mMaxElements; j++) {
-			if (mEntryStatus[j] != 0) {
-				continue;
-			}
-			Creature* obj2 = mObjectList[j];
-
-			if (mabiki || AIPerf::useUpdateMgr) {
-				if (!obj->mSearchContext.updatable() && !obj2->mSearchContext.updatable()) {
+			// Update manager early-out
+			const bool updatable2 = obj2->mSearchContext.updatable();
+			if (mabiki || useUpdateMgr) {
+				if (!updatable1 && !updatable2) {
 					continue;
 				}
 			}
 
-			bool isPlayer = false;
-			if (obj2->mObjType == OBJTYPE_Piki || obj2->mObjType == OBJTYPE_Navi) {
-				isPlayer = true;
-			}
-			if (!isPlayer && obj2->mGrid.aiCulling() && !obj2->aiCullable()) {
+			const int objType2   = obj2->mObjType;
+			const bool isPlayer2 = (objType2 == OBJTYPE_Piki || objType2 == OBJTYPE_Navi);
+			if (!isPlayer2 && obj2->mGrid.aiCulling() && !obj2->aiCullable()) {
 				continue;
 			}
-			if (AIPerf::useGrid) {
-				if (obj->mGrid.doCulling(obj2->mGrid, obj->getBoundingSphereRadius() + obj2->getBoundingSphereRadius())) {
+
+			const f32 radius2 = obj2->getBoundingSphereRadius();
+
+			// Grid culling (cheap)
+			if (useGrid) {
+				if (grid1.doCulling(obj2->mGrid, radius1 + radius2)) {
 					continue;
 				}
 			}
-			f32 dist1 = centreDist(obj, obj2);
-			f32 s1    = obj2->getBoundingSphereRadius();
-			f32 s2    = obj->getBoundingSphereRadius();
-			s1        = s2 + s1;
-			f32 dist  = dist1 - s1;
 
-			if (dist <= 300.0f && obj->isAlive()) {
-				if (obj->isAlive() && obj->mSearchBuffer.available()) {
-					if ((!AIPerf::useUpdateMgr && !mabiki) || obj->mSearchContext.updatable()) {
+			// Distance squared first (NO SQRT)
+			Vector3f pos2       = obj2->getCentre();
+			const f32 distSq    = (pos1 - pos2).squaredLength();
+			const f32 threshold = 300.0f + radius1 + radius2;
+			if (distSq > SQUARE(threshold)) {
+				continue;
+			}
+
+			// Only compute sqrt when we know we're in range
+			f32 dist = sqrtf(distSq) - radius1 - radius2;
+
+			if (dist <= 300.0f) {
+				const bool alive2 = obj2->isAlive();
+				const bool avail2 = obj2->mSearchBuffer.available();
+
+				if (alive1 && avail1) {
+					if ((!useUpdateMgr && !mabiki) || updatable1) {
 						obj->mSearchBuffer.insert(obj2, dist);
 					}
 				}
-				if (obj2->isAlive() && obj2->mSearchBuffer.available()) {
-					if ((!AIPerf::useUpdateMgr && !mabiki) || obj2->mSearchContext.updatable()) {
+
+				if (alive2 && avail2) {
+					if ((!useUpdateMgr && !mabiki) || updatable2) {
 						obj2->mSearchBuffer.insert(obj, dist);
 					}
 				}
 			}
 		}
 	}
-
-	STACK_PAD_VAR(2);
 }
 
 /**
