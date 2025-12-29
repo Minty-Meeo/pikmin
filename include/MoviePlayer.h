@@ -107,7 +107,6 @@ struct MoviePlayer {
 	f32 mInitialCamBlend;             ///< _164
 	f32 mCamTransitionFactor;         ///< _168
 	bool mIsGameCam;                  ///< _16C, are we using the player's camera?
-	u32 _170;                         ///< _170, unknown
 };
 
 /**
