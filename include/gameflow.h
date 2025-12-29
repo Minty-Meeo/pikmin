@@ -671,7 +671,6 @@ struct GameFlow : public Node {
 	s32 mNextOnePlayerSectionID;        ///< _1F4, next OnePlayerSection to transit to - see `OnePlayerSectionID` enum.
 	u8 _1F8[0x4];                       ///< _1F8, unknown/unused.
 	int mNextOnePlayerSectionOnDayEnd;  ///< _1FC, next OnePlayerSection to transit to when day ends - see `OnePlayerSectionID` enum.
-	u32 _200;                           ///< _200, unknown/unused - set to zero then never referenced.
 	Section* mGameSection;              ///< _204, pointer to current active game section.
 	LangMode mLangModes[LANG_CAPACITY]; ///< _208, directories and paths for each language type - only 2 ever used (5 for PAL).
 	int mLanguageIndex;                 ///< _2A8, current language mode selected (adult/child text mode for demo/JP).

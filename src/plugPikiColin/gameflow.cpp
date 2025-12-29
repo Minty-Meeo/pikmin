@@ -506,7 +506,6 @@ void GameFlow::hardReset(BaseApp* baseApp)
 	mCurrGameSectionID      = -1;
 	mNextGameSectionID      = SECTION_NinLogo;
 	mNextOnePlayerSectionID = ONEPLAYER_GameSetup;
-	_200                    = 0;            // never used again
 	mNextIntroMovieID       = MOV_GrowDemo; // title screen idling movie demo to queue up first
 
 	// Different versions handle language differently (duh) but a lot of the mechanics are hold-overs from JP.
