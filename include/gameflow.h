@@ -699,8 +699,6 @@ struct GameFlow : public Node {
 	BOOL mPauseAll;                     ///< _33C, whether gameplay is paused (due to cutscene or being in an onion menu).
 	BOOL mIsTutorialTextActive;         ///< _340, whether a text ("tutorial") window is currently open.
 	u8 _344[0x4];                       ///< _344, unknown/unused.
-	u32 _348;                           ///< _348, unknown/unused - set to 0 and never touched.
-	u32 _34C;                           ///< _34C, unknown/unused - set to 0 and never touched.
 	int mFilterType;                    ///< _350, type of vertical filter values to apply - see `GameFilterType` enum.
 	u8 mVFilters[FILTER_COUNT][8];      ///< _354, vertical filter values, indexed by `GameFilterType`. Only first 7 are used.
 };

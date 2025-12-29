@@ -744,8 +744,6 @@ void GameFlow::softReset()
 	mFlowManager->add(mGameSection);
 	mPauseAll          = FALSE;
 	mIsUIOverlayActive = FALSE;
-	_348               = 0; // unused
-	_34C               = 0; // unused
 	mIsPauseAllowed    = TRUE;
 
 	// all set, we can forget where we came from now
