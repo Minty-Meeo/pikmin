@@ -1,4 +1,4 @@
-#include "Dolphin/arith.h"
+#include "PowerPC_EABI_Support/MSL_C/MSL_Common/arith.h"
 
 /**
  * @TODO: Documentation
