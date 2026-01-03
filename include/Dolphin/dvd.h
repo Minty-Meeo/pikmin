@@ -193,6 +193,7 @@ BOOL DVDReadDiskID(DVDCommandBlock* block, DVDDiskID* diskID, DVDCBCallback call
 void DVDSeekAbsAsyncPrio(DVDCommandBlock* block, void* addr, DVDCBCallback callback, s32 prio);
 BOOL DVDPrepareStreamAbsAsync(DVDCommandBlock* block, u32 length, u32 offset, DVDCBCallback callback);
 BOOL DVDReadAbsAsyncForBS(DVDCommandBlock* block, void* addr, s32 length, s32 offset, DVDCBCallback callback);
+void __DVDPrepareResetAsync(DVDCBCallback callback);
 
 ///////////////////////////////////////////
 

@@ -1,6 +1,8 @@
 #include "Dolphin/os.h"
 #include "Dolphin/PPCArch.h"
 #include "Dolphin/hw_regs.h"
+#include <stddef.h>
+#include <string.h>
 
 DECL_SECT(".init") extern char _db_stack_end[];
 
@@ -28,13 +30,12 @@ void DVDInquiryAsync(void*, void*, void*);
 void EXIInit();
 void EnableMetroTRKInterrupts();
 int OSEnableInterrupts();
-void OSExceptionInit();
+static void OSExceptionInit();
 void OSRegisterVersion(const char*);
 void SIInit();
 void __OSContextInit();
 void __OSInitAudioSystem();
 void __OSInitMemoryProtection();
-void __OSInitSram();
 void __OSInitSystemCall();
 void __OSInterruptInit();
 void __OSThreadInit();
@@ -50,7 +51,7 @@ extern char* __OSResetSWInterruptHandler[];
 #define OS_EXCEPTIONTABLE_ADDR 0x3000
 #define OS_DBJUMPPOINT_ADDR    0x60
 
-vu16 __OSDeviceCode : (OS_BASE_CACHED | OS_DVD_DEVICECODE);
+vu16 __OSDeviceCode AT_ADDRESS((OS_BASE_CACHED | OS_DVD_DEVICECODE));
 
 // flags and system info
 static OSBootInfo* BootInfo;
@@ -67,7 +68,6 @@ void* __OSSavedRegionStart;
 void* __OSSavedRegionEnd;
 
 // functions
-static void OSExceptionInit(void);
 static void OSDefaultExceptionHandler(__OSException exception, OSContext* context);
 
 /**
@@ -395,7 +395,7 @@ static void OSExceptionInit(void)
 		DBPrintf("Installing OSDBIntegrator\n");
 		memcpy(destAddr, (void*)__OSDBINTSTART, (u32)__OSDBINTEND - (u32)__OSDBINTSTART);
 		DCFlushRangeNoSync(destAddr, (u32)__OSDBINTEND - (u32)__OSDBINTSTART);
-		__sync();
+		// __sync();
 		ICInvalidateRange(destAddr, (u32)__OSDBINTEND - (u32)__OSDBINTSTART);
 	}
 
@@ -429,7 +429,7 @@ static void OSExceptionInit(void)
 		destAddr = (void*)OSPhysicalToCached(__OSExceptionLocations[(u32)exception]);
 		memcpy(destAddr, handlerStart, handlerSize);
 		DCFlushRangeNoSync(destAddr, handlerSize);
-		__sync();
+		// __sync();
 		ICInvalidateRange(destAddr, handlerSize);
 	}
 
@@ -613,7 +613,7 @@ void __OSPSInit(void)
 {
 	PPCMthid2(PPCMfhid2() | 0xA0000000);
 	ICFlashInvalidate();
-	__sync();
+	// __sync();
 #ifdef __MWERKS__
 	asm {
 		li      r3, 0

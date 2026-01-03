@@ -1,4 +1,5 @@
 #include "Dolphin/os.h"
+#include <stddef.h>
 
 // forward declarations.
 static BOOL WriteSram(void* buffer, u32 offset, u32 size);
@@ -286,7 +287,7 @@ void OSSetSoundMode(u32 mode)
 	__OSUnlockSram(TRUE);
 }
 
-inline OSSram* __OSLockSramHACK()
+static inline OSSram* __OSLockSramHACK()
 {
 	return LockSram(0);
 }

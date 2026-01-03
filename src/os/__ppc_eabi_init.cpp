@@ -5,6 +5,7 @@
 #ifdef __cplusplus
 extern "C" {
 #endif
+
 typedef void (*voidfunctionptr)(); // pointer to function returning void
 DECL_SECT(".ctors") extern voidfunctionptr _ctors[];
 DECL_SECT(".dtors") extern voidfunctionptr _dtors[];
@@ -26,7 +27,7 @@ ASM void __init_hardware() {
 #endif // clang-format on
 }
 
-DECL_SECT(".init") ASM void __flush_cache(u32 addr, int size)
+DECL_SECT(".init") ASM void __flush_cache(void* addr, int size)
 {
 #ifdef __MWERKS__ // clang-format off
 	nofralloc
@@ -85,6 +86,7 @@ void _ExitProcess(void)
 {
 	PPCHalt();
 }
+
 #ifdef __cplusplus
 }
 #endif

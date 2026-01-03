@@ -50,6 +50,10 @@ OSInterruptMask __OSUnmaskInterrupts(OSInterruptMask mask);
 OSInterruptMask OSGetInterruptMask();
 OSInterruptMask OSSetInterruptMask(OSInterruptMask mask);
 
+// necessary for some asm functions
+extern void __RAS_OSDisableInterrupts_begin();
+extern void __RAS_OSDisableInterrupts_end();
+
 //////////////////////////////////
 
 //////// INTERRUPT CODES /////////

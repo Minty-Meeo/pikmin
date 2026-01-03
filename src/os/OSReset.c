@@ -1,5 +1,6 @@
 #include "Dolphin/hw_regs.h"
 #include "Dolphin/os.h"
+#include <stddef.h>
 
 static OSResetQueue ResetFunctionQueue;
 
@@ -73,7 +74,7 @@ BOOL CallResetFunctions(BOOL final)
 /**
  * @TODO: Documentation
  */
-static ASM Reset(register s32 resetCode)
+static void ASM Reset(register s32 resetCode)
 {
 #ifdef __MWERKS__ // clang-format off
 	nofralloc

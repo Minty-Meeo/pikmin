@@ -1,4 +1,7 @@
+#include "Dolphin/OS/OSCache.h"
+#include "Dolphin/OS/OSUtil.h"
 #include "types.h"
+#include <string.h>
 
 #if defined(VERSION_G98E01_PIKIDEMO) || defined(VERSION_GPIP01_00)
 static u8 DSPInitCode[] = {
@@ -20,7 +23,7 @@ static u8 DSPInitCode[] = {
 };
 #endif
 
-vu16 __DSPRegs[] : 0xCC005000;
+vu16 __DSPRegs[] AT_ADDRESS(0xCC005000);
 #define __DSPWorkBuffer (void*)0x81000000
 
 /**

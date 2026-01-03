@@ -17,7 +17,7 @@ extern "C" {
 
 extern void InitMetroTRK();
 
-u16 Pad3Button : PAD3_BUTTON_ADDR;
+u16 Pad3Button AT_ADDRESS(PAD3_BUTTON_ADDR);
 
 #if defined(VERSION_GPIP01_00)
 #else
@@ -31,13 +31,11 @@ extern void InitMetroTRK_BBA(void);
 extern void OSInit(void);
 extern void OSResetSystem(BOOL reset, u32 resetCode, BOOL forceMenu);
 extern void __init_hardware(void);
+extern void __flush_cache(void*, int);
 
 DECL_SECT(".init") extern void __check_pad3(void);
 DECL_SECT(".init") extern void __set_debug_bba(void);
 DECL_SECT(".init") extern u8 __get_debug_bba(void);
-DECL_SECT(".init") extern void __start(void);
-DECL_SECT(".init") extern void __init_registers(void);
-DECL_SECT(".init") extern void __init_data(void);
 
 DECL_SECT(".init") extern u8 _stack_addr[];
 DECL_SECT(".init") extern char _SDA_BASE_[];

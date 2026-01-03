@@ -1,5 +1,6 @@
 #include "Dolphin/hw_regs.h"
 #include "Dolphin/os.h"
+#include <stddef.h>
 
 static SIControl Si = { -1, 0, 0, NULL, NULL };
 static SIPacket Packet[SI_MAX_CHAN];
@@ -126,7 +127,8 @@ static u32 CompleteTransfer(void)
 		input = Si.input;
 		rLen  = (Si.inputBytes / 4);
 		for (i = 0; i < rLen; i++) {
-			*((u32*)input)++ = __SIRegs[i + 0x20];
+			*((u32*)input) = __SIRegs[i + 0x20];
+			input += 4;
 		}
 
 		rLen = Si.inputBytes & 3;

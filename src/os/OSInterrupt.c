@@ -1,10 +1,8 @@
 #include "Dolphin/hw_regs.h"
 #include "Dolphin/os.h"
+#include <string.h>
 
 ASM static void ExternalInterruptHandler(register __OSException exception, register OSContext* context);
-
-extern void __RAS_OSDisableInterrupts_begin(void);
-extern void __RAS_OSDisableInterrupts_end(void);
 
 static __OSInterruptHandler* InterruptHandlerTable;
 
@@ -121,7 +119,7 @@ static u32 SetInterruptMask(OSInterruptMask mask, OSInterruptMask current)
 {
 	u32 reg;
 
-	switch (__cntlzw(mask)) {
+	switch ((mask)) {
 	case __OS_INTERRUPT_MEM_0:
 	case __OS_INTERRUPT_MEM_1:
 	case __OS_INTERRUPT_MEM_2:
@@ -452,7 +450,7 @@ void __OSDispatchInterrupt(__OSException exception, OSContext* context)
 	if (unmasked) {
 		for (prio = InterruptPrioTable;; ++prio) {
 			if (unmasked & *prio) {
-				interrupt = (__OSInterrupt)__cntlzw(unmasked & *prio);
+				// interrupt = (__OSInterrupt)__cntlzw(unmasked & *prio);
 				break;
 			}
 		}

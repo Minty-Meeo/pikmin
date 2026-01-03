@@ -1,4 +1,5 @@
 #include "Dolphin/os.h"
+#include <stddef.h>
 
 static u32 serEnabled = 0;
 
@@ -72,9 +73,9 @@ u32 WriteUARTN(const void* buf, u32 len)
 	}
 
 #if defined(VERSION_G98E01_PIKIDEMO)
-	for (ptr = (char*)buf; ptr - buf < len; ptr++) {
+	for (ptr = (char*)buf; ptr - (char*)buf < len; ptr++) {
 #else
-	for (ptr = (u8*)buf; ptr - buf < len; ptr++) {
+	for (ptr = (u8*)buf; ptr - (u8*)buf < len; ptr++) {
 #endif
 		if (*ptr == '\n')
 			*ptr = '\r';
@@ -105,7 +106,7 @@ u32 WriteUARTN(const void* buf, u32 len)
 				break;
 			xLen = (len < 4) ? (s32)len : 4;
 			EXIImm(0, (void*)buf, xLen, EXI_WRITE, NULL);
-			(u8*)buf += xLen;
+			buf = (u8*)buf + xLen;
 			len -= xLen;
 			qLen -= xLen;
 			EXISync(0);
