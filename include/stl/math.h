@@ -16,17 +16,6 @@ extern "C" {
 #define HUGE_VAL (*(f64*)__double_huge)
 #define DBL_NAN  (*(f64*)__double_nan)
 
-#define LONG_TAU   6.2831854820251465
-#define TAU        6.2831855f
-#define PI         3.1415927f
-#define HALF_PI    1.5707964f
-#define THIRD_PI   1.0471976f
-#define QUARTER_PI 0.7853982f
-
-#define SIN_2_5 0.43633234f
-#define M_SQRT3 1.73205f
-#define M_PI    3.1415926535897932
-
 #define FP_NAN       1
 #define FP_INFINITE  2
 #define FP_ZERO      3

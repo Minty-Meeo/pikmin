@@ -35,7 +35,7 @@ struct Material : public CoreNode {
 		mAttribute     = nullptr;
 		mEnvMapTexture = nullptr;
 		mFlags         = MATFLAG_OPAQUE;
-		Colour().set(0xFF, 0xFF, 0xFF, 0xFF);
+		getColour().set(0xFF, 0xFF, 0xFF, 0xFF);
 		mTevInfoIndex   = 0;
 		mDisplayListPtr = nullptr;
 	}
@@ -55,7 +55,8 @@ struct Material : public CoreNode {
 		}
 	}
 
-	Colour& Colour() { return mColourInfo.mColour; }
+	// This is called `Colour` according to the ILK, but that is confusing and inconsistent with `setColour`.
+	Colour& getColour() { return mColourInfo.mColour; }
 
 	// _00     = VTBL
 	// _00-_14 = CoreNode

@@ -1620,7 +1620,7 @@ void ShapeDynMaterials::animate(f32* data)
 		Material& mat = mMaterials[i];
 		if (mat.mFlags & MATFLAG_PVW) {
 			if (mat.mColourInfo.mTotalFrameCount != 0) {
-				mat.mColourInfo.animate(data, mat.Colour());
+				mat.mColourInfo.animate(data, mat.getColour());
 			}
 
 			for (int j = 0; j < 3; j++) {
@@ -1648,7 +1648,7 @@ void ShapeDynMaterials::updateContext()
 	for (int i = 0; i < mMatCount; i++) {
 		Material& mat = mMaterials[i];
 		if (mat.mFlags & MATFLAG_PVW) {
-			mShape->mMaterialList[mat.mIndex].Colour() = mat.Colour();
+			mShape->mMaterialList[mat.mIndex].getColour() = mat.getColour();
 
 			for (int j = 0; j < 3; j++) {
 				if (mat.mTevInfo->mTevColRegs[j].mAnimFrameCount) {
@@ -1816,7 +1816,7 @@ void BaseShape::makeInstance(ShapeDynMaterials& dynMats, int jointIdx)
 	countMaterials(joint, 0);
 
 	if (joint->mChild) {
-		recTraverseMaterials((Joint*)joint->mChild, &Delegate2<BaseShape, Joint*, u32>(this, &countMaterials));
+		recTraverseMaterials((Joint*)joint->mChild, &Delegate2<BaseShape, Joint*, u32>(this, &BaseShape::countMaterials));
 	}
 
 	dynMats.mMatCount  = matIndex;
@@ -3269,39 +3269,40 @@ void BaseShape::calcWeightedMatrices()
 			weights[1]             = weight;
 
 			// could probably make this a static inline but eh.
-			ASM
-			{
-				psq_l f0, 0x0(weightsR), 0, 0;
-				psq_l f1, 0x0(mtx2), 0, 0;
-				psq_l f2, 0x0(mtx1), 0, 0;
-				ps_madd f1, f2, f0, f1;
-				psq_st f1, 0x0(mtx2), 0, 0;
+			// ASM
+			// {
+			// 	psq_l f0, 0x0(weightsR), 0, 0;
+			// 	psq_l f1, 0x0(mtx2), 0, 0;
+			// 	psq_l f2, 0x0(mtx1), 0, 0;
+			// 	ps_madd f1, f2, f0, f1;
+			// 	psq_st f1, 0x0(mtx2), 0, 0;
 
-				psq_l f3, 0x8(mtx2), 0, 0;
-				psq_l f2, 0x8(mtx1), 0, 0;
-				ps_madd f3, f2, f0, f3;
-				psq_st f3, 0x8(mtx2), 0, 0;
+			// 	psq_l f3, 0x8(mtx2), 0, 0;
+			// 	psq_l f2, 0x8(mtx1), 0, 0;
+			// 	ps_madd f3, f2, f0, f3;
+			// 	psq_st f3, 0x8(mtx2), 0, 0;
 
-				psq_l f1, 0x10(mtx2), 0, 0;
-				psq_l f2, 0x10(mtx1), 0, 0;
-				ps_madd f1, f2, f0, f1;
-				psq_st f1, 0x10(mtx2), 0, 0;
+			// 	psq_l f1, 0x10(mtx2), 0, 0;
+			// 	psq_l f2, 0x10(mtx1), 0, 0;
+			// 	ps_madd f1, f2, f0, f1;
+			// 	psq_st f1, 0x10(mtx2), 0, 0;
 
-				psq_l f3, 0x18(mtx2), 0, 0;
-				psq_l f2, 0x18(mtx1), 0, 0;
-				ps_madd f3, f2, f0, f3;
-				psq_st f3, 0x18(mtx2), 0, 0;
+			// 	psq_l f3, 0x18(mtx2), 0, 0;
+			// 	psq_l f2, 0x18(mtx1), 0, 0;
+			// 	ps_madd f3, f2, f0, f3;
+			// 	psq_st f3, 0x18(mtx2), 0, 0;
 
-				psq_l f1, 0x20(mtx2), 0, 0;
-				psq_l f2, 0x20(mtx1), 0, 0;
-				ps_madd f1, f2, f0, f1;
-				psq_st f1, 0x20(mtx2), 0, 0;
+			// 	psq_l f1, 0x20(mtx2), 0, 0;
+			// 	psq_l f2, 0x20(mtx1), 0, 0;
+			// 	ps_madd f1, f2, f0, f1;
+			// 	psq_st f1, 0x20(mtx2), 0, 0;
 
-				psq_l f3, 0x28(mtx2), 0, 0;
-				psq_l f2, 0x28(mtx1), 0, 0;
-				ps_madd f3, f2, f0, f3;
-				psq_st f3, 0x28(mtx2), 0, 0;
-			};
+			// 	psq_l f3, 0x28(mtx2), 0, 0;
+			// 	psq_l f2, 0x28(mtx1), 0, 0;
+			// 	ps_madd f3, f2, f0, f3;
+			// 	psq_st f3, 0x28(mtx2), 0, 0;
+			// }
+			// ;
 		}
 	}
 }

@@ -110,43 +110,50 @@ void Light::setLightSpot(f32 angle, int spotMode)
 	f32 linearTerm;
 	f32 quadTerm;
 	switch (spotMode) {
-	case 1:
+	case 1: {
 		constTerm  = -1000.0f * cosTheta;
 		linearTerm = 1000.0f;
 		quadTerm   = 0.0f;
 		break;
-	case 2:
+	}
+	case 2: {
 		constTerm  = -cosTheta / (1.0f - cosTheta);
 		linearTerm = 1.0f / (1.0f - cosTheta);
 		quadTerm   = 0.0f;
 		break;
-	case 3:
+	}
+	case 3: {
 		constTerm  = 0.0f;
 		linearTerm = -cosTheta / (1.0f - cosTheta);
 		quadTerm   = 1.0f / (1.0f - cosTheta);
 		break;
-	case 4:
+	}
+	case 4: {
 		f32 tmp    = SQUARE(1.0f - cosTheta);
 		constTerm  = (cosTheta * (cosTheta - 2.0f)) / tmp;
 		linearTerm = 2.0f / tmp;
 		quadTerm   = -1.0f / tmp;
 		break;
-	case 5:
+	}
+	case 5: {
 		constTerm  = -4.0f * cosTheta / SQUARE(1.0f - cosTheta);
 		linearTerm = 4.0f * (1.0f + cosTheta) / SQUARE(1.0f - cosTheta);
 		quadTerm   = -4.0f / SQUARE(1.0f - cosTheta);
 		break;
-	case 6:
+	}
+	case 6: {
 		constTerm  = 1.0f - (2.0f * cosTheta * cosTheta) / SQUARE(1.0f - cosTheta);
 		linearTerm = 4.0f * cosTheta / SQUARE(1.0f - cosTheta);
 		quadTerm   = -2.0f / SQUARE(1.0f - cosTheta);
 		break;
+	}
 	case 0:
-	default:
+	default: {
 		constTerm  = 1.0f;
 		linearTerm = 0.0f;
 		quadTerm   = 0.0f;
 		break;
+	}
 	}
 
 	mSpotConstTerm  = constTerm;

@@ -1996,7 +1996,7 @@ void Navi::refresh(Graphics& gfx)
 			}
 
 			bool isLighting                                    = gfx.setLighting(false, nullptr);
-			GlobalShape::markerShape2->mMaterialList->Colour() = markerColour;
+			GlobalShape::markerShape2->mMaterialList->getColour() = markerColour;
 			GlobalShape::markerShape2->drawshape(gfx, *gfx.mCamera, nullptr);
 			gfx.setLighting(isLighting, nullptr);
 		}
