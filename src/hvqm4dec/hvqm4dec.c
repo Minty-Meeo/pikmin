@@ -1,4 +1,5 @@
 #include "hvqm4.h"
+#include <stddef.h>
 
 /*
  * Initial code attempts + comments + function arguments/naming guides taken from
@@ -134,8 +135,9 @@ static inline int getBit(BitBuffer* str)
 	int bit;
 
 	if ((bit = str->shift) < 0) {
-		value = str->word = *((u32*)str->ptr)++;
-		bit               = 31;
+		value = str->word = *(u32*)str->ptr;
+		str->ptr += 4;
+		bit = 31;
 	} else {
 		value = str->word;
 	}
@@ -159,7 +161,8 @@ static inline s16 getByte(BitBuffer* str)
 	} else {
 		value = str->word;
 		value <<= 7 - bit;
-		str->word = *((u32*)str->ptr)++;
+		str->word = *((u32*)str->ptr);
+		str->ptr += 4;
 		value |= str->word >> (bit + 25);
 		bit += 24;
 	}
