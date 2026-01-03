@@ -51,10 +51,10 @@ ASM void __DBExceptionDestination(void)
 #else // clang-format on
 void __DBExceptionDestination(void)
 {
-	asm("mfmsr %r3\n"
-	    "ori %r3, %r3, 0x30\n"
-	    "mtmsr %r3\n"
-	    "b __DBExceptionDestinationAux\n");
+	// asm("mfmsr %r3\n"
+	//     "ori %r3, %r3, 0x30\n"
+	//     "mtmsr %r3\n"
+	//     "b __DBExceptionDestinationAux\n");
 }
 #endif
 
