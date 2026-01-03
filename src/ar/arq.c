@@ -1,4 +1,6 @@
+#include "Dolphin/OS/OSInterrupt.h"
 #include "Dolphin/ar.h"
+#include <stddef.h>
 
 static ARQRequest* __ARQRequestQueueHi;
 static ARQRequest* __ARQRequestTailHi;
