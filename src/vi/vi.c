@@ -2,6 +2,7 @@
 #include "Dolphin/gx.h"
 #include "Dolphin/hw_regs.h"
 #include "Dolphin/os.h"
+#include <stddef.h>
 
 // Useful macros.
 #define CLAMP(x, l, h)    (((x) > (h)) ? (h) : (((x) < (l)) ? (l) : (x)))
@@ -97,13 +98,13 @@ static int cntlzd(u64 bit)
 
 	hi    = (u32)(bit >> 32);
 	lo    = (u32)(bit & 0xFFFFFFFF);
-	value = __cntlzw(hi);
+	// value = __cntlzw(hi);
 
 	if (value < 32) {
 		return value;
 	}
 
-	return (32 + __cntlzw(lo));
+	// return (32 + __cntlzw(lo));
 	// UNUSED FUNCTION
 }
 
