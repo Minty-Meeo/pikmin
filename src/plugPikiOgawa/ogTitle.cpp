@@ -196,7 +196,7 @@ zen::ogScrTitleMgr::TitleStatus zen::ogScrTitleMgr::update(Controller* input)
 	}
 
 	switch (mCurrentMenu) {
-	case 0:
+	case 0: {
 		mUseMenu->update(input);
 		int flag0         = mUseMenu->getStatusFlag();
 		mCurrentSelection = mUseMenu->getSelectMenu();
@@ -224,7 +224,8 @@ zen::ogScrTitleMgr::TitleStatus zen::ogScrTitleMgr::update(Controller* input)
 			return mStatus;
 		}
 		break;
-	case 1:
+	}
+	case 1: {
 		mOptionsMenu->update(input);
 		int flag1         = mOptionsMenu->getStatusFlag();
 		mCurrentSelection = mOptionsMenu->getSelectMenu();
@@ -293,13 +294,14 @@ zen::ogScrTitleMgr::TitleStatus zen::ogScrTitleMgr::update(Controller* input)
 			mCurrentMenu = 0;
 		}
 		break;
-	case 2:
+	}
+	case 2: {
 		mSoundSelectMenu->update(input);
 		int flag2         = mSoundSelectMenu->getStatusFlag();
 		mCurrentSelection = mSoundSelectMenu->getSelectMenu();
 		if (mInput->keyRepeat(KBBTN_MSTICK_LEFT)) {
 			switch (mCurrentSelection) {
-			case 0:
+			case 0: {
 				if (!mStereoMode) {
 					mStereoMode = true;
 					setGamePrefs();
@@ -315,8 +317,8 @@ zen::ogScrTitleMgr::TitleStatus zen::ogScrTitleMgr::update(Controller* input)
 #endif
 				}
 				break;
-
-			case 1:
+			}
+			case 1: {
 				if (mBgmVol > 0) {
 					mBgmVol--;
 					setGamePrefs();
@@ -329,8 +331,8 @@ zen::ogScrTitleMgr::TitleStatus zen::ogScrTitleMgr::update(Controller* input)
 #endif
 				}
 				break;
-
-			case 2:
+			}
+			case 2: {
 				if (mSfxVol > 0) {
 					mSfxVol--;
 					setGamePrefs();
@@ -344,10 +346,11 @@ zen::ogScrTitleMgr::TitleStatus zen::ogScrTitleMgr::update(Controller* input)
 				}
 				break;
 			}
+			}
 		}
 		if (mInput->keyRepeat(KBBTN_MSTICK_RIGHT)) {
 			switch (mCurrentSelection) {
-			case 0:
+			case 0: {
 				if (mStereoMode) {
 					mStereoMode = false;
 					setGamePrefs();
@@ -360,8 +363,8 @@ zen::ogScrTitleMgr::TitleStatus zen::ogScrTitleMgr::update(Controller* input)
 #endif
 				}
 				break;
-
-			case 1:
+			}
+			case 1: {
 				if (mBgmVol < 10) {
 					mBgmVol++;
 					setGamePrefs();
@@ -374,8 +377,8 @@ zen::ogScrTitleMgr::TitleStatus zen::ogScrTitleMgr::update(Controller* input)
 #endif
 				}
 				break;
-
-			case 2:
+			}
+			case 2: {
 				if (mSfxVol < 10) {
 					mSfxVol++;
 					setGamePrefs();
@@ -388,6 +391,7 @@ zen::ogScrTitleMgr::TitleStatus zen::ogScrTitleMgr::update(Controller* input)
 #endif
 				}
 				break;
+			}
 			}
 		}
 
@@ -411,8 +415,8 @@ zen::ogScrTitleMgr::TitleStatus zen::ogScrTitleMgr::update(Controller* input)
 			mCurrentMenu = 1;
 		}
 		break;
-
-	case 3:
+	}
+	case 3: {
 		mVSelectMenu->update(input);
 		int flag3         = mVSelectMenu->getStatusFlag();
 		mCurrentSelection = mVSelectMenu->getSelectMenu();
@@ -442,8 +446,8 @@ zen::ogScrTitleMgr::TitleStatus zen::ogScrTitleMgr::update(Controller* input)
 			mCurrentMenu = 1;
 		}
 		break;
-
-	case 4:
+	}
+	case 4: {
 		mMsSelectMenu->update(input);
 		int flag4         = mMsSelectMenu->getStatusFlag();
 		mCurrentSelection = mMsSelectMenu->getSelectMenu();
@@ -474,6 +478,7 @@ zen::ogScrTitleMgr::TitleStatus zen::ogScrTitleMgr::update(Controller* input)
 		mStatus = Status_2;
 		return mStatus;
 		break;
+	}
 	}
 
 	return mStatus;

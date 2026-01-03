@@ -145,12 +145,14 @@ void zen::ogScrMessageMgr::resetPage()
 
 	for (int i = 0; i < mActivePaneCount; i++) {
 		switch (mPagePaneList[i]->getTypeID()) {
-		case PANETYPE_TextBox:
+		case PANETYPE_TextBox: {
 			((P2DTextBox*)mPagePaneList[i])->setString("");
 			break;
-		case PANETYPE_Picture:
+		}
+		case PANETYPE_Picture: {
 			mPagePaneList[i]->hide();
 			break;
+		}
 		}
 	}
 }
@@ -409,7 +411,7 @@ void zen::ogScrMessageMgr::setPageInfoSub()
 
 		if (mPagePaneList[id]) {
 			switch (mPagePaneList[id]->getTypeID()) {
-			case PANETYPE_TextBox:
+			case PANETYPE_TextBox: {
 #if defined(VERSION_PIKIDEMO) || defined(VERSION_GPIJ01_01)
 				mProcessedTextBoxStrings[id] = ((P2DTextBox*)mPagePaneList[id])->getString();
 #else
@@ -421,11 +423,12 @@ void zen::ogScrMessageMgr::setPageInfoSub()
 				((P2DTextBox*)mPagePaneList[id])->setString("");
 				id++;
 				break;
-
-			case PANETYPE_Picture:
+			}
+			case PANETYPE_Picture: {
 				mPagePaneList[id]->hide();
 				id++;
 				break;
+			}
 			}
 		}
 		mActivePaneCount = id;
@@ -505,7 +508,7 @@ zen::ogScrMessageMgr::ogScrMessageMgr(immut char* path)
 	mButtonMarkupColours[6]    = "808080";
 	mButtonMarkupColours[7]    = "808080";
 #endif
-	P2DPaneLibrary::setFamilyAlpha(mBaseScreen, nullptr);
+	P2DPaneLibrary::setFamilyAlpha(mBaseScreen, 0);
 }
 
 /**
@@ -527,19 +530,21 @@ void zen::ogScrMessageMgr::dispAll()
 
 	for (int i = 0; i < mActivePaneCount; i++) {
 		switch (mPagePaneList[i]->getTypeID()) {
-		case PANETYPE_Picture:
+		case PANETYPE_Picture: {
 			P2DPicture* pic = (P2DPicture*)mPagePaneList[i];
 			pic->show();
 			P2DPaneLibrary::setFamilyAlpha(pic, 255);
 			pic->initWhite();
 			pic->initBlack();
 			break;
-		case PANETYPE_TextBox:
+		}
+		case PANETYPE_TextBox: {
 			strcpy(mFormattedDisplayStrings[i], mProcessedTextBoxStrings[i]);
 			cnvSpecialNumber(mFormattedDisplayStrings[i]);
 			((P2DTextBox*)mPagePaneList[i])->setString(mFormattedDisplayStrings[i]);
 			mActivePaneId = i;
 			break;
+		}
 		}
 	}
 
@@ -675,7 +680,7 @@ zen::ogScrMessageMgr::MessageStatus zen::ogScrMessageMgr::update(Controller* inp
 		mTextAnimationProgress += gsys->getFrameTime() * speed;
 
 		switch (mPagePaneList[mNextPaneId]->getTypeID()) {
-		case PANETYPE_Picture:
+		case PANETYPE_Picture: {
 			P2DPicture* pic = (P2DPicture*)mPagePaneList[mNextPaneId];
 			pic->show();
 			if (mTextAnimationProgress < 1.0f) {
@@ -690,8 +695,8 @@ zen::ogScrMessageMgr::MessageStatus zen::ogScrMessageMgr::update(Controller* inp
 				mNextPaneId++;
 			}
 			break;
-
-		case PANETYPE_TextBox:
+		}
+		case PANETYPE_TextBox: {
 #if defined(VERSION_PIKIDEMO) || defined(VERSION_GPIJ01_01)
 			if (mTextAnimationProgress >= 0.04f) {
 #else
@@ -715,6 +720,7 @@ zen::ogScrMessageMgr::MessageStatus zen::ogScrMessageMgr::update(Controller* inp
 			}
 			mButtonPromptPane->hide();
 			break;
+		}
 		}
 	}
 
