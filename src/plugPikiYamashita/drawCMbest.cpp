@@ -46,7 +46,7 @@ public:
 	void setRootPane(P2DPane* pane)
 	{
 		mRootPane     = pane;
-		mModeFunction = &modeSleep;
+		mModeFunction = &DrawCMBpicObj::modeSleep;
 	}
 
 	// DLL:
@@ -98,7 +98,7 @@ protected:
 		mMode = mode;
 		switch (mMode) {
 		case MODE_Sleep:
-			mModeFunction = &modeSleep;
+			mModeFunction = &DrawCMBpicObj::modeSleep;
 			mRootPane->setScale(0.0f);
 			break;
 
@@ -106,13 +106,13 @@ protected:
 			mWaitTime = 0.0f;
 			_1C = 0.0f;
 			mRootPane->setScale(0.0f);
-			mModeFunction = &modeAppear;
+			mModeFunction = &DrawCMBpicObj::modeAppear;
 			break;
 
 		case MODE_Wait:
 			mWaitTime     = 0.0f;
 			mAppearTime   = 4.0f;
-			mModeFunction = &modeWait;
+			mModeFunction = &DrawCMBpicObj::modeWait;
 			break;
 		}
 	}
@@ -233,14 +233,14 @@ void zen::DrawCMbest::setMode(zen::DrawCMbest::modeFlag mode)
 	mMode = mode;
 	switch (mMode) {
 	case MODE_Sleep:
-		mModeFunction = &modeSleep;
+		mModeFunction = &DrawCMbest::modeSleep;
 		for (i = 0; i < _0C; i++) {
 			mPicObjs[i].sleep();
 		}
 		break;
 
 	case MODE_Wait:
-		mModeFunction = &modeWait;
+		mModeFunction = &DrawCMbest::modeWait;
 		show();
 		for (i = 0; i < _0C; i++) {
 			mPicObjs[i].wait((_0C - i - 1) * 0.25f);
@@ -248,7 +248,7 @@ void zen::DrawCMbest::setMode(zen::DrawCMbest::modeFlag mode)
 		break;
 
 	case MODE_Appear:
-		mModeFunction = &modeAppear;
+		mModeFunction = &DrawCMbest::modeAppear;
 		show();
 		for (i = 0; i < _0C; i++) {
 			mPicObjs[i].appear(i * 0.25f);

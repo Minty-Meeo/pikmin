@@ -1141,7 +1141,7 @@ public:
 	bool update(Controller* controller)
 	{
 		switch (mStatus) {
-		case Appearing:
+		case Appearing: {
 			mAnimTimer += gsys->getFrameTime();
 			f32 a;
 			if (mAnimTimer > 0.25f) {
@@ -1161,13 +1161,15 @@ public:
 			mConfirmScreen->getScreenPtr()->moveZ(mAnimPos.z);
 			mConfirmScreen->getScreenPtr()->rotate(P2DROTATE_Unk1, TAU - (angle1 - HALF_PI));
 			break;
-		case Active:
+		}
+		case Active: {
 			if (modeOperation(controller)) {
 				mStatus    = Disappearing;
 				mAnimTimer = 0.0f;
 			}
 			break;
-		case Disappearing:
+		}
+		case Disappearing: {
 			mAnimTimer += gsys->getFrameTime();
 			f32 b;
 			if (mAnimTimer > 0.25f) {
@@ -1191,6 +1193,7 @@ public:
 				mConfirmScreen->getScreenPtr()->rotate(P2DROTATE_Unk1, TAU - (angle2 - HALF_PI));
 			}
 			break;
+		}
 		}
 
 		mConfirmScreen->update();

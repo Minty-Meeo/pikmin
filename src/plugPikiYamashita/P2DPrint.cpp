@@ -116,31 +116,33 @@ void P2DPrint::printReturn(const char* textBuffer, int boxWidth, int boxHeight, 
 	f32 blockHeight = parse((u8*)textBuffer, textLen, boxWidth, xPosBuffer, size, false);
 	blockHeight += mFontHeight;
 	switch (vBind) {
-	case TBOXVBIND_Top:
+	case TBOXVBIND_Top: {
 		break;
-
-	case TBOXVBIND_Bottom:
+	}
+	case TBOXVBIND_Bottom: {
 		yOffset += boxHeight - int(blockHeight + 0.5f);
 		break;
-
-	case TBOXVBIND_Center:
+	}
+	case TBOXVBIND_Center: {
 		yOffset += (boxHeight - int(blockHeight + 0.5f)) / 2;
 		break;
+	}
 	}
 
 	for (int i = 0; xPosBuffer[i] != 0xFFFF; i++) {
 		switch (hBind) {
-		case TBOXHBIND_Left:
+		case TBOXHBIND_Left: {
 			xPosBuffer[i] = 0;
 			break;
-
-		case TBOXHBIND_Right:
+		}
+		case TBOXHBIND_Right: {
 			xPosBuffer[i] = boxWidth - xPosBuffer[i];
 			break;
-
-		case TBOXHBIND_Center:
+		}
+		case TBOXHBIND_Center: {
 			xPosBuffer[i] = (boxWidth - xPosBuffer[i]) / 2;
 			break;
+		}
 		}
 	}
 
@@ -309,49 +311,49 @@ u16 P2DPrint::doEscapeCode(const u8** textPtr)
 	(*textPtr) += 2;
 
 	switch (code) {
-	case 'CU':                                    // cursor up
+	case 'CU': {                                  // cursor up
 		mCursorY -= getNumber(textPtr, 1, 0, 10); // default 1, 0 if invalid
 		break;
-
-	case 'CD':                                    // cursor down
+	}
+	case 'CD': {                                  // cursor down
 		mCursorY += getNumber(textPtr, 1, 0, 10); // default 1, 0 if invalid
 		break;
-
-	case 'CL':                                    // cursor left
+	}
+	case 'CL': {                                  // cursor left
 		mCursorX -= getNumber(textPtr, 1, 0, 10); // default 1, 0 if invalid
 		break;
-
-	case 'CR':                                    // cursor right
+	}
+	case 'CR': {                                  // cursor right
 		mCursorX += getNumber(textPtr, 1, 0, 10); // default 1, 0 if invalid
 		break;
-
-	case 'LU': // current line up
+	}
+	case 'LU': { // current line up
 		mCursorY -= mCharLeading;
 		break;
-
-	case 'LD': // current line down
+	}
+	case 'LD': { // current line down
 		mCursorY += mCharLeading;
 		break;
-
-	case 'ST':                                                            // string terminator
+	}
+	case 'ST': {                                                          // string terminator
 		s32 width = getNumber(textPtr, mCharTabWidth, mCharTabWidth, 10); // default tab, tab if invalid
 		if (width > 0) {
 			mCharTabWidth = width;
 		}
 		break;
-
+	}
 	case 'CA': { // char color, preserve alpha
 		// set char top colour (default font top colour, no change if invalid format)
 		u32ToColour(getNumber(textPtr, ColourTou32(mFontTopColour), ColourTou32(mCharTopColour), 16), &mCharTopColour);
 		mFont->setGradColor(mCharTopColour, (mCharGradientActive) ? mCharBottomColour : mCharTopColour);
-	} break;
-
+		break;
+	}
 	case 'GA': { // grad color, preserve alpha
 		// set char bottom colour (default font bottom colour, no change if invalid format)
 		u32ToColour(getNumber(textPtr, ColourTou32(mFontBottomColour), ColourTou32(mCharBottomColour), 16), &mCharBottomColour);
 		mFont->setGradColor(mCharTopColour, (mCharGradientActive) ? mCharBottomColour : mCharTopColour);
-	} break;
-
+		break;
+	}
 	case 'CC': { // char color, use font alpha
 		// set char top colour (default font top colour, no change if invalid format)
 		u32ToColour(getNumber(textPtr, ColourTou32(mFontTopColour), ColourTou32(mCharTopColour), 16), &mCharTopColour);
@@ -359,8 +361,8 @@ u16 P2DPrint::doEscapeCode(const u8** textPtr)
 		mCharTopColour.a    = alpha;
 		mCharBottomColour.a = alpha;
 		mFont->setGradColor(mCharTopColour, (mCharGradientActive) ? mCharBottomColour : mCharTopColour);
-	} break;
-
+		break;
+	}
 	case 'GC': { // grad color, use font alpha
 		// set char bottom colour (default font bottom colour, no change if invalid format)
 		u32ToColour(getNumber(textPtr, ColourTou32(mFontBottomColour), ColourTou32(mCharBottomColour), 16), &mCharBottomColour);
@@ -368,43 +370,44 @@ u16 P2DPrint::doEscapeCode(const u8** textPtr)
 		mCharTopColour.a    = alpha;
 		mCharBottomColour.a = alpha;
 		mFont->setGradColor(mCharTopColour, (mCharGradientActive) ? mCharBottomColour : mCharTopColour);
-	} break;
-
+		break;
+	}
 	case 'FX': {                                                    // fix x (change width)
 		int width = getNumber(textPtr, mFontWidth, mCharWidth, 10); // default = font width, invalid = no change
 		if (width >= 0) {
 			mCharWidth = width;
 		}
-	} break;
-
-	case 'FY':                                                         // fix y (change height)
+		break;
+	}
+	case 'FY': {                                                       // fix y (change height)
 		int height = getNumber(textPtr, mFontHeight, mCharHeight, 10); // default = font height, invalid = no change
 		if (height >= 0) {
 			mCharHeight = height;
 		}
 		break;
-
-	case 'SH':                                                             // scale horizontal
+	}
+	case 'SH': {                                                           // scale horizontal
 		mCharSpacing = getNumber(textPtr, mFontSpacing, mCharSpacing, 10); // default = font spacing, invalid = no change
 		break;
-
-	case 'SV':                                                             // scale vertical
+	}
+	case 'SV': {                                                           // scale vertical
 		mCharLeading = getNumber(textPtr, mFontLeading, mCharLeading, 10); // default = font leading, invalid = no change
 		break;
-
+	}
 	case 'GM': { // gradient marker? switch gradient on/off
 		mCharGradientActive
 		    = getNumber(textPtr, !mCharGradientActive, mCharGradientActive, 10) != 0; // default = switch to opposite, invalid = no change
 		mFont->setGradColor(mCharTopColour, (mCharGradientActive) ? mCharBottomColour : mCharTopColour);
-	} break;
-
-	case 'HM': // ??
 		break;
-
-	default:
+	}
+	case 'HM': { // ??
+		break;
+	}
+	default: {
 		(*textPtr) -= 2; // reset string
 		code = 0;
 		break;
+	}
 	}
 
 	return code;
@@ -416,12 +419,12 @@ u16 P2DPrint::doEscapeCode(const u8** textPtr)
 void P2DPrint::doCtrlCode(int inputChar)
 {
 	switch (inputChar) {
-	case 0x8: // backspace
+	case 0x8: { // backspace
 		mCursorX -= mCurrCharWidth;
 		mCurrCharWidth = 0.0f;
 		break;
-
-	case 0x9: // horizontal tab
+	}
+	case 0x9: { // horizontal tab
 		int width = mCharTabWidth;
 		if (width > 0) {
 			f32 oldX       = mCursorX;
@@ -429,33 +432,34 @@ void P2DPrint::doCtrlCode(int inputChar)
 			mCurrCharWidth = mCursorX - oldX;
 		}
 		break;
-
-	case 0xA: // line feed
+	}
+	case 0xA: { // line feed
 		mCurrCharWidth = 0.0f;
 		mCursorX       = mInitX;
 		mCursorY       = mCursorY + mCharLeading;
 		break;
-
-	case 0xD: // carriage return
+	}
+	case 0xD: { // carriage return
 		mCurrCharWidth = 0.0f;
 		mCursorX       = mInitX;
 		break;
-
-	case 0x1C: // file separator
+	}
+	case 0x1C: { // file separator
 		mCursorX += 1.0f;
 		break;
-
-	case 0x1D: // group separator
+	}
+	case 0x1D: { // group separator
 		mCursorX -= 1.0f;
 		break;
-
-	case 0x1E: // record separator
+	}
+	case 0x1E: { // record separator
 		mCursorY -= 1.0f;
 		break;
-
-	case 0x1F: // unit separator
+	}
+	case 0x1F: { // unit separator
 		mCursorY += 1.0f;
 		break;
+	}
 	}
 }
 

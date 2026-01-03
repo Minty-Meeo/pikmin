@@ -410,21 +410,21 @@ void zen::DrawMenu::updateMenuPanes()
 		}
 
 		switch (mState) {
-		case STATUS_FadeIn:
+		case STATUS_FadeIn: {
 			f32 yScale = 2.0f * (mRatio - 0.5f);
 			if (yScale < 0.0f) {
 				yScale = 0.0f;
 			}
 			mMenuItems[i].setScale(2.0f - yScale, yScale);
 			break;
-
-		case STATUS_Active:
+		}
+		case STATUS_Active: {
 			mMenuItems[i].setScale(1.0f, 1.0f);
 			break;
-
-		case STATUS_FadeOut:
+		}
+		case STATUS_FadeOut: {
 			if (mCancelSelectMenuNo < 0 || i != mCurrentSelect) {
-				yScale = 1.0f - (2.0f * mRatio);
+				f32 yScale = 1.0f - (2.0f * mRatio);
 				if (yScale < 0.0f) {
 					yScale = 0.0f;
 				}
@@ -433,6 +433,7 @@ void zen::DrawMenu::updateMenuPanes()
 				mMenuItems[i].setScale(1.0f, NMathF::sin((3.0f * PI / 2.0f) * mRatio) + 1.0f);
 			}
 			break;
+		}
 		}
 	}
 
@@ -503,7 +504,7 @@ bool zen::DrawMenu::update(Controller* controller)
 		mRatio = _104 / _108;
 
 		switch (mState) {
-		case STATUS_FadeIn:
+		case STATUS_FadeIn: {
 			if (mRatio == 1.0f && mMenuPanelMgr.checkFinish()) {
 				_104   = 0.0f;
 				_108   = 0.1f;
@@ -513,7 +514,8 @@ bool zen::DrawMenu::update(Controller* controller)
 				mTitle.operation();
 			}
 			break;
-		case STATUS_Active:
+		}
+		case STATUS_Active: {
 			if (mRatio == 1.0f) {
 				updateSelectMenuNo(controller);
 				if (controller->keyClick(KBBTN_MSTICK_UP | KBBTN_MSTICK_DOWN)) {
@@ -556,12 +558,14 @@ bool zen::DrawMenu::update(Controller* controller)
 				}
 			}
 			break;
-		case STATUS_FadeOut:
+		}
+		case STATUS_FadeOut: {
 			if (mRatio == 1.0f && mMenuPanelMgr.checkFinish() && mLeftCursorMgr.checkFinish() && mRightCursorMgr.checkFinish()) {
 				mState = STATUS_Inactive;
 				res    = true;
 			}
 			break;
+		}
 		}
 
 		updateMenuPanes();
