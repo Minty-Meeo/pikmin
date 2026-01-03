@@ -110,7 +110,7 @@ public:
 		P2DPicture* pic = (P2DPicture*)pane;
 		switch (mPanelMgr->getStatusFlag()) {
 		case MenuPanelMgr::STATE_Wait:
-		case MenuPanelMgr::STATE_Start:
+		case MenuPanelMgr::STATE_Start: {
 			f32 t = mPanelMgr->getRatio();
 			t     = (1.0f - NMathF::cos(PI * t)) * 0.5f;
 			move(pane, mCurrentPos, t);
@@ -124,8 +124,8 @@ public:
 			mOffset.set(0.0f, 0.0f, mOffset.z);
 			mTimer = 0.0f;
 			break;
-
-		case MenuPanelMgr::STATE_Operation:
+		}
+		case MenuPanelMgr::STATE_Operation: {
 			mTimer += gsys->getFrameTime();
 			if (mTimer > 1.0f) {
 				mTimer = 1.0f;
@@ -136,15 +136,15 @@ public:
 				mRotationAngle -= TAU;
 			}
 
-			t            = NMathF::sin(mRotationAngle);
+			f32 t        = NMathF::sin(mRotationAngle);
 			f32 cosTheta = NMathF::cos(mRotationAngle);
 			pic->setAlpha(RoundOff(87.5f * cosTheta + 167.5f));
 			pic->setScale(NMathF::sin(mRotationAngle) * (mTimer * mScaleSpeedFactor) + 1.0f);
 			mOffset.set(mTimer * mMoveSpeed * t, mTimer * mMoveSpeed * cosTheta, mOffset.z);
 			break;
-
-		case MenuPanelMgr::STATE_End:
-			t = 1.0f - mPanelMgr->getRatio();
+		}
+		case MenuPanelMgr::STATE_End: {
+			f32 t = 1.0f - mPanelMgr->getRatio();
 			move(pane, mCurrentPos, t);
 			if (t < 0.7f) {
 				pic->setScale(1.0f, 0.02f, 1.0f);
@@ -152,6 +152,7 @@ public:
 				pic->setScale(1.0f, (t - 0.7f) * 0.98f / 0.3f + 0.02f, 1.0f);
 			}
 			break;
+		}
 		}
 
 		pic->move(RoundOff(mCurrentPos.x + mOffset.x), RoundOff(mCurrentPos.y + mOffset.y));

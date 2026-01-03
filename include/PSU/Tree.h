@@ -19,16 +19,16 @@ struct PSUTree : public PSUList<T>, public PSULink<T> {
 
 	~PSUTree() { }
 
-	PSUTree<T>* getFirstChild() const { return (PSUTree<T>*)getFirstLink(); }
+	PSUTree<T>* getFirstChild() const { return (PSUTree<T>*)this->getFirstLink(); }
 	PSUTree<T>* getEndChild() const { return nullptr; }
-	PSUTree<T>* getNextChild() const { return (PSUTree<T>*)mNext; }
-	T* getObject() const { return (T*)mObject; }
+	PSUTree<T>* getNextChild() const { return (PSUTree<T>*)this->mNext; }
+	T* getObject() const { return (T*)this->mObject; }
 
-	bool appendChild(PSUTree<T>* child) { return PSUList::append(child); }
-	PSUTree<T>* getParent() const { return (PSUTree<T>*)mList; }
+	bool appendChild(PSUTree<T>* child) { return this->append(child); }
+	PSUTree<T>* getParent() const { return (PSUTree<T>*)this->mList; }
 
 	// DLL inlines to do:
-	bool removeChild(PSUTree<T>* child) { return PSUList::remove(child); }
+	bool removeChild(PSUTree<T>* child) { return this->remove(child); }
 
 	// PSUList at _00
 	// PSULink at _0C

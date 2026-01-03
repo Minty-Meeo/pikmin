@@ -365,10 +365,11 @@ public:
 		bool res   = false;
 		mEventFlag = EVENT_NONE;
 		switch (mAppearState) {
-		case CourseAppearState::Ready:
+		case CourseAppearState::Ready: {
 			res = true;
 			break;
-		case CourseAppearState::RocketIncoming:
+		}
+		case CourseAppearState::RocketIncoming: {
 			f32 timer1 = mAppearTimer += gsys->getFrameTime();
 			if (timer1 > 0.5f) {
 				Vector3f vec1;
@@ -381,7 +382,8 @@ public:
 				mAppearTimer = 0.0f;
 			}
 			break;
-		case CourseAppearState::Exploding:
+		}
+		case CourseAppearState::Exploding: {
 			f32 timer2 = mAppearTimer += gsys->getFrameTime();
 			if (timer2 > 1.0f) {
 				mAppearTimer = 0.0f;
@@ -389,7 +391,8 @@ public:
 				mOpenedPic->show();
 			}
 			break;
-		case CourseAppearState::Revealing:
+		}
+		case CourseAppearState::Revealing: {
 			f32 timer3 = mAppearTimer += gsys->getFrameTime();
 			if (timer3 > 1.0f) {
 				mAppearTimer = 0.0f;
@@ -398,6 +401,7 @@ public:
 				res = true;
 			}
 			break;
+		}
 		}
 
 		return res;

@@ -81,32 +81,32 @@ public:
 	    : P2DPaneCallBack(pane, PANETYPE_Picture)
 	    , FigureTex<T>(amountPtr, digit)
 	{
-		mUseShadowTex    = p4;
-		mCurrentValue    = *mNumberPtr;
-		mValueDifference = 0;
-		mAnimTimer       = 0.0f;
+		mUseShadowTex       = p4;
+		this->mCurrentValue = *this->mNumberPtr;
+		mValueDifference    = 0;
+		mAnimTimer          = 0.0f;
 		setTexture(pane);
 		pane->setOffset(pane->getWidth() >> 1, pane->getHeight() >> 1);
 	}
 
 	virtual bool invoke(P2DPane* pane) // _08
 	{
-		if (getNumber() != getNumber(mCurrentValue)) {
+		if (this->getNumber() != this->getNumber(this->mCurrentValue)) {
 			setTexture(pane);
-			mValueDifference = *mNumberPtr - mCurrentValue;
-			mAnimTimer       = 0.0f;
+			this->mValueDifference = *this->mNumberPtr - this->mCurrentValue;
+			mAnimTimer             = 0.0f;
 		}
 
-		if (mValueDifference) {
+		if (this->mValueDifference) {
 			mAnimTimer += gsys->getFrameTime();
 			if (mAnimTimer > 0.5f) {
-				mAnimTimer       = 0.5f;
-				mValueDifference = 0;
+				mAnimTimer             = 0.5f;
+				this->mValueDifference = 0;
 			}
 
 			f32 t     = mAnimTimer / 0.5f;
 			f32 tComp = (1.0f - t) * 0.3f;
-			if (mValueDifference > 0) {
+			if (this->mValueDifference > 0) {
 				f32 scale = (NMathF::cos(2.0f * TAU * t) + 1.0f) * tComp + 1.0f;
 				pane->setScale(scale, scale, 1.0f);
 			} else {
@@ -115,7 +115,7 @@ public:
 			}
 		}
 
-		mCurrentValue = *mNumberPtr;
+		this->mCurrentValue = *this->mNumberPtr;
 		STACK_PAD_VAR(2);
 		return true;
 	}
@@ -124,10 +124,10 @@ public:
 	{
 		if (mUseShadowTex) {
 			P2DPicture* pic = (P2DPicture*)pane;
-			pic->setTexture(getShadowTexPtr(), 0);
+			pic->setTexture(this->getShadowTexPtr(), 0);
 		} else {
 			P2DPicture* pic = (P2DPicture*)pane;
-			pic->setTexture(getTexPtr(), 0);
+			pic->setTexture(this->getTexPtr(), 0);
 		}
 	}
 
