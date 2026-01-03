@@ -1,4 +1,5 @@
 #include "Dolphin/card.h"
+#include <stddef.h>
 
 /**
  * @TODO: Documentation
@@ -16,7 +17,7 @@ static void BlockReadCallback(s32 channel, s32 result)
 	card->xferred += CARD_SEG_SIZE;
 
 	card->addr += CARD_SEG_SIZE;
-	(u8*)card->buffer += CARD_SEG_SIZE;
+	card->buffer = (u8*)card->buffer + CARD_SEG_SIZE;
 	if (--card->repeat <= 0) {
 		goto error;
 	}
@@ -73,7 +74,7 @@ static void BlockWriteCallback(s32 channel, s32 result)
 	card->xferred += CARD_PAGE_SIZE;
 
 	card->addr += CARD_PAGE_SIZE;
-	(u8*)card->buffer += CARD_PAGE_SIZE;
+	card->buffer = (u8*)card->buffer + CARD_PAGE_SIZE;
 	if (--card->repeat <= 0) {
 		goto error;
 	}
