@@ -47,10 +47,6 @@ typedef volatile f128 vf128;
 #define M_SQRT3 1.73205f
 #define M_PI    3.1415926535897932
 
-#ifndef __cplusplus
-typedef u16 wchar_t;
-#endif
-
 // For Windows-specific types
 #ifdef WIN32
 #include <windows.h>
@@ -118,16 +114,6 @@ typedef u32 HWND;
 #define TRUE (1)
 #undef FALSE
 #define FALSE (0)
-
-#if !defined(__cplusplus)
-#define NULL    ((void*)0)
-#define nullptr 0
-#elif __cplusplus >= 201103L
-#define NULL nullptr
-#else
-#define NULL    0
-#define nullptr 0
-#endif
 
 // Here's some fun facts about the non-standard C++ that `immut` and `NRef` exist to eliminate:
 //  - According to https://isocpp.org/wiki/faq/cpp11-language#rval, binding rvalues to non-const references has been forbidden since C++98.
