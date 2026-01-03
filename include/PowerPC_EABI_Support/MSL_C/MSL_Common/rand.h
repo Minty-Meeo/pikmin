@@ -3,6 +3,8 @@
 
 #include "types.h"
 
+#define RAND_MAX (32767)
+
 #ifdef __cplusplus
 extern "C" {
 #endif // ifdef __cplusplus
