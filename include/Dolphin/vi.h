@@ -1,6 +1,7 @@
 #ifndef _DOLPHIN_VI_H
 #define _DOLPHIN_VI_H
 
+#include "Dolphin/GX/GXTypes.h"
 #include "types.h"
 
 #ifdef __cplusplus
@@ -173,6 +174,7 @@ void VIFlush(void);
 void VIWaitForRetrace(void);
 
 // Configure functions.
+struct _GXRenderModeObj;
 void VIConfigure(const struct _GXRenderModeObj* obj);
 
 // Retrace callbacks.

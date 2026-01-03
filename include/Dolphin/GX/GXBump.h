@@ -3,13 +3,13 @@
 
 #include "types.h"
 
-#ifdef __cplusplus
-extern "C" {
-#endif // ifdef __cplusplus
-
 #include "Dolphin/GX/GXEnum.h"
 #include "Dolphin/GX/GXTypes.h"
 #include "Dolphin/mtx.h"
+
+#ifdef __cplusplus
+extern "C" {
+#endif // ifdef __cplusplus
 
 ////////////// BUMP FUNCTIONS //////////////
 // Flush functions.
@@ -36,6 +36,9 @@ extern void GXSetTevIndTile(GXTevStageID tevStage, GXIndTexStageID indStage, u16
 extern void GXSetTevIndBumpST(GXTevStageID tevStage, GXIndTexStageID indStage, GXIndTexMtxID mtx);
 extern void GXSetTevIndBumpXYZ(GXTevStageID tevStage, GXIndTexStageID indStage, GXIndTexMtxID mtx);
 extern void GXSetTevIndRepeat(GXTevStageID stage);
+
+// Private
+void __GXUpdateBPMask(void);
 
 ////////////////////////////////////////////
 

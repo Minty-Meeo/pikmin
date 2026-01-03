@@ -1,4 +1,5 @@
 #include "Dolphin/gx.h"
+#include <string.h>
 
 u8 GXTexMode0Ids[8]        = { 0x80, 0x81, 0x82, 0x83, 0xA0, 0xA1, 0xA2, 0xA3 };
 u8 GXTexMode1Ids[8]        = { 0x84, 0x85, 0x86, 0x87, 0xA4, 0xA5, 0xA6, 0xA7 };
@@ -83,9 +84,9 @@ u32 GXGetTexBufferSize(u16 width, u16 height, u32 format, u8 mipmap, u8 max_lod)
 		tileBytes = 32;
 	}
 	if (mipmap == 1) {
-		nx = 1 << (31 - __cntlzw(width));
+		// nx = 1 << (31 - __cntlzw(width));
 		ASSERTMSGLINEV(0x1A7, width == nx, "%s: width must be a power of 2", "GXGetTexBufferSize");
-		ny = 1 << (31 - __cntlzw(height));
+		// ny = 1 << (31 - __cntlzw(height));
 		ASSERTMSGLINEV(0x1AA, height == ny, "%s: height must be a power of 2", "GXGetTexBufferSize");
 
 		bufferSize = 0;
@@ -165,9 +166,9 @@ void GXInitTexObj(GXTexObj* obj, void* image_ptr, u16 width, u16 height, GXTexFm
 		t->flags |= 1;
 		t->mode0 = (t->mode0 & 0xFFFFFF1F) | 0xC0;
 		if (width > height) {
-			maxLOD = 31 - __cntlzw(width);
+			// maxLOD = 31 - __cntlzw(width);
 		} else {
-			maxLOD = 31 - __cntlzw(height);
+			// maxLOD = 31 - __cntlzw(height);
 		}
 		lmax = 16.0f * maxLOD;
 		SET_REG_FIELD(0x234, t->mode1, 8, 8, lmax);

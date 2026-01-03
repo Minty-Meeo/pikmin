@@ -1,4 +1,6 @@
-#include "Dolphin/gx.h"
+#include "Dolphin/GX/GXAttr.h"
+#include "Dolphin/GX/GXData.h"
+#include "Dolphin/GX/GXTransform.h"
 #include "Dolphin/os.h"
 
 #define CHECK_ATTRPTR(line, attrPtr) ASSERTMSGLINE(line, (attrPtr) != NULL, "GXSetVtxDescv: attrPtr is NULL")
@@ -592,7 +594,6 @@ void GXInvalidateVtxCache(void)
 /**
  * @TODO: Documentation
  */
-
 void GXSetTexCoordGen2(GXTexCoordID dst_coord, GXTexGenType func, GXTexGenSrc src_param, u32 mtx, GXBool normalize, u32 pt_texmtx)
 {
 	u32 reg = 0;

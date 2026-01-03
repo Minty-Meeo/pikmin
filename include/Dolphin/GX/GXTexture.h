@@ -27,10 +27,6 @@ extern u8 GXTexImage2Ids[8];
 extern u8 GXTexImage3Ids[8];
 extern u8 GXTexTlutIds[8];
 
-// Filter conversion arrays (HW2GX unused in P2).
-extern u8 GX2HWFiltConv[6];
-// extern u8 HW2GXFiltConv[8];
-
 ////////////////////////////////////////////
 
 //////////// TEXTURE FUNCTIONS /////////////
@@ -67,7 +63,6 @@ extern GXTlutRegionCallback GXSetTlutRegionCallback(GXTlutRegionCallback func);
 
 // Unknown arg functions.
 // TODO: work these out.
-extern void __SetSURegs();
 extern void __GXSetSUTexRegs();
 extern void __GXSetTmemConfig(u32 config);
 

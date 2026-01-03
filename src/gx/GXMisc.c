@@ -1,4 +1,5 @@
 #include "Dolphin/gx.h"
+#include <stddef.h>
 
 static GXDrawSyncCallback TokenCB;
 static GXDrawDoneCallback DrawDoneCB;
@@ -473,7 +474,7 @@ u32 GXCompressZ16(u32 z24, GXZFmt16 zfmt)
 #endif
 
 	z24n = ~(z24 << 8);
-	temp = __cntlzw(z24n);
+	temp = 0; //__cntlzw(z24n);
 	switch (zfmt) {
 	case GX_ZC_LINEAR:
 		z16 = (z24 >> 8) & 0xFFFF;
