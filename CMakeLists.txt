@@ -30,5 +30,19 @@ set(CMAKE_POSITION_INDEPENDENT_CODE OFF)
 add_compile_options(-msdata=eabi)
 # add_compile_options(-save-temps=obj)
 
+add_compile_options(-Wno-multichar)
+add_compile_options(-Wno-write-strings)
+add_compile_options(-Wno-return-type)
+add_compile_options($<$<COMPILE_LANGUAGE:C>:-Wno-pointer-to-int-cast>)
+add_compile_options($<$<COMPILE_LANGUAGE:C>:-Wno-int-to-pointer-cast>)
+add_compile_options($<$<COMPILE_LANGUAGE:C>:-Wno-incompatible-pointer-types>)
+add_compile_options($<$<COMPILE_LANGUAGE:CXX>:-Wno-register>)
+add_compile_options(-fno-exceptions)
+add_compile_options(-fno-asynchronous-unwind-tables)
+add_compile_options(-fpermissive)
+add_compile_options(-funsigned-char)
+
+add_compile_options($<$<COMPILE_LANGUAGE:C>:-Werror=implicit>)
+
 # Add source tree
 add_subdirectory(src)
