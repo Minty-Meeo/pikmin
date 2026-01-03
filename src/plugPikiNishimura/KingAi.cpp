@@ -69,27 +69,34 @@ void KingAi::initAI(King* king)
 void KingAi::animationKeyUpdated(immut PaniAnimKeyEvent& event)
 {
 	switch (event.mEventType) {
-	case KEY_Action0:
+	case KEY_Action0: {
 		keyAction0();
 		break;
-	case KEY_Action1:
+	}
+	case KEY_Action1: {
 		keyAction1();
 		break;
-	case KEY_Action2:
+	}
+	case KEY_Action2: {
 		keyAction2();
 		break;
-	case KEY_LoopEnd:
+	}
+	case KEY_LoopEnd: {
 		keyLoopEnd();
 		break;
-	case KEY_Finished:
+	}
+	case KEY_Finished: {
 		keyFinished();
 		break;
-	case KEY_PlaySound:
+	}
+	case KEY_PlaySound: {
 		playSound(event.mValue);
 		break;
-	case KEY_PlayEffect:
+	}
+	case KEY_PlayEffect: {
 		createEffect(event.mValue);
 		break;
+	}
 	}
 }
 
@@ -99,16 +106,16 @@ void KingAi::animationKeyUpdated(immut PaniAnimKeyEvent& event)
 void KingAi::keyAction0()
 {
 	switch (mKing->getCurrentState()) {
-	case KINGAI_Die:
+	case KINGAI_Die: {
 		mKing->mKingBody->createUfoParts();
 		break;
-
-	case KINGAI_Damage:
+	}
+	case KINGAI_Damage: {
 		killStickToMouthPiki();
 		mKing->mKingBody->setEatBombEffect();
 		break;
-
-	case KINGAI_BombDown:
+	}
+	case KINGAI_BombDown: {
 		CollPart* nosePart = mKing->mCollInfo->getSphere('nose');
 		if (nosePart) {
 			Vector3f nosePos(nosePart->mCentre);
@@ -118,37 +125,38 @@ void KingAi::keyAction0()
 		}
 		mKing->mKingBody->setSeedFlashEffect();
 		break;
-
-	case KINGAI_Attack:
+	}
+	case KINGAI_Attack: {
 		mIsTongueOut = true;
 		tongueAttackNavi();
 		break;
-
-	case KINGAI_JumpAttack:
+	}
+	case KINGAI_JumpAttack: {
 		effectMgr->create(EffectMgr::EFF_King_Jump, mKing->mSRT.t, nullptr, nullptr);
 		break;
-
-	case KINGAI_EatThrowPiki:
+	}
+	case KINGAI_EatThrowPiki: {
 		mKing->setMotionFinish(true);
 		break;
-
-	case KINGAI_Flick:
+	}
+	case KINGAI_Flick: {
 		fallBackSide();
 		mKing->calcFlickPiki();
 		effectMgr->create(EffectMgr::EFF_King_Flick, mKing->mSRT.t, nullptr, nullptr);
 		rumbleMgr->start(RUMBLE_Unk4, 0, mKing->mSRT.t);
 		cameraMgr->startVibrationEvent(2, mKing->mSRT.t);
 		break;
-
+	}
 #if defined(BUGFIX) || defined(VERSION_PIKIDEMO) || defined(VERSION_GPIJ01_01)
-		// This case is never hit anyway.  Looks like someone forgot to add a keyAction0 to the appear animation.  See: the other bugfix.
+	// This case is never hit anyway.  Looks like someone forgot to add a keyAction0 to the appear animation.  See: the other bugfix.
 #else
-	case KINGAI_Appear:
+	case KINGAI_Appear: {
 		if (!mKing->needShadow()) {
 			mapMgr->mShadowCaster.add(&mKing->mShadowCaster);
 			mKing->setShadowNeed(true);
 		}
 		break;
+	}
 #endif
 	}
 }
@@ -159,24 +167,25 @@ void KingAi::keyAction0()
 void KingAi::keyAction1()
 {
 	switch (mKing->getCurrentState()) {
-	case KINGAI_Die:
+	case KINGAI_Die: {
 		rumbleMgr->start(RUMBLE_Unk5, 0, mKing->mSRT.t);
 		break;
-
-	case KINGAI_Damage:
+	}
+	case KINGAI_Damage: {
 		effectMgr->create(EffectMgr::EFF_King_Flick, mKing->mSRT.t, nullptr, nullptr);
 		break;
-
-	case KINGAI_BombDown:
+	}
+	case KINGAI_BombDown: {
 		effectMgr->create(EffectMgr::EFF_King_Flick, mKing->mSRT.t, nullptr, nullptr);
 		break;
-
-	case KINGAI_JumpAttack:
+	}
+	case KINGAI_JumpAttack: {
 		fallBackSide();
 		mKing->calcFlickPiki();
 		rumbleMgr->start(RUMBLE_Unk5, 0, mKing->mSRT.t);
 		cameraMgr->startVibrationEvent(2, mKing->mSRT.t);
 		break;
+	}
 	}
 }
 
@@ -187,10 +196,11 @@ void KingAi::keyAction2()
 {
 	// you're so right nishimura, this absolutely needed a switch statement.
 	switch (mKing->getCurrentState()) {
-	case KINGAI_Die:
+	case KINGAI_Die: {
 		mKing->mShadowCaster.del();
 		mKing->setShadowNeed(false);
 		break;
+	}
 	}
 }
 
@@ -217,15 +227,16 @@ void KingAi::keyFinished()
 {
 	mKing->setMotionFinish(true);
 	switch (mKing->getCurrentState()) {
-	case KINGAI_Die:
+	case KINGAI_Die: {
 		mKing->createPellet(mKing->mSRT.t, 300.0f, false);
 		GameStat::killTekis.inc();
 		mKing->doKill();
 		break;
-
-	case KINGAI_Swallow:
+	}
+	case KINGAI_Swallow: {
 		killStickToMouthPiki();
 		break;
+	}
 	}
 }
 
@@ -1656,17 +1667,20 @@ void KingAi::afterProcessing()
 {
 	if (mKing->getCurrentState() != mKing->getNextState()) {
 		switch (mKing->getCurrentState()) {
-		case KINGAI_Damage:
+		case KINGAI_Damage: {
 			setAttackPriority();
 			break;
-		case KINGAI_Attack:
+		}
+		case KINGAI_Attack: {
 			mIsTongueOut = false;
 			endSpreadSaliva();
 			setAttackPriority();
 			break;
-		case KINGAI_JumpAttack:
+		}
+		case KINGAI_JumpAttack: {
 			setAttackPriority();
 			break;
+		}
 		}
 	}
 }
@@ -1679,11 +1693,11 @@ void KingAi::update()
 	setEveryFrame();
 
 	switch (mKing->getCurrentState()) {
-	case KINGAI_Die:
+	case KINGAI_Die: {
 		dieState();
 		break;
-
-	case KINGAI_Damage:
+	}
+	case KINGAI_Damage: {
 		damageState();
 		if (dieTransit()) {
 			initDie(KINGAI_Die);
@@ -1691,8 +1705,8 @@ void KingAi::update()
 			initWalkRandom(KINGAI_WalkRandom, false);
 		}
 		break;
-
-	case KINGAI_BombDown:
+	}
+	case KINGAI_BombDown: {
 		bombDownState();
 		if (dieTransit()) {
 			initDie(KINGAI_Die);
@@ -1700,8 +1714,8 @@ void KingAi::update()
 			initWalkRandom(KINGAI_WalkRandom, false);
 		}
 		break;
-
-	case KINGAI_WalkRandom:
+	}
+	case KINGAI_WalkRandom: {
 		walkRandomState();
 		if (dieTransit()) {
 			initDie(KINGAI_Die);
@@ -1721,8 +1735,8 @@ void KingAi::update()
 			initChasePiki(KINGAI_ChasePiki, false);
 		}
 		break;
-
-	case KINGAI_HomeTurn:
+	}
+	case KINGAI_HomeTurn: {
 		homeTurnState();
 		if (dieTransit()) {
 			initDie(KINGAI_Die);
@@ -1732,8 +1746,8 @@ void KingAi::update()
 			initWalkGoHome(KINGAI_WalkGoHome, false);
 		}
 		break;
-
-	case KINGAI_ChaseTurn:
+	}
+	case KINGAI_ChaseTurn: {
 		chaseTurnState();
 		if (dieTransit()) {
 			initDie(KINGAI_Die);
@@ -1749,8 +1763,8 @@ void KingAi::update()
 			initWalkRandom(KINGAI_WalkRandom, false);
 		}
 		break;
-
-	case KINGAI_ChaseNavi:
+	}
+	case KINGAI_ChaseNavi: {
 		chaseNaviState();
 		if (dieTransit()) {
 			initDie(KINGAI_Die);
@@ -1770,8 +1784,8 @@ void KingAi::update()
 			initChaseNavi(KINGAI_ChaseNavi, false);
 		}
 		break;
-
-	case KINGAI_ChasePiki:
+	}
+	case KINGAI_ChasePiki: {
 		chasePikiState();
 		if (dieTransit()) {
 			initDie(KINGAI_Die);
@@ -1793,8 +1807,8 @@ void KingAi::update()
 			initChasePiki(KINGAI_ChasePiki, false);
 		}
 		break;
-
-	case KINGAI_Attack:
+	}
+	case KINGAI_Attack: {
 		attackState();
 		if (dieTransit()) {
 			initDie(KINGAI_Die);
@@ -1820,8 +1834,8 @@ void KingAi::update()
 			}
 		}
 		break;
-
-	case KINGAI_JumpAttack:
+	}
+	case KINGAI_JumpAttack: {
 		jumpAttackState();
 		if (dieTransit()) {
 			initDie(KINGAI_Die);
@@ -1833,8 +1847,8 @@ void KingAi::update()
 			}
 		}
 		break;
-
-	case KINGAI_Swallow:
+	}
+	case KINGAI_Swallow: {
 		swallowState();
 		if (dieTransit()) {
 			initDie(KINGAI_Die);
@@ -1842,8 +1856,8 @@ void KingAi::update()
 			initWalkRandom(KINGAI_WalkRandom, false);
 		}
 		break;
-
-	case KINGAI_EatThrowPiki:
+	}
+	case KINGAI_EatThrowPiki: {
 		eatThrowPikiState();
 		if (dieTransit()) {
 			initDie(KINGAI_Die);
@@ -1855,8 +1869,8 @@ void KingAi::update()
 			}
 		}
 		break;
-
-	case KINGAI_WalkGoHome:
+	}
+	case KINGAI_WalkGoHome: {
 		walkGoHomeState();
 		if (dieTransit()) {
 			initDie(KINGAI_Die);
@@ -1868,8 +1882,8 @@ void KingAi::update()
 			initWalkRandom(KINGAI_WalkRandom, false);
 		}
 		break;
-
-	case KINGAI_Flick:
+	}
+	case KINGAI_Flick: {
 		flickState();
 		if (dieTransit()) {
 			initDie(KINGAI_Die);
@@ -1877,8 +1891,8 @@ void KingAi::update()
 			initWalkRandom(KINGAI_WalkRandom, false);
 		}
 		break;
-
-	case KINGAI_WaveNeck:
+	}
+	case KINGAI_WaveNeck: {
 		waveNeckState();
 		if (dieTransit()) {
 			initDie(KINGAI_Die);
@@ -1892,8 +1906,8 @@ void KingAi::update()
 			initWalkRandom(KINGAI_WalkRandom, false);
 		}
 		break;
-
-	case KINGAI_Appear:
+	}
+	case KINGAI_Appear: {
 		appearState();
 		if (dieTransit()) {
 			initDie(KINGAI_Die);
@@ -1901,13 +1915,14 @@ void KingAi::update()
 			initWalkRandom(KINGAI_WalkRandom, false);
 		}
 		break;
-
-	case KINGAI_Stay:
+	}
+	case KINGAI_Stay: {
 		stayState();
 		if (appearTransit()) {
 			initAppear(KINGAI_Appear);
 		}
 		break;
+	}
 	}
 
 	afterProcessing();
