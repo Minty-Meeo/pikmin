@@ -1,5 +1,7 @@
 #include "Dolphin/dvd.h"
 #include "Dolphin/os.h"
+#include <ctype.h>
+#include <stddef.h>
 
 typedef struct FSTEntry FSTEntry;
 
@@ -546,7 +548,7 @@ BOOL DVDSeekAsyncPrio(DVDFileInfo* fileInfo, s32 offset, DVDCallback callback, s
 	}
 
 	fileInfo->callback = callback;
-	DVDSeekAbsAsyncPrio(&fileInfo->cBlock, (u32)(char*)fileInfo->startAddr + offset, cbForSeekAsync, prio);
+	DVDSeekAbsAsyncPrio(&fileInfo->cBlock, (char*)fileInfo->startAddr + offset, cbForSeekAsync, prio);
 	return TRUE;
 }
 

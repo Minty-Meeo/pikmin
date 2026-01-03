@@ -575,7 +575,7 @@ static void stateCoverClosed()
  */
 void stateCoverClosed_CMD(DVDCommandBlock* cmdBlock)
 {
-	DVDLowReadDiskID(tmpBuffer, cbForStateCoverClosed);
+	DVDLowReadDiskID((DVDDiskID*)tmpBuffer, cbForStateCoverClosed);
 }
 
 /**
@@ -990,7 +990,7 @@ BOOL DVDReadAbsAsyncPrio(DVDCommandBlock* block, void* addr, s32 length, s32 off
  * @TODO: Documentation
  * @note UNUSED Size: 0000CC
  */
-void DVDSeekAbsAsyncPrio(void)
+void DVDSeekAbsAsyncPrio(DVDCommandBlock* block, void* addr, DVDCBCallback callback, s32 prio)
 {
 	// UNUSED FUNCTION
 }
@@ -1388,7 +1388,7 @@ int DVDSetAutoInvalidation(int newValue)
  * @TODO: Documentation
  * @note UNUSED Size: 00003C
  */
-static void DVDPause()
+void DVDPause()
 {
 	BOOL level;
 	level     = OSDisableInterrupts();
@@ -1565,7 +1565,7 @@ static void cbForCancelSync(s32 result, DVDCommandBlock* block)
  * @TODO: Documentation
  * @note UNUSED Size: 0000EC
  */
-static BOOL DVDCancelAllAsync(DVDCBCallback callback)
+BOOL DVDCancelAllAsync(DVDCBCallback callback)
 {
 	BOOL enabled;
 	DVDCommandBlock* p;

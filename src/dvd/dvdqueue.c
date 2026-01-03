@@ -1,4 +1,6 @@
 #include "Dolphin/dvd.h"
+#include "Dolphin/os.h"
+#include <stddef.h>
 
 struct DVDQueue WaitingQueue[4];
 
