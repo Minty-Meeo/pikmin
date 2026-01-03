@@ -1,3 +1,18 @@
+# Boot / startup object
+add_library(sysBootup OBJECT
+    sysBootup.cpp
+)
+
+# Ensure it is compiled as C++
+set_target_properties(sysBootup PROPERTIES
+    LINKER_LANGUAGE CXX
+)
+
+target_include_directories(sysBootup
+    PRIVATE
+        ${PROJECT_SOURCE_DIR}/include
+)
+
 # Future libraries go here:
 add_subdirectory(sysCommon)
 add_subdirectory(sysDolphin)
@@ -28,3 +43,56 @@ add_subdirectory(plugPikiNakata)
 add_subdirectory(plugPikiNishimura)
 add_subdirectory(plugPikiOgawa)
 add_subdirectory(plugPikiYamashita)
+
+add_executable(main.elf)
+
+# Add the standalone object file
+target_sources(main.elf
+    PRIVATE
+        $<TARGET_OBJECTS:sysBootup>
+)
+
+# Link all static libraries
+target_link_libraries(main.elf
+    PRIVATE
+        sysCommon
+        sysDolphin
+        hvqm4dec
+        ai
+        amcExi2
+        amcnotstub
+        ar
+        base
+        card
+        db
+        dsp
+        dvd
+        exi
+        gx
+        hio
+        jaudio
+        mtx
+        OdemuExi2
+        odenotstub
+        os
+        pad
+        si
+        vi
+        plugPikiColin
+        plugPikiKando
+        plugPikiNakata
+        plugPikiNishimura
+        plugPikiOgawa
+        plugPikiYamashita
+)
+
+# target_link_options(main.elf
+#     PRIVATE
+#         -T${PROJECT_SOURCE_DIR}/linker.ld
+# )
+
+# Include paths for the final executable
+target_include_directories(main.elf
+    PRIVATE
+        ${PROJECT_SOURCE_DIR}/include
+)
