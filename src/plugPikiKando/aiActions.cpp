@@ -43,16 +43,17 @@ void ActPick::Initialiser::initialise(Action* action)
 void ActPick::animationKeyUpdated(immut PaniAnimKeyEvent& event)
 {
 	switch (event.mEventType) {
-	case KEY_Action0:
+	case KEY_Action0: {
 		Creature* obj = mObject.getPtr();
 		if (obj && obj->isVisible() && qdist2(obj, mPiki) < 20.0f) {
 			obj->stimulate(InteractGrab(mPiki));
 		}
 		break;
-
-	case KEY_Finished:
+	}
+	case KEY_Finished: {
 		mIsAnimationFinished = true;
 		break;
+	}
 	}
 }
 

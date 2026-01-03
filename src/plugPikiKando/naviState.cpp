@@ -486,17 +486,19 @@ void NaviBuryState::procAnimMsg(Navi* navi, MsgAnim* msg)
 		break;
 	case KEY_PlayEffect:
 		switch (mBuryState) {
-		case 2:
+		case 2: {
 			f32 randAngle = 2.0f * (PI * gsys->getRand(1.0f));
 			f32 height    = 80.0f;
 			Vector3f dir(40.0f * sinf(randAngle), height, 40.0f * cosf(randAngle));
 			EffectParm parm(navi->mSRT.t, dir);
 			UtEffectMgr::cast(KandoEffect::SmokeSoil, parm);
 			break;
-		case 3:
+		}
+		case 3: {
 			effectMgr->create(EffectMgr::EFF_SD_DirtCloud, navi->mSRT.t, nullptr, nullptr);
 			effectMgr->create(EffectMgr::EFF_SD_DirtSpray, navi->mSRT.t, nullptr, nullptr);
 			break;
+		}
 		}
 		break;
 	}
@@ -2073,7 +2075,7 @@ void NaviThrowState::procTargetMsg(Navi* navi, MsgTarget* msg)
 void NaviThrowState::procAnimMsg(Navi* navi, MsgAnim* msg)
 {
 	switch (msg->mKeyEvent->mEventType) {
-	case KEY_Action0:
+	case KEY_Action0: {
 		_14->mFSM->transit(_14, 14);
 		rumbleMgr->start(RUMBLE_Unk2, 0, nullptr);
 
@@ -2087,9 +2089,11 @@ void NaviThrowState::procAnimMsg(Navi* navi, MsgAnim* msg)
 		navi->throwPiki(_14, speed);
 		_10 = true;
 		break;
-	case KEY_Finished:
+	}
+	case KEY_Finished: {
 		transit(navi, NAVISTATE_Walk);
 		break;
+	}
 	}
 }
 
@@ -3060,7 +3064,7 @@ void NaviStartingState::exec(Navi* navi)
 	}
 
 	switch (_30) {
-	case 0:
+	case 0: {
 		_10 -= gsys->getFrameTime();
 		if (_10 < 0.0f) {
 			_30 = 1;
@@ -3068,8 +3072,8 @@ void NaviStartingState::exec(Navi* navi)
 		}
 
 		return;
-
-	case 1:
+	}
+	case 1: {
 		Vector3f diff         = _14 - navi->mSRT.t;
 		f32 len               = diff.normalise();
 		navi->mVelocity       = diff * 25.0f;
@@ -3087,10 +3091,12 @@ void NaviStartingState::exec(Navi* navi)
 			_32 = false;
 		}
 		break;
-	case 2:
+	}
+	case 2: {
 		if (_32)
 			transit(navi, NAVISTATE_Walk);
 		break;
+	}
 	}
 
 	_34 = navi->mSRT.t;

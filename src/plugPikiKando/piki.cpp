@@ -1839,7 +1839,7 @@ void Piki::startMotion(immut PaniMotionInfo& motion1, immut PaniMotionInfo& moti
 	case PIKIANIM_Walk:
 	case PIKIANIM_Wait:
 	case PIKIANIM_Iraira:
-	case PIKIANIM_Suwaru:
+	case PIKIANIM_Suwaru: {
 		Creature* target = mLookAtCreature.getPtr();
 		if (!isLooking()) {
 			if (!target) {
@@ -1875,10 +1875,11 @@ void Piki::startMotion(immut PaniMotionInfo& motion1, immut PaniMotionInfo& moti
 			mLookAtCreature.set(target);
 		}
 		return;
-
-	default:
+	}
+	default: {
 		finishLook();
 		return;
+	}
 	}
 
 	STACK_PAD_VAR(2); // idk what this is from

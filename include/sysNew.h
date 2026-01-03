@@ -3,12 +3,13 @@
 
 #include "system.h"
 #include "types.h"
+#include <stddef.h>
 
-inline void* operator new(u32 size)
+inline void* operator new(size_t size)
 {
 	return System::alloc(size);
 }
-inline void* operator new[](u32 size)
+inline void* operator new[](size_t size)
 {
 	return System::alloc(size);
 }

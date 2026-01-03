@@ -98,14 +98,15 @@ int ActDecoy::exec()
 {
 	Creature* teki = update();
 	switch (mState) {
-	case 3:
+	case 3: {
 		mPiki->mTargetVelocity.set(0.0f, 0.0f, 0.0f);
 		mDecoyTimer -= gsys->getFrameTime();
 		if (mDecoyTimer < 0.0f) {
 			return ACTOUT_Success;
 		}
 		break;
-	case 2:
+	}
+	case 2: {
 		Vector3f dir = mPiki->mSRT.t - teki->mSRT.t;
 		f32 dist     = dir.length();
 		dir          = dir * (-1.0f / dist);
@@ -116,12 +117,13 @@ int ActDecoy::exec()
 			mPiki->setSpeed(0.5f, dir);
 		}
 		break;
-	case 0:
+	}
+	case 0: {
 		Navi* navi       = naviMgr->getNavi();
 		Vector3f naviDir = mPiki->mSRT.t - navi->mSRT.t;
 		naviDir.normalise();
 		Vector3f tekiDir = mPiki->mSRT.t - teki->mSRT.t;
-		dist             = tekiDir.length();
+		f32 dist         = tekiDir.length();
 		tekiDir          = tekiDir * (1.0f / dist);
 		tekiDir          = tekiDir + quickABS(tekiDir.DP(naviDir)) * naviDir * 1.3f;
 		tekiDir.normalise();
@@ -130,6 +132,7 @@ int ActDecoy::exec()
 			mState = 2;
 		}
 		break;
+	}
 	}
 
 	return ACTOUT_Continue;

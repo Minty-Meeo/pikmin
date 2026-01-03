@@ -178,27 +178,31 @@ Creature* GenObjectItem::birth(BirthInfo& info)
 	Creature* item = itemMgr->birth(mObjType);
 	if (item) {
 		switch (item->mObjType) {
-		case OBJTYPE_Goal:
+		case OBJTYPE_Goal: {
 			GoalItem* goal = (GoalItem*)item;
 			goal->setColorType(mParameterA());
 			break;
-		case OBJTYPE_Rope:
+		}
+		case OBJTYPE_Rope: {
 			RopeItem* rope = (RopeItem*)item;
 			rope->_2D0     = mParameterA();
 			rope->autoInit();
 			break;
-		case OBJTYPE_GemItem:
+		}
+		case OBJTYPE_GemItem: {
 			GemItem* gem = (GemItem*)item;
 			gem->setColorType(mParameterA());
 			break;
+		}
 		case OBJTYPE_SluiceSoft:
 		case OBJTYPE_SluiceHard:
 		case OBJTYPE_SluiceBomb:
-		case OBJTYPE_SluiceBombHard:
+		case OBJTYPE_SluiceBombHard: {
 			BuildingItem* wall = (BuildingItem*)item;
 			wall->mNumStages   = mParameterD();
 			break;
-		case OBJTYPE_RockGen:
+		}
+		case OBJTYPE_RockGen: {
 			RockGen* rock = (RockGen*)item;
 			f32 size      = mParameterA();
 			if ((f32)mParameterA() <= 0.0f) {
@@ -206,18 +210,21 @@ Creature* GenObjectItem::birth(BirthInfo& info)
 			}
 			rock->setSizeAndNum(size, mParameterD());
 			break;
-		case OBJTYPE_GrassGen:
+		}
+		case OBJTYPE_GrassGen: {
 			GrassGen* grass = (GrassGen*)item;
-			size            = mParameterA();
+			f32 size        = mParameterA();
 			if (size <= 0.0f) {
 				size = 30.0f;
 			}
 			grass->setSizeAndNum(size, mParameterD());
 			break;
-		case OBJTYPE_Weeds:
+		}
+		case OBJTYPE_Weeds: {
 			WeedsGen* weeds    = (WeedsGen*)item;
 			weeds->mWeedsCount = mParameterD();
 			break;
+		}
 		}
 
 		int health = mParameterC() + mParameterB() * (int)gameflow.mWorldClock.mHoursInDay;

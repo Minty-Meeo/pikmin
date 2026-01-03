@@ -48,14 +48,15 @@ int ActStone::exec()
 	}
 
 	switch (mState) {
-	case STATE_Approach:
+	case STATE_Approach: {
 		return exeApproach();
-
-	case STATE_Adjust:
+	}
+	case STATE_Adjust: {
 		return exeAdjust();
-
-	case STATE_Attack:
+	}
+	case STATE_Attack: {
 		return exeAttack();
+	}
 	}
 
 	return ACTOUT_Continue;
@@ -185,7 +186,7 @@ int ActStone::exeAttack()
 void ActStone::animationKeyUpdated(immut PaniAnimKeyEvent& event)
 {
 	switch (event.mEventType) {
-	case KEY_Action0:
+	case KEY_Action0: {
 		if (mState != STATE_Attack) {
 			return;
 		}
@@ -223,11 +224,13 @@ void ActStone::animationKeyUpdated(immut PaniAnimKeyEvent& event)
 			mPiki->playEventSound(mRockGen, SEB_STONE_HIT);
 		}
 		break;
-	case KEY_Finished:
+	}
+	case KEY_Finished: {
 		if (mState == STATE_Attack) {
 			mIsAttackReady = true;
 		}
 
 		break;
+	}
 	}
 }

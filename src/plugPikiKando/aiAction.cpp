@@ -122,7 +122,7 @@ int AndAction::exec()
 	Child* child = &mChildActions[mCurrActionIdx];
 
 	switch (child->mAction->exec()) {
-	case ACTOUT_Success:
+	case ACTOUT_Success: {
 		mChildActions[mCurrActionIdx].mAction->cleanup();
 		mCurrActionIdx++;
 
@@ -133,9 +133,10 @@ int AndAction::exec()
 		Child* child = &mChildActions[mCurrActionIdx];
 		child->initialise(mOtherCreature);
 		break;
-
-	case ACTOUT_Fail:
+	}
+	case ACTOUT_Fail: {
 		return ACTOUT_Fail;
+	}
 	}
 
 	return ACTOUT_Continue;
@@ -159,10 +160,10 @@ int OrAction::exec()
 	Child* child = &mChildActions[mCurrActionIdx];
 
 	switch (child->mAction->exec()) {
-	case ACTOUT_Success:
+	case ACTOUT_Success: {
 		return ACTOUT_Success;
-
-	case ACTOUT_Fail:
+	}
+	case ACTOUT_Fail: {
 		mChildActions[mCurrActionIdx].mAction->cleanup();
 		mCurrActionIdx++;
 		if (mCurrActionIdx >= mChildCount) {
@@ -171,6 +172,7 @@ int OrAction::exec()
 		Child* child = &mChildActions[mCurrActionIdx];
 		child->initialise(mOtherCreature);
 		return ACTOUT_Fail;
+	}
 	}
 
 	return ACTOUT_Continue;
@@ -213,10 +215,11 @@ void Action::cleanup()
 void TopAction::MotionListener::animationKeyUpdated(immut PaniAnimKeyEvent& event)
 {
 	switch (event.mEventType) {
-	case KEY_Finished:
+	case KEY_Finished: {
 		mAction->mIsAnimating = false;
 		mAction->mChildActions[mAction->mCurrActionIdx].initialise(mAction->mTarget);
 		break;
+	}
 	}
 }
 
@@ -338,7 +341,7 @@ int TopAction::exec()
 	int res      = child->mAction->exec();
 	switch (res) {
 	case ACTOUT_Fail:
-	case ACTOUT_Success:
+	case ACTOUT_Success: {
 		if (mCurrActionIdx == PikiAction::NOACTION) {
 			return ACTOUT_Fail;
 		}
@@ -351,17 +354,20 @@ int TopAction::exec()
 		if (mPiki->mMode != PikiMode::FreeMode) {
 			bool doJoinParty = false;
 			switch (mPiki->mActionState) {
-			case 2:
+			case 2: {
 				break;
-			case 1:
+			}
+			case 1: {
 				f32 dist = qdist2(mPiki->mNavi, mPiki);
 				if (dist <= C_PIKI_PROP(mPiki).mPostWorkJoinPartyRange()) {
 					doJoinParty = true;
 				}
 				break;
-			case 0:
+			}
+			case 0: {
 				doJoinParty = true;
 				break;
+			}
 			}
 
 			if (doJoinParty) {
@@ -412,6 +418,7 @@ int TopAction::exec()
 			}
 		}
 		break;
+	}
 	}
 
 	return ACTOUT_Continue;

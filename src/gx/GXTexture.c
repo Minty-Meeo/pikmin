@@ -1081,9 +1081,9 @@ void GXPreLoadEntireTexture(GXTexObj* tex_obj, GXTexRegion* region)
 		wd = GET_REG_FIELD(t->image0, 10, 0) + 1;
 		ht = GET_REG_FIELD(t->image0, 10, 10) + 1;
 		if (wd > ht) {
-			maxLevelIndex = (u16)(31 - __cntlzw(wd));
+			// maxLevelIndex = (u16)(31 - __cntlzw(wd));
 		} else {
-			maxLevelIndex = (u16)(31 - __cntlzw(ht));
+			// maxLevelIndex = (u16)(31 - __cntlzw(ht));
 		}
 #if DEBUG
 		count    = nTiles;

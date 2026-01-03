@@ -302,22 +302,23 @@ void PikiLookAtState::cleanup(Piki* piki)
 void PikiLookAtState::procAnimMsg(Piki* piki, MsgAnim* msg)
 {
 	switch (msg->mKeyEvent->mEventType) {
-	case KEY_Action0:
+	case KEY_Action0: {
 		// Compute a smooth multi-frame turn toward the player.
 		mState        = LAS_Turning;
 		Vector3f dir  = piki->mNavi->mSRT.t - piki->mSRT.t;
 		mRotationStep = angDist(atan2f(dir.x, dir.z), piki->mFaceDirection) / 7.0f;
 		break;
-
-	case KEY_Action1:
+	}
+	case KEY_Action1: {
 		// Enter a short wait after turning.
 		mState = LAS_Waiting;
 		break;
-
-	case KEY_Finished:
+	}
+	case KEY_Finished: {
 		// Begin return countdown; state exits when the timer elapses.
 		mState = LAS_Returning;
 		break;
+	}
 	}
 }
 

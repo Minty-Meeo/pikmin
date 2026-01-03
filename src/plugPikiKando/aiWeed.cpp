@@ -44,14 +44,15 @@ void ActWeed::init(Creature* creature)
 int ActWeed::exec()
 {
 	switch (mState) {
-	case STATE_Approach:
+	case STATE_Approach: {
 		return exeApproach();
-
-	case STATE_Adjust:
+	}
+	case STATE_Adjust: {
 		return exeAdjust();
-
-	case STATE_Attack:
+	}
+	case STATE_Attack: {
 		return exeNuking();
+	}
 	}
 
 	return ACTOUT_Continue;
@@ -181,7 +182,7 @@ int ActWeed::exeNuking()
 void ActWeed::animationKeyUpdated(immut PaniAnimKeyEvent& event)
 {
 	switch (event.mEventType) {
-	case KEY_Action0:
+	case KEY_Action0: {
 		if (mState != STATE_Attack) {
 			return;
 		}
@@ -214,11 +215,13 @@ void ActWeed::animationKeyUpdated(immut PaniAnimKeyEvent& event)
 			}
 		}
 		break;
-	case KEY_Finished:
+	}
+	case KEY_Finished: {
 		if (mState == STATE_Attack) {
 			mAnimationFinished = true;
 		}
 
 		break;
+	}
 	}
 }

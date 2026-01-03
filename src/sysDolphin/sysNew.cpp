@@ -18,7 +18,7 @@ DEFINE_PRINT("sysNew");
 /**
  * @todo: Documentation
  */
-void* System::alloc(u32 size)
+void* System::alloc(size_t size)
 {
 	void* result = nullptr;
 	if (size & 0x3) {
@@ -72,7 +72,7 @@ void* System::alloc(u32 size)
  * @todo: Documentation
  * @note UNUSED Size: 000044
  */
-void* operator new(u32, int)
+void* operator new(size_t, int)
 {
 	// UNUSED FUNCTION
 }
@@ -80,7 +80,7 @@ void* operator new(u32, int)
 /**
  * @todo: Documentation
  */
-void* operator new[](u32 size, int alignment)
+void* operator new[](size_t size, int alignment)
 {
 	u32 alloc  = (u32)System::alloc(size + alignment);
 	u32 result = (alloc + (alignment - 1)) & ~(alignment - 1);
