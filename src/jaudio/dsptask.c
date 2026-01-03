@@ -1,3 +1,4 @@
+#include "jaudio/dsptask.h"
 #include "Dolphin/dsp.h"
 #include "jaudio/dspboot.h"
 #if defined(VERSION_GPIP01_00)

@@ -3,6 +3,7 @@
 #include "Dolphin/os.h"
 #include "jaudio/audiocommon.h"
 #include "jaudio/memory.h"
+#include <stdint.h>
 
 ALHeap aram_hp;
 u8* JAC_ARAM_DMA_BUFFER_TOP;
@@ -69,7 +70,7 @@ void ARAlloc2(u32)
  */
 void* ARAllocFull(u32* outSize)
 {
-	u32 freeSize = aram_hp.length - ((int)aram_hp.current - (int)aram_hp.base);
+	u32 freeSize = aram_hp.length - ((intptr_t)aram_hp.current - (intptr_t)aram_hp.base);
 
 	void* alloc = Nas_HeapAlloc(&aram_hp, freeSize - 32);
 	*outSize    = freeSize - 32;

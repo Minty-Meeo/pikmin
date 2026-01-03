@@ -8,6 +8,7 @@
 #include "jaudio/interleave.h"
 #include "jaudio/playercall.h"
 #include "jaudio/rate.h"
+#include <stddef.h>
 
 // fabricated, size 0x14.
 struct UNK_STRUCT {
@@ -1047,17 +1048,20 @@ int StreamGetCurrentFrame(u32 streamId, u32 id2)
 	}
 
 	switch (id2) {
-	case 0:
+	case 0: {
 		return ctrl->samplesDecoded * ctrl->header.frameRate / ctrl->header.sampleRate;
-	case 1:
+	}
+	case 1: {
 		f32 subframeRate = JAC_DAC_RATE * JAC_SUBFRAMES / JAC_FRAMESAMPLES;
 		return ctrl->header.frameRate / subframeRate * ctrl->frameCounter;
-	case 2:
+	}
+	case 2: {
 		if (ctrl->frameCounter == 0) {
 			return 0;
 		}
 		u32 size = ctrl->totalSamples - Get_DirectPCM_Remain(GetDspHandle(dspCh->buffer_idx));
 		return size * (f32)ctrl->header.frameRate / ctrl->header.sampleRate + 0.499f;
+	}
 	}
 
 	STACK_PAD_VAR(3);

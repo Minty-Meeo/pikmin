@@ -9,6 +9,7 @@
 #include "jaudio/rate.h"
 #include "jaudio/tables.h"
 #include "jaudio/waveread.h"
+#include <stddef.h>
 
 static int Jesus1Shot_Update(jc_*, JCSTATUS);
 
@@ -235,7 +236,7 @@ static jc_* __Oneshot_Play_Start(jcs_* jcs, jc_* jc, u32 p3)
  */
 static jc_* __Oneshot_GetLogicalChannel(jcs_* jcs, CtrlWave_* wave)
 {
-	if (wave && wave->sampleSrcType == NULL) {
+	if (wave && wave->sampleSrcType == 0) {
 		return FALSE;
 	}
 

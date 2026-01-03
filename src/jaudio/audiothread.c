@@ -10,6 +10,7 @@
 #include "jaudio/dspbuf.h"
 #include "jaudio/dspinterface.h"
 #include "jaudio/dspproc.h"
+#include "jaudio/dsptask.h"
 #include "jaudio/dummyprobe.h"
 #include "jaudio/dummyrom.h"
 #include "jaudio/dvdthread.h"
@@ -17,8 +18,7 @@
 #include "jaudio/playercall.h"
 #include "jaudio/rate.h"
 #include "jaudio/stackchecker.h"
-
-DspFinishWork(u16);
+#include <stddef.h>
 
 // this is purely for comm bullshit to match. pretty sure it's not the comm bug, just wacky.
 typedef struct Jac_AudioThread {
@@ -203,10 +203,10 @@ static void* audioproc(void*)
 
 		OSReceiveMessage(&audioproc_mq, &msg, OS_MESSAGE_BLOCK);
 		switch ((int)msg) {
-		case (int)AUDIOPROC_MESSAGE_UPDATE_DAC:
+		case 0: // (int)AUDIOPROC_MESSAGE_UPDATE_DAC:
 			Jac_UpdateDAC();
 			break;
-		case (int)AUDIOPROC_MESSAGE_DSP_SYNC:
+		case 1: // (int)AUDIOPROC_MESSAGE_DSP_SYNC:
 			if (intcount == 0) {
 				return;
 			}
@@ -222,10 +222,10 @@ static void* audioproc(void*)
 			}
 
 			break;
-		case (int)AUDIOPROC_MESSAGE_NEOS_SYNC:
+		case 2: // (int)AUDIOPROC_MESSAGE_NEOS_SYNC:
 			CpuFrameEnd();
 			break;
-		case (int)AUDIOPROC_MESSAGE_3:
+		case 3: // (int)AUDIOPROC_MESSAGE_3:
 			OSExitThread(NULL);
 			break;
 		}

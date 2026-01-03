@@ -2,6 +2,7 @@
 #include "Dolphin/os.h"
 #include "jaudio/aictrl.h"
 #include "jaudio/rate.h"
+#include <stddef.h>
 
 static u8 write_buffer = 0;
 static u8 read_buffer  = 0;
@@ -17,7 +18,7 @@ s16* CpubufProcess(DSPBUF_EVENTS event)
 	u32 i, j;
 
 	switch (event) {
-	case DSPBUF_EVENT_INIT:
+	case DSPBUF_EVENT_INIT: {
 		write_buffer = 2;
 		read_buffer  = 0;
 		for (i = 0; i < DSPBUF_NUM; i++) {
@@ -31,7 +32,8 @@ s16* CpubufProcess(DSPBUF_EVENTS event)
 
 		dspstatus = 0;
 		break;
-	case DSPBUF_EVENT_FRAME_END:
+	}
+	case DSPBUF_EVENT_FRAME_END: {
 		u8 write = write_buffer + 1;
 
 		if (write == DSPBUF_NUM) {
@@ -45,7 +47,8 @@ s16* CpubufProcess(DSPBUF_EVENTS event)
 			dspstatus    = 1;
 		}
 		break;
-	case DSPBUF_EVENT_MIX:
+	}
+	case DSPBUF_EVENT_MIX: {
 		u8 read = read_buffer + 1;
 		if (read == DSPBUF_NUM) {
 			read = 0;
@@ -74,6 +77,7 @@ s16* CpubufProcess(DSPBUF_EVENTS event)
 		}
 
 		return dsp_buf[read_buffer];
+	}
 	}
 
 	return NULL;

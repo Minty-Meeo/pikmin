@@ -490,40 +490,49 @@ void Jac_StartDemo(u32 cinID)
 	}
 
 	switch (status->mBgmFadeMode) {
-	case 0:
+	case 0: {
 		Jac_StopBgm(0);
 		Jac_StopBgm(1);
 		break;
-	case 1:
+	}
+	case 1: {
 		break;
-	case 2:
+	}
+	case 2: {
 		Jac_DemoFade(1, 15, 0.01f);
 		break;
-	case 4:
+	}
+	case 4: {
 		Jac_FadeOutBgm(0, 15);
 		Jac_FadeOutBgm(1, 15);
 		break;
-	case 5:
+	}
+	case 5: {
 		Jac_DemoFade(1, 30, 0.5f);
 		break;
-	case 3:
+	}
+	case 3: {
 		Jac_DemoFade(1, 8, 0.0f);
 		break;
 	}
+	}
 
 	switch (status->mGameplayFlags) {
-	case 0:
+	case 0: {
 		break;
-	case 1:
+	}
+	case 1: {
 		event_pause_counter = 0;
 		seqp_* track        = Jam_GetTrackHandle(0x20000);
 		seqp_** tp          = &track;
 		Jam_PauseTrack(track, 1);
 		break;
-	case 2:
+	}
+	case 2: {
 		Jac_InitAllEvent();
 		Jac_Orima_Formation(0, 0);
 		break;
+	}
 	}
 
 	switch (cinID) {

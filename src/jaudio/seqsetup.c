@@ -9,6 +9,7 @@
 #include "jaudio/playercall.h"
 
 #include "Dolphin/OS/OSInterrupt.h"
+#include <stddef.h>
 
 #define SEQ_SIZE             (256)
 #define ROOT_OUTER_SIZE      (16)

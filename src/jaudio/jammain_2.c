@@ -12,6 +12,7 @@
 #include "jaudio/seqsetup.h"
 
 #include "Dolphin/OS/OSError.h"
+#include <stddef.h>
 
 // TODO IN THIS FILE: What do the return values for the `Cmd_` functions signify?
 // 0 is probably success / "no error".  Return values 1 and 2 have been observed.
@@ -52,7 +53,9 @@ static u8 SEQ_CMD;
 static u32 SEQ_ARG[8];
 
 // predeclare this so Jam_UpdateTrackAll can use this stupid function.
-extern "C" static void OSf32tos8(f32* in, s8* out);
+// extern "C" {
+static void OSf32tos8(f32* in, s8* out);
+// }
 
 /**
  * @TODO: Documentation
