@@ -1,4 +1,5 @@
 #include "Dolphin/vec.h"
+#include "Dolphin/os.h"
 #include <math.h>
 
 #pragma - fp_contract off
@@ -23,8 +24,7 @@ void C_VECAdd(Vec* a, Vec* b, Vec* c)
  * @TODO: Documentation
  * @note UNUSED Size: 000024
  */
-ASM void PSVECAdd(register Vec* a, register Vec* b, register Vec* c)
-{
+ASM void PSVECAdd(register Vec* a, register Vec* b, register Vec* c) {
 #ifdef __MWERKS__ // clang-format off
     psq_l f2, Vec.x(a), 0, qr0
     psq_l f4, Vec.x(b), 0, qr0
@@ -36,6 +36,8 @@ ASM void PSVECAdd(register Vec* a, register Vec* b, register Vec* c)
     psq_st f7, Vec.z(c), 1, qr0
 #endif // clang-format on
 }
+
+#define VECAdd C_VECAdd
 
 /**
  * @TODO: Documentation
@@ -154,6 +156,8 @@ void PSVECNormalize(register Vec* vec1, register Vec* dst)
 	#endif // clang-format on
 }
 
+#define VECNormalize C_VECNormalize
+
 /**
  * @TODO: Documentation
  * @note UNUSED Size: 000024
@@ -227,8 +231,7 @@ f32 C_VECDotProduct(Vec* a, Vec* b)
  * @TODO: Documentation
  * @note UNUSED Size: 000020
  */
-ASM void PSVECDotProduct(register Vec* vec1, register Vec* vec2)
-{
+ASM void PSVECDotProduct(register Vec* vec1, register Vec* vec2) {
 #ifdef __MWERKS__ // clang-format off
     psq_l f2, Vec.y(vec1), 0, qr0
     psq_l f3, Vec.y(vec2), 0, qr0
@@ -239,6 +242,8 @@ ASM void PSVECDotProduct(register Vec* vec1, register Vec* vec2)
     ps_sum0 f1, f3, f2, f2
 #endif // clang-format on
 }
+
+#define VECDotProduct C_VECDotProduct
 
 /**
  * @TODO: Documentation
@@ -370,6 +375,8 @@ ASM void PSVECSquareDistance(register Vec* vec1, register Vec* vec2) {
     ps_sum0 f1, f5, f4, f4
 #endif // clang-format on
 }
+
+#define VECSquareDistance C_VECSquareDistance
 
 /**
  * @TODO: Documentation
