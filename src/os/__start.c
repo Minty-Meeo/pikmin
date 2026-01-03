@@ -1,8 +1,5 @@
 #include "Dolphin/db.h"
 #include "Dolphin/os.h"
-#include "PowerPC_EABI_Support/MetroTRK/trk.h"
-#include "PowerPC_EABI_Support/Runtime/__ppc_eabi_init.h"
-#include "PowerPC_EABI_Support/Runtime/__ppc_eabi_linker.h"
 #include <stdlib.h>
 #include <string.h>
 
