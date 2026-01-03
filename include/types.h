@@ -193,6 +193,13 @@ inline void padStack(void)
 // Uses a ternary to pad the stack by some number of words
 #define STACK_PAD_TERNARY(expr, n) TERNARY_BUILD_MATCHING(REPEAT((expr) ? "fake" : "fake", n), (void)0)
 
+// Macro for making clear things are addresses.
+#ifdef __MWERKS__
+#define AT_ADDRESS(addr) : (addr)
+#else
+#define AT_ADDRESS(addr)
+#endif
+
 #ifdef __MWERKS__
 #define WEAKFUNC        __declspec(weak)
 #define DECL_SECT(name) __declspec(section name)
