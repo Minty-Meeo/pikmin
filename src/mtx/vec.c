@@ -38,6 +38,8 @@ ASM void PSVECAdd(register Vec* a, register Vec* b, register Vec* c)
 #endif // clang-format on
 }
 
+#define VECAdd C_VECAdd
+
 /**
  * @TODO: Documentation
  * @note UNUSED Size: 000034
@@ -155,6 +157,8 @@ void PSVECNormalize(register Vec* vec1, register Vec* dst)
 	#endif // clang-format on
 }
 
+#define VECNormalize C_VECNormalize
+
 /**
  * @TODO: Documentation
  * @note UNUSED Size: 000024
@@ -240,6 +244,8 @@ ASM void PSVECDotProduct(register Vec* vec1, register Vec* vec2)
     ps_sum0 f1, f3, f2, f2
 #endif // clang-format on
 }
+
+#define VECDotProduct C_VECDotProduct
 
 /**
  * @TODO: Documentation
@@ -371,6 +377,8 @@ ASM void PSVECSquareDistance(register Vec* vec1, register Vec* vec2) {
     ps_sum0 f1, f5, f4, f4
 #endif // clang-format on
 }
+
+#define VECSquareDistance C_VECSquareDistance
 
 /**
  * @TODO: Documentation

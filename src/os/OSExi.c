@@ -2,8 +2,6 @@
 #include <stddef.h>
 #include <string.h>
 
-// This OS file in particular is really fussy, so I'm just seperating the whole thing for v37 (USA) and v47 (USA Demo)
-#if defined(VERSION_G98E01_PIKIDEMO)
 typedef void (*EXICallback)(s32, OSContext*);
 
 #define EXI_0LENGTH_EXILENGTH_MASK 0x03FFFFE0
@@ -31,6 +29,13 @@ void EXIInit();
 int EXILock(s32 chan, u32 dev, void (*unlockedCallback)(s32, struct OSContext*));
 int EXIUnlock(s32 chan);
 u32 EXIGetState(s32 chan);
+
+static int __EXIProbe(s32 chan)
+{
+}
+
+// This OS file in particular is really fussy, so I'm just seperating the whole thing for v37 (USA) and v47 (USA Demo)
+#if defined(VERSION_G98E01_PIKIDEMO)
 
 static void SetExiInterruptMask(s32 chan, struct EXIControl* exi)
 {

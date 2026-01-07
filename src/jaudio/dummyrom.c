@@ -3,6 +3,7 @@
 #include "Dolphin/os.h"
 #include "jaudio/audiocommon.h"
 #include "jaudio/memory.h"
+#include <stdint.h>
 
 ALHeap aram_hp;
 u8* JAC_ARAM_DMA_BUFFER_TOP;
