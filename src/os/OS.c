@@ -404,7 +404,7 @@ static void OSExceptionInit(void)
 		DBPrintf("Installing OSDBIntegrator\n");
 		memcpy(destAddr, (void*)__OSDBINTSTART, (u32)__OSDBINTEND - (u32)__OSDBINTSTART);
 		DCFlushRangeNoSync(destAddr, (u32)__OSDBINTEND - (u32)__OSDBINTSTART);
-		__sync();
+		// __sync();
 		ICInvalidateRange(destAddr, (u32)__OSDBINTEND - (u32)__OSDBINTSTART);
 	}
 
@@ -438,7 +438,7 @@ static void OSExceptionInit(void)
 		destAddr = (void*)OSPhysicalToCached(__OSExceptionLocations[(u32)exception]);
 		memcpy(destAddr, handlerStart, handlerSize);
 		DCFlushRangeNoSync(destAddr, handlerSize);
-		__sync();
+		// __sync();
 		ICInvalidateRange(destAddr, handlerSize);
 	}
 
@@ -622,7 +622,7 @@ void __OSPSInit(void)
 {
 	PPCMthid2(PPCMfhid2() | 0xA0000000);
 	ICFlashInvalidate();
-	__sync();
+	// __sync();
 #ifdef __MWERKS__
 	asm {
 		li      r3, 0
