@@ -836,7 +836,7 @@ BOOL EXIImmEx(s32 chan, void* buf, s32 len, u32 mode)
 			return FALSE;
 		}
 
-		(u8*)buf += xLen;
+		buf = (u8*)buf + xLen;
 		len -= xLen;
 	}
 	return TRUE;

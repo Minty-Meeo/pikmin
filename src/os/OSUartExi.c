@@ -106,7 +106,7 @@ u32 WriteUARTN(const void* buf, u32 len)
 				break;
 			xLen = (len < 4) ? (s32)len : 4;
 			EXIImm(0, (void*)buf, xLen, EXI_WRITE, NULL);
-			(u8*)buf += xLen;
+			buf = (u8*)buf + xLen;
 			len -= xLen;
 			qLen -= xLen;
 			EXISync(0);
