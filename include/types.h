@@ -35,6 +35,17 @@ typedef volatile f32 vf32;
 typedef volatile f64 vf64;
 typedef volatile f128 vf128;
 
+#define LONG_TAU   6.2831854820251465
+#define TAU        6.2831855f
+#define PI         3.1415927f
+#define HALF_PI    1.5707964f
+#define THIRD_PI   1.0471976f
+#define QUARTER_PI 0.7853982f
+
+#define SIN_2_5 0.43633234f
+#define M_SQRT3 1.73205f
+#define M_PI    3.1415926535897932
+
 // For Windows-specific types
 #ifdef WIN32
 #include <windows.h>
