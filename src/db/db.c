@@ -40,24 +40,16 @@ void __DBExceptionDestinationAux(void)
 /**
  * @TODO: Documentation
  */
-#ifdef __MWERKS__ // clang-format off
-ASM void __DBExceptionDestination(void)
-{
-	nofralloc
-	mfmsr r3
-	ori r3, r3, 0x30
-	mtmsr r3
-	b __DBExceptionDestinationAux
-}
-#else // clang-format on
 void __DBExceptionDestination(void)
 {
-	asm("mfmsr %r3\n"
-	    "ori %r3, %r3, 0x30\n"
-	    "mtmsr %r3\n"
-	    "b __DBExceptionDestinationAux\n");
+	int tmp;
+
+	asm("mfmsr %[tmp];"
+	    "ori   %[tmp], %[tmp], 0x30;"
+	    "mtmsr %[tmp];"
+	    "b     __DBExceptionDestinationAux;"
+	    : [tmp] "=r"(tmp));
 }
-#endif
 
 /**
  * @TODO: Documentation

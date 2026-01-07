@@ -28,6 +28,8 @@ BraceWrapping:
   AfterCaseLabel: true
   AfterFunction: true
 
+BreakBeforeInlineASMColon: OnlyMultiline
+
 Cpp11BracedListStyle: false
 
 AlwaysBreakTemplateDeclarations: true

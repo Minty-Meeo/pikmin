@@ -10,23 +10,22 @@ void __OSSystemCallVectorEnd();
 /**
  * @TODO: Documentation
  */
-static ASM void SystemCallVector(void)
+static void SystemCallVector(void)
 {
-#ifdef __MWERKS__ // clang-format off
-	nofralloc
+	// TODO: Document clobbers explicitly, I guess.
+	// asm(".global __OSSystemCallVectorStart"
+	//     "__OSSystemCallVectorStart:"
 
-	entry __OSSystemCallVectorStart
-	mfspr r9, DBSR
-	ori r10, r9, 8
-	mtspr DBSR, r10
-	isync
-	sync
-	mtspr DBSR, r9
-	rfi
+	//     "mfspr  9, DBSR"
+	//     "ori    10, 9, 8"
+	//     "mtspr  DBSR, 10"
+	//     "isync"
+	//     "sync"
+	//     "mtspr  DBSR, 9"
+	//     "rfi"
 
-	entry __OSSystemCallVectorEnd
-	nop
-#endif // clang-format on
+	//     ".global __OSSystemCallVectorEnd"
+	//     "__OSSystemCallVectorEnd:");
 }
 
 /**

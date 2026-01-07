@@ -83,43 +83,43 @@ u32 __OSIsDebuggerPresent(void)
  * @TODO: Documentation
  * @note UNUSED Size: 000084
  */
-static ASM void __OSInitFPRs(void) {
-#ifdef __MWERKS__ // clang-format off
-    nofralloc
-    lfd     fp0, ZeroF
-    fmr     fp1, fp0
-    fmr     fp2, fp0
-    fmr     fp3, fp0
-    fmr     fp4, fp0
-    fmr     fp5, fp0
-    fmr     fp6, fp0
-    fmr     fp7, fp0
-    fmr     fp8, fp0
-    fmr     fp9, fp0
-    fmr     fp10, fp0
-    fmr     fp11, fp0
-    fmr     fp12, fp0
-    fmr     fp13, fp0
-    fmr     fp14, fp0
-    fmr     fp15, fp0
-    fmr     fp16, fp0
-    fmr     fp17, fp0
-    fmr     fp18, fp0
-    fmr     fp19, fp0
-    fmr     fp20, fp0
-    fmr     fp21, fp0
-    fmr     fp22, fp0
-    fmr     fp23, fp0
-    fmr     fp24, fp0
-    fmr     fp25, fp0
-    fmr     fp26, fp0
-    fmr     fp27, fp0
-    fmr     fp28, fp0
-    fmr     fp29, fp0
-    fmr     fp30, fp0
-    fmr     fp31, fp0
-    blr
-#endif // clang-format on
+static void __OSInitFPRs(void)
+{
+	// TODO: Give me register names or give me death!
+	// asm("lfd     0, %[ZeroF]"
+	//     "fmr     1, fp0"
+	//     "fmr     2, fp0"
+	//     "fmr     3, fp0"
+	//     "fmr     4, fp0"
+	//     "fmr     5, fp0"
+	//     "fmr     6, fp0"
+	//     "fmr     7, fp0"
+	//     "fmr     8, fp0"
+	//     "fmr     9, fp0"
+	//     "fmr     10, fp0"
+	//     "fmr     11, fp0"
+	//     "fmr     12, fp0"
+	//     "fmr     13, fp0"
+	//     "fmr     14, fp0"
+	//     "fmr     15, fp0"
+	//     "fmr     16, fp0"
+	//     "fmr     17, fp0"
+	//     "fmr     18, fp0"
+	//     "fmr     19, fp0"
+	//     "fmr     20, fp0"
+	//     "fmr     21, fp0"
+	//     "fmr     22, fp0"
+	//     "fmr     23, fp0"
+	//     "fmr     24, fp0"
+	//     "fmr     25, fp0"
+	//     "fmr     26, fp0"
+	//     "fmr     27, fp0"
+	//     "fmr     28, fp0"
+	//     "fmr     29, fp0"
+	//     "fmr     30, fp0"
+	//     "fmr     31, fp0"
+	//     :
+	//     : [ZeroF] "g"(ZeroF));
 }
 
 /**

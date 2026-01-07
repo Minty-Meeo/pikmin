@@ -6,10 +6,10 @@
 #define MOVE_FROM_MSR(rD)       asm { mfmsr rD }
 #define MOVE_TO_MSR(rS)         asm { mtmsr rS }
 #else
-#define MOVE_FROM_SPR(name, rD) (void)0
-#define MOVE_TO_SPR(name, rS)   (void)0
-#define MOVE_FROM_MSR(rD)       (void)0
-#define MOVE_TO_MSR(rS)         (void)0
+#define MOVE_FROM_SPR(name, rD) asm("mfspr %[dst], %[SPR]" : [dst] "=g"(rD) : [SPR] "i"(name));
+#define MOVE_TO_SPR(name, rS)   asm("mtspr %[SPR], %[src]" : : [src] "g"(rS), [SPR] "i"(name));
+#define MOVE_FROM_MSR(rD)       asm("mfmsr %[dst]" : [dst] "=g"(rD));
+#define MOVE_TO_MSR(rS)         asm("mtmsr %[src]" : : [src] "g"(rS));
 #endif
 
 /**
@@ -126,9 +126,7 @@ u32 PPCMfdec(void)
  */
 void PPCSync(void)
 {
-#ifdef __MWERKS__
-	asm { sc }
-#endif
+	asm("sc");
 }
 
 /**
@@ -163,13 +161,10 @@ void PPCHalt(void)
 {
 	__mwerks_sync();
 	for (;;) {
-#ifdef __MWERKS__
-		asm {
-			nop
-			li r3, 0
-			nop
-		}
-#endif
+		// TODO: register names / explicit clobbers / is this *really* necessary?
+		asm("nop;"
+		    "li 3, 0;"
+		    "nop;");
 	}
 }
 

@@ -34,19 +34,14 @@ static ApploaderHeader Header ATTRIBUTE_ALIGN(32);
 /**
  * @TODO: Documentation
  */
-static ASM void Run(register void (*entrypoint)())
+__attribute__((noreturn)) static void Run(void (*entrypoint)())
 {
-#ifdef __MWERKS__ // clang-format off
-	fralloc
-	bl OSDisableInterrupts
-	bl ICFlashInvalidate
-	sync
-	isync
-	mtlr entrypoint
-	blr
-	frfree
-	blr
-#endif // clang-format on
+	OSDisableInterrupts();
+	ICFlashInvalidate();
+	__mwerks_sync();
+	__mwerks_isync();
+	entrypoint();
+	__builtin_unreachable();
 }
 
 /**

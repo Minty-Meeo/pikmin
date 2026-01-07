@@ -1,5 +1,6 @@
 #include "jaudio/audiothread.h"
 #include "Dolphin/OS/OSThread.h"
+#include "Dolphin/PPCArch.h"
 #include "Dolphin/ai.h"
 #include "Dolphin/dsp.h"
 #include "Dolphin/os.h"
@@ -259,22 +260,19 @@ static void* audioproc(void*)
  */
 static void OSInitFastCast(void)
 {
-#ifdef __MWERKS__
-	asm {
-		li        r3,     OS_GQR_U8
-		oris      r3, r3, OS_GQR_U8
-		mtspr     GQR2, r3
-		li        r3,     OS_GQR_U16
-		oris      r3, r3, OS_GQR_U16
-		mtspr     GQR3, r3
-		li        r3,     OS_GQR_S8
-		oris      r3, r3, OS_GQR_S8
-		mtspr     GQR4, r3
-		li        r3,     OS_GQR_S16
-		oris      r3, r3, OS_GQR_S16
-		mtspr     GQR5, r3
-	}
-#endif
+	int tmp;
+
+#define OS_SET_GQR_DATA_TYPE(_gqr, _dataType)    \
+	asm("li        %[tmp],         %[dataType];" \
+	    "oris      %[tmp], %[tmp], %[dataType];" \
+	    "mtspr     %[gqr], %[tmp];"              \
+	    : [tmp] "=r"(tmp)                        \
+	    : [gqr] "i"(_gqr), [dataType] "i"(_dataType));
+
+	OS_SET_GQR_DATA_TYPE(SPR_GQR2, OS_GQR_U8);
+	OS_SET_GQR_DATA_TYPE(SPR_GQR3, OS_GQR_U16);
+	OS_SET_GQR_DATA_TYPE(SPR_GQR4, OS_GQR_S8);
+	OS_SET_GQR_DATA_TYPE(SPR_GQR5, OS_GQR_S16);
 }
 
 static BOOL priority_set        = FALSE;

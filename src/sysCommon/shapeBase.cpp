@@ -3377,7 +3377,7 @@ void BaseShape::calcWeightedMatrices()
 			Matrix4f weightedMtx;
 			f32* weightedMtxFloats;
 
-#ifdef WIN32
+#ifdef WIN32 || 1
 			getAnimMatrix(idx).multiplyTo(mJointList[idx].mInverseAnimMatrix, weightedMtx);
 			weightedMtxFloats = (f32*)&weightedMtx;
 			animMtxFloats     = (f32*)&mAnimMatrices[mJointCount + i];

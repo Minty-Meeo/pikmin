@@ -23,18 +23,18 @@ void C_VECAdd(const Vec* a, const Vec* b, Vec* ab)
  */
 void PSVECAdd(register const Vec* a, const register Vec* b, register Vec* ab)
 {
-#ifdef __MWERKS__
-	asm {
-		psq_l   fp2, 0x0000 (a), 0, 0
-		psq_l   fp4, 0x0000 (b), 0, 0
-		ps_add  fp6, fp2, fp4
-		psq_st  fp6, 0x0000 (ab), 0, 0
-		psq_l   fp3, 0x0008 (a), 1, 0
-		psq_l   fp5, 0x0008 (b), 1, 0
-		ps_add  fp7, fp3, fp5
-		psq_st  fp7, 0x0008 (ab), 1, 0
-	}
-#endif
+	f32 tmp2, tmp3, tmp4, tmp5, tmp6, tmp7;
+
+	// asm("psq_l   %[tmp2], 0x0000 (%[a]), 0, 0"
+	//     "psq_l   %[tmp4], 0x0000 (%[b]), 0, 0"
+	//     "ps_add  %[tmp6], %[tmp2], %[tmp4]"
+	//     "psq_st  %[tmp6], 0x0000 (%[ab]), 0, 0"
+	//     "psq_l   %[tmp3], 0x0008 (%[a]), 1, 0"
+	//     "psq_l   %[tmp5], 0x0008 (%[b]), 1, 0"
+	//     "ps_add  %[tmp7], %[tmp3], %[tmp5]"
+	//     "psq_st  %[tmp7], 0x0008 (%[ab]), 1, 0"
+	//     : [tmp2] "=g"(tmp2), [tmp3] "=g"(tmp3), [tmp4] "=g"(tmp4), [tmp5] "=g"(tmp5), [tmp6] "=g"(tmp6), [tmp7] "=g"(tmp7)
+	//     : [a] "g"(a), [b] "g"(b), [ab] "g"(ab));
 }
 
 /**
@@ -58,18 +58,18 @@ void C_VECSubtract(const Vec* a, const Vec* b, Vec* a_b)
  */
 void PSVECSubtract(register const Vec* a, register const Vec* b, register Vec* a_b)
 {
-#ifdef __MWERKS__
-	asm {
-		psq_l   fp2, 0x0000 (a), 0, 0
-		psq_l   fp4, 0x0000 (b), 0, 0
-		ps_sub  fp6, fp2, fp4
-		psq_st  fp6, 0x0000 (a_b), 0, 0
-		psq_l   fp3, 0x0008 (a), 1, 0
-		psq_l   fp5, 0x0008 (b), 1, 0
-		ps_sub  fp7, fp3, fp5
-		psq_st  fp7, 0x0008 (a_b), 1, 0
-	}
-#endif
+	f32 tmp2, tmp3, tmp4, tmp5, tmp6, tmp7;
+
+	// asm("psq_l   %[tmp2], 0x0000 (%[a]), 0, 0"
+	//     "psq_l   %[tmp4], 0x0000 (%[b]), 0, 0"
+	//     "ps_sub  %[tmp6], %[tmp2], %[tmp4]"
+	//     "psq_st  %[tmp6], 0x0000 (%[a_b]), 0, 0"
+	//     "psq_l   %[tmp3], 0x0008 (%[a]), 1, 0"
+	//     "psq_l   %[tmp5], 0x0008 (%[b]), 1, 0"
+	//     "ps_sub  %[tmp7], %[tmp3], %[tmp5]"
+	//     "psq_st  %[tmp7], 0x0008 (%[a_b]), 1, 0"
+	//     : [tmp2] "=g"(tmp2), [tmp3] "=g"(tmp3), [tmp4] "=g"(tmp4), [tmp5] "=g"(tmp5), [tmp6] "=g"(tmp6), [tmp7] "=g"(tmp7)
+	//     : [a] "g"(a), [b] "g"(b), [a_b] "g"(a_b));
 }
 
 /**
@@ -92,18 +92,16 @@ void C_VECScale(const Vec* src, Vec* dst, f32 scale)
  */
 void PSVECScale(register const Vec* src, register Vec* dst, register f32 scale)
 {
-	register f32 vxy, vz, rxy, rz;
+	f32 vxy, vz, rxy, rz;
 
-#ifdef __MWERKS__
-	asm {
-		psq_l     vxy, 0x0000 (src), 0, 0
-		psq_l     vz,  0x0008 (src), 1, 0
-		ps_muls0  rxy, vxy, scale
-		psq_st    rxy, 0x0000 (dst), 0, 0
-		ps_muls0  rz, vz, scale
-		psq_st    rz,  0x0008 (dst), 1, 0
-	}
-#endif
+	// asm("psq_l     %[vxy], 0x0000 (%[src]), 0, 0"
+	//     "psq_l     %[vz],  0x0008 (%[src]), 1, 0"
+	//     "ps_muls0  %[rxy], %[vxy], %[scale]"
+	//     "psq_st    %[rxy], 0x0000 (%[dst]), 0, 0"
+	//     "ps_muls0  %[rz],  %[vz],  %[scale]"
+	//     "psq_st    %[rz],  0x0008 (%[dst]), 1, 0"
+	//     : [vxy] "=g"(vxy), [vz] "=g"(vz), [rxy] "=g"(rxy), [rz] "=g"(rz)
+	//     : [src] "g"(src), [dst] "g"(dst), [scale] "g"(scale));
 }
 
 /**
@@ -146,24 +144,23 @@ void PSVECNormalize(register const Vec* src, register Vec* unit)
 	c_half  = 0.5f;
 	c_three = 3.0f;
 
-#ifdef __MWERKS__ // clang-format off
-	asm {
-		psq_l     v1_xy, 0x0000 (src), 0, 0
-		ps_mul    xx_yy, v1_xy, v1_xy
-		psq_l     v1_z, 0x0008 (src), 1, 0
-		ps_madd   xx_zz, v1_z, v1_z, xx_yy
-		ps_sum0   sqsum, xx_zz, v1_z, xx_yy
-		frsqrte   rsqrt, sqsum
-		fmuls     nwork0, rsqrt, rsqrt
-		fmuls     nwork1, rsqrt, c_half
-		fnmsubs   nwork0, nwork0, sqsum, c_three
-		fmuls     rsqrt, nwork0, nwork1
-		ps_muls0  v1_xy, v1_xy, rsqrt
-		psq_st    v1_xy, 0x0000 (unit), 0, 0
-		ps_muls0  v1_z, v1_z, rsqrt
-		psq_st    v1_z, 0x0008 (unit), 1, 0
-	}
-	#endif // clang-format on
+	// asm("psq_l     %[v1_xy] , 0x0000 (%[src]), 0, 0"
+	//     "ps_mul    %[xx_yy] , %[v1_xy], %[v1_xy]"
+	//     "psq_l     %[v1_z]  , 0x0008 (%[src]), 1, 0"
+	//     "ps_madd   %[xx_zz] , %[v1_z] , %[v1_z] , %[xx_yy]"
+	//     "ps_sum0   %[sqsum] , %[xx_zz], %[v1_z] , %[xx_yy]"
+	//     "frsqrte   %[rsqrt] , %[sqsum]"
+	//     "fmuls     %[nwork0], %[rsqrt], %[rsqrt]"
+	//     "fmuls     %[nwork1], %[rsqrt], %[c_half]"
+	//     "fnmsubs   %[nwork0], %[nwork0], %[sqsum] , %[c_three]"
+	//     "fmuls     %[rsqrt] , %[nwork0], %[nwork1]"
+	//     "ps_muls0  %[v1_xy] , %[v1_xy], %[rsqrt]"
+	//     "psq_st    %[v1_xy] , 0x0000 (%[unit]), 0, 0"
+	//     "ps_muls0  %[v1_z]  , %[v1_z] , %[rsqrt]"
+	//     "psq_st    %[v1_z]  , 0x0008 (%[unit]), 1, 0"
+	//     : [v1_xy] "=g"(v1_xy), [v1_z] "=g"(v1_z), [xx_zz] "=g"(xx_zz), [xx_yy] "=g"(xx_yy), [sqsum] "=g"(sqsum), [rsqrt] "=g"(rsqrt),
+	//       [nwork0] "=g"(nwork0), [nwork1] "=g"(nwork1)
+	//     : [src] "g"(src), [unit] "g"(unit), [c_half] "g"(c_half), [c_three] "g"(c_three));
 }
 
 /**
@@ -184,18 +181,18 @@ f32 C_VECSquareMag(const Vec* v)
  * @TODO: Documentation
  * @note This must be a file-scope ASM function for matching purposes.
  */
-ASM f32 PSVECSquareMag(register const Vec* v) {
-#ifdef __MWERKS__ // clang-format off
-	psq_l    fp2, 0x0000 (v), 0, 0
-	ps_mul   fp3, fp2, fp2
-	lfs f4,  0x0008 (v)
-	ps_madd  fp5, fp4, fp4, fp3
-	ps_sum0  fp1, fp5, fp3, fp3
-#if defined(BUGFIX)
-#else
-	blr  // Whoops! An extra blr was added despite the compiler automatically handling that.
-#endif
-#endif // clang-format on
+f32 PSVECSquareMag(register const Vec* v)
+{
+	f32 res;
+	f32 tmp2, tmp3, tmp4, tmp5;
+
+	// asm("psq_l    %[tmp2], 0x0000 (%[v]), 0, 0"
+	//     "ps_mul   %[tmp3], %[tmp2], %[tmp2]"
+	//     "lfs      %[tmp4], 0x0008 (%[v])"
+	//     "ps_madd  %[tmp5], %[tmp4], %[tmp4], %[tmp3]"
+	//     "ps_sum0  %[res], %[tmp5], %[tmp3], %[tmp3]"
+	//     : [res] "=g"(res), [tmp2] "=g"(tmp2), [tmp3] "=g"(tmp3), [tmp4] "=g"(tmp4), [tmp5] "=g"(tmp5)
+	//     : [v] "g"(v));
 }
 
 /**
@@ -216,36 +213,21 @@ f32 PSVECMag(register const Vec* v)
 	register f32 c_three;
 	register f32 c_half;
 
-	// In all likelyhood, this was probably actually written as a file-scope ASM function and used the `lfs fpr, FLOAT_LITERAL`
-	// mnenomnic, however that is non-portable so I've written it this other way instead.  Attempting to use the special mnenomic
-	// anyway while putting the `asm` block inside the (not file-scope ASM) function results in an internal compiler error in
-	// 'CInline.c', (but only for MWCC 1.2.5?).  Additionally, putting any statement before the `asm` blocks (e.g. `v;`) will
-	// prevent the internal error.  I don't know why that works as a kludge, and what's worse is this workaround is not required
-	// in the implementation of `PSVECDistance`.  It seems like a bad idea to rely on that fix, so I haven't.
-
-#ifdef __MWERKS__
-	asm {
-		psq_l    tmp0, 0x0000 (v), 0, 0
-		ps_mul   tmp0, tmp0, tmp0
-		lfs      tmp1, 0x0008 (v)
-		ps_madd  tmp1, tmp1, tmp1, tmp0
-	}
-	c_half = 0.5f;
-	asm {
-		ps_sum0  tmp1, tmp1, tmp0, tmp0
-		frsqrte  tmp0, tmp1
-	}
+	c_half  = 0.5f;
 	c_three = 3.0f;
-	asm
-	{
-		fmuls    tmp2, tmp0, tmp0
-		fmuls    tmp0, tmp0, c_half
-		fnmsubs  tmp2, tmp2, tmp1, c_three
-		fmuls    tmp0, tmp2, tmp0
-		fsel     tmp0, tmp0, tmp0, tmp1
-		fmuls    res, tmp1, tmp0
-	}
-#endif
+
+	// asm("psq_l    f0, 0x0000 (v), 0, 0"
+	//     "ps_mul   f0, f0, f0"
+	//     "lfs      f1, 0x0008 (v)"
+	//     "ps_madd  f1, f1, f1, f0"
+	//     "ps_sum0  f1, f1, f0, f0"
+	//     "frsqrte  f0, f1"
+	//     "fmuls    f2, f0, f0"
+	//     "fmuls    f0, f0, c_half"
+	//     "fnmsubs  f2, f2, f1, c_three"
+	//     "fmuls    f0, f2, f0"
+	//     "fsel     f0, f0, f0, f1"
+	//     "fmuls    res, f1, f0");
 
 	return res;
 }
@@ -443,8 +425,6 @@ f32 PSVECDistance(register const Vec* a, register const Vec* b)
 	register f32 res;
 	register f32 c_half;
 	register f32 c_three;
-
-	// See comment in `PSVECMag` for why I don't use the `lfs fpr, FLOAT_LITERAL` mnemonic here.
 
 #ifdef __MWERKS__
 	asm {

@@ -17,12 +17,17 @@ GXBool __GXinBegin;
  * @TODO: Documentation
  * @note UNUSED Size: 000010
  */
-static ASM BOOL IsWriteGatherBufferEmpty(void) {
-#ifdef __MWERKS__ // clang-format off
-    sync
-    mfspr r3, WPAR
-    andi. r3, r3, 1
-	#endif // clang-format on
+static BOOL IsWriteGatherBufferEmpty(void)
+{
+	BOOL res;
+
+	asm("sync;"
+	    "mfspr %[res], %[WPAR];"
+	    "andi. %[res], %[res], 1;"
+	    : [res] "=r"(res)
+	    : [WPAR] "i"(SPR_WPAR));
+
+	return res;
 }
 
 /**

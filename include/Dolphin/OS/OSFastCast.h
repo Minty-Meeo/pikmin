@@ -25,37 +25,37 @@ BEGIN_SCOPE_EXTERN_C
 // Initialise fast casting.
 static inline void OSInitFastCast()
 {
-#ifdef __MWERKS__
-	asm {
-		li        r3,     OS_GQR_U8
-		oris      r3, r3, OS_GQR_U8
-		mtspr     GQR2, r3
-		li        r3,     OS_GQR_U16
-		oris      r3, r3, OS_GQR_U16
-		mtspr     GQR3, r3
-		li        r3,     OS_GQR_S8
-		oris      r3, r3, OS_GQR_S8
-		mtspr     GQR4, r3
-		li        r3,     OS_GQR_S16
-		oris      r3, r3, OS_GQR_S16
-		mtspr     GQR5, r3
-	}
-#endif
+	int tmp;
+
+	asm("li        %[tmp],         %[gqrU8];"
+	    "oris      %[tmp], %[tmp], %[gqrU8];"
+	    "mtspr     GQR2, %[tmp];"
+	    "li        %[tmp],         %[gqrU16];"
+	    "oris      %[tmp], %[tmp], %[gqrU16];"
+	    "mtspr     GQR3, %[tmp];"
+	    "li        %[tmp],         %[gqrS8];"
+	    "oris      %[tmp], %[tmp], %[gqrS8];"
+	    "mtspr     GQR4, %[tmp];"
+	    "li        %[tmp],         %[gqrS16];"
+	    "oris      %[tmp], %[tmp], %[gqrS16];"
+	    "mtspr     GQR5, %[tmp];"
+	    : [tmp] "=r"(tmp)
+	    : [gqrU8] "i"(OS_GQR_U8), [gqrU16] "i"(OS_GQR_U16), [gqrS8] "i"(OS_GQR_S8), [gqrS16] "i"(OS_GQR_S16));
 }
 
 // f32 to int.
 // NB: should theoretically have these for u8/u16/s8/s16 eventually.
 static inline s16 __OSf32tos16(register f32 inF)
 {
-	register s16 out;
+	s16 out;
 	u32 tmp;
-	register u32* tmpPtr = &tmp;
-#ifdef __MWERKS__
-	asm {
-		psq_st    inF, 0 (tmpPtr), 0x1, OS_FASTCAST_S16
-		lha       out, 0 (tmpPtr)
-	}
-#endif
+	u32* tmpPtr = &tmp;
+
+	asm("psq_st    inF, 0 (tmpPtr), 1, gqrI;"
+	    "lha       out, 0 (tmpPtr);"
+	    : [out] "=r"(out)
+	    : [inF] "r"(inF), [tmpPtr] "r"(tmpPtr), [gqrI] "i"(OS_FASTCAST_S16));
+
 	return out;
 }
 
@@ -66,15 +66,15 @@ static inline void OSf32tos16(f32* f, s16* out)
 
 static inline u8 __OSf32tou8(register f32 inF)
 {
-	register u8 out;
+	u8 out;
 	u32 tmp;
-	register u32* tmpPtr = &tmp;
-#ifdef __MWERKS__
-	asm {
-		psq_st    inF, 0 (tmpPtr), 0x1, OS_FASTCAST_U8
-		lbz       out, 0 (tmpPtr)
-	}
-#endif
+	u32* tmpPtr = &tmp;
+
+	asm("psq_st    inF, 0 (tmpPtr), 1, gqrI;"
+	    "lbz       out, 0 (tmpPtr);"
+	    : [out] "=r"(out)
+	    : [inF] "r"(inF), [tmpPtr] "r"(tmpPtr), [gqrI] "i"(OS_FASTCAST_U8));
+
 	return out;
 }
 
@@ -85,16 +85,16 @@ static inline void OSf32tou8(f32* f, u8* out)
 
 static inline s8 __OSf32tos8(register f32 inF)
 {
-	register s8 out;
+	s8 out;
 	u32 tmp;
-	register u32* tmpPtr = &tmp;
-#ifdef __MWERKS__
-	asm {
-		psq_st    inF, 0(tmpPtr), 0x1, OS_FASTCAST_S8
-		lbz       out, 0(tmpPtr)
-		extsb     out, out
-	}
-#endif
+	u32* tmpPtr = &tmp;
+
+	asm("psq_st    inF, 0(tmpPtr), 1, gqrI;"
+	    "lbz       out, 0(tmpPtr);"
+	    "extsb     out, out;"
+	    : [out] "=r"(out)
+	    : [inF] "r"(inF), [tmpPtr] "r"(tmpPtr), [gqrI] "i"(OS_FASTCAST_S8));
+
 	return out;
 }
 

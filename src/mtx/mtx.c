@@ -34,7 +34,7 @@ void C_MTXIdentity(Mtx m)
 /**
  * @TODO: Documentation
  */
-void PSMTXIdentity(register Mtx m)
+void PSMTXIdentity(Mtx m)
 {
 	register f32 c_zero;
 	register f32 c_one;
@@ -44,18 +44,17 @@ void PSMTXIdentity(register Mtx m)
 	c_zero = 0.0f;
 	c_one  = 1.0f;
 
-#ifdef __MWERKS__
-	asm {
-		psq_st      c_zero, 0x0008 (m), 0, 0
-		ps_merge01  c_01, c_zero, c_one
-		psq_st      c_zero, 0x0018 (m), 0, 0
-		ps_merge10  c_10, c_one, c_zero
-		psq_st      c_zero, 0x0020 (m), 0, 0
-		psq_st      c_01,   0x0010 (m), 0, 0
-		psq_st      c_10,   0x0000 (m), 0, 0
-		psq_st      c_10,   0x0028 (m), 0, 0
-	}
-#endif
+	return C_MTXIdentity(m);
+	// asm("psq_st      %[zero_c],  8(%[m]),  0, 0;"
+	//     "ps_merge01  %[c_01], %[zero_c], %[one_c];"
+	//     "psq_st      %[zero_c], 24(%[m]),  0, 0;"
+	//     "ps_merge10  %[c_10], %[one_c], %[zero_c];"
+	//     "psq_st      %[zero_c], 32(%[m]),  0, 0;"
+	//     "psq_st      %[c_01],   16(%[m]),  0, 0;"
+	//     "psq_st      %[c_10],    0(%[m]),  0, 0;"
+	//     "psq_st      %[c_10],   40(%[m]),  0, 0;"
+	//     : [c_01] "=g"(c_01), [c_10] "=g"(c_10)
+	//     : [m] "r"(m), [zero_c] "r"(zero_c), [one_c] "r"(one_c));
 }
 
 /**
@@ -90,22 +89,26 @@ void C_MTXCopy(const Mtx src, Mtx dst)
  */
 void PSMTXCopy(register const Mtx src, register Mtx dst)
 {
-#ifdef __MWERKS__
-	asm {
-		psq_l   fp0, 0x0000 (src), 0, 0
-		psq_st  fp0, 0x0000 (dst), 0, 0
-		psq_l   fp1, 0x0008 (src), 0, 0
-		psq_st  fp1, 0x0008 (dst), 0, 0
-		psq_l   fp2, 0x0010 (src), 0, 0
-		psq_st  fp2, 0x0010 (dst), 0, 0
-		psq_l   fp3, 0x0018 (src), 0, 0
-		psq_st  fp3, 0x0018 (dst), 0, 0
-		psq_l   fp4, 0x0020 (src), 0, 0
-		psq_st  fp4, 0x0020 (dst), 0, 0
-		psq_l   fp5, 0x0028 (src), 0, 0
-		psq_st  fp5, 0x0028 (dst), 0, 0
-	}
-#endif
+	return C_MTXCopy(src, dst);
+	
+	// #ifdef __MWERKS__ // clang-format off
+	// 	nofralloc
+
+	// 	psq_l       fp0, 0(src),   0, 0
+	// 	psq_st      fp0, 0(dst),   0, 0
+	// 	psq_l       fp1, 8(src),   0, 0
+	// 	psq_st      fp1, 8(dst),   0, 0
+	// 	psq_l       fp2, 16(src),  0, 0
+	// 	psq_st      fp2, 16(dst),  0, 0
+	// 	psq_l       fp3, 24(src),  0, 0
+	// 	psq_st      fp3, 24(dst),  0, 0
+	// 	psq_l       fp4, 32(src),  0, 0
+	// 	psq_st      fp4, 32(dst),  0, 0
+	// 	psq_l       fp5, 40(src),  0, 0
+	// 	psq_st      fp5, 40(dst),  0, 0
+
+	// 	blr
+	// #endif // clang-format on
 }
 
 /**
@@ -146,68 +149,58 @@ void C_MTXConcat(const Mtx a, const Mtx b, Mtx dst)
 /**
  * @TODO: Documentation
  */
-ASM void PSMTXConcat(register const Mtx a, register const Mtx b, register Mtx dst)
+void PSMTXConcat(register const Mtx a, register const Mtx b, register Mtx dst)
 {
-#ifdef __MWERKS__ // clang-format off
-	nofralloc
+	return C_MTXConcat(a, b, dst);
 
-	stwu       r1, -64(r1)
-	psq_l      fp0, 0(a), 0, 0
-	stfd       fp14, 8(r1)
-	psq_l      fp6, 0(b), 0, 0
-	addis      r6, 0, Unit01@ha
-	psq_l      fp7, 8(b), 0, 0
-	stfd       fp15, 16(r1)
-	addi       r6, r6, Unit01@l
-	stfd       fp31, 40(r1)
-	psq_l      fp8, 16(b), 0, 0
-	ps_muls0   fp12, fp6, fp0
-	psq_l      fp2, 16(a), 0, 0
-	ps_muls0   fp13, fp7, fp0
-	psq_l      fp31, 0(r6), 0, 0
-	ps_muls0   fp14, fp6, fp2
-	psq_l      fp9, 24(b), 0, 0
-	ps_muls0   fp15, fp7, fp2
-	psq_l      fp1, 8(a), 0, 0
-	ps_madds1  fp12, fp8, fp0, fp12
-	psq_l      fp3, 24(a), 0, 0
-	ps_madds1  fp14, fp8, fp2, fp14
-	psq_l      fp10, 32(b), 0, 0
-	ps_madds1  fp13, fp9, fp0, fp13
-	psq_l      fp11, 40(b), 0, 0
-	ps_madds1  fp15, fp9, fp2, fp15
-	psq_l      fp4, 32(a), 0, 0
-	psq_l      fp5, 40(a), 0, 0
-	ps_madds0  fp12, fp10, fp1, fp12
-	ps_madds0  fp13, fp11, fp1, fp13
-	ps_madds0  fp14, fp10, fp3, fp14
-	ps_madds0  fp15, fp11, fp3, fp15
-	psq_st     fp12, 0(dst), 0, 0
+	// const f32* REF_Unit01 = &Unit01; // TODO: figure out smalldata in inline assembly so this isn't necessary
+	// f32 tmp00, tmp01, tmp02, tmp03, tmp04, tmp05, tmp06, tmp07, tmp08, tmp09, tmp10, tmp11, tmp12, tmp13, tmp14, tmp15, tmp31;
 
-	ps_muls0   fp2, fp6, fp4
-	ps_madds1  fp13, fp31, fp1, fp13
-	ps_muls0   fp0, fp7, fp4
-	psq_st     fp14, 16(dst), 0, 0
-	ps_madds1  fp15, fp31, fp3, fp15
-
-	psq_st     fp13, 8(dst), 0, 0
-
-	ps_madds1  fp2, fp8, fp4, fp2
-	ps_madds1  fp0, fp9, fp4, fp0
-	ps_madds0  fp2, fp10, fp5, fp2
-	lfd        fp14, 8(r1)
-	psq_st     fp15, 24(dst), 0, 0
-	ps_madds0  fp0, fp11, fp5, fp0
-	psq_st     fp2, 32(dst), 0, 0
-	ps_madds1  fp0, fp31, fp5, fp0
-	lfd        fp15, 16(r1)
-	psq_st     fp0, 40(dst), 0, 0
-
-	lfd        fp31, 40(r1)
-	addi       r1, r1, 64
-
-	blr
-#endif // clang-format on
+	// // TODO: Does GCC pipeline inline assembly?  In other words, can I rearrange this assembly to read more easily without losing speed?
+	// asm("psq_l      %[tmp00], 0x0000 (%[mA]), 0, 0;"
+	//     "psq_l      %[tmp06], 0x0000 (%[mB]), 0, 0;"
+	//     "psq_l      %[tmp07], 0x0008 (%[mB]), 0, 0;"
+	//     "psq_l      %[tmp08], 0x0010 (%[mB]), 0, 0;"
+	//     "ps_muls0   %[tmp12], %[tmp06], %[tmp00];"
+	//     "psq_l      %[tmp02], 0x0010 (%[mA]), 0, 0;"
+	//     "ps_muls0   %[tmp13], %[tmp07], %[tmp00];"
+	//     "psq_l      %[tmp31], 0x0000 (%[REF_Unit01]), 0, 0;"
+	//     "ps_muls0   %[tmp14], %[tmp06], %[tmp02];"
+	//     "psq_l      %[tmp09], 0x0018 (%[mB]), 0, 0;"
+	//     "ps_muls0   %[tmp15], %[tmp07], %[tmp02];"
+	//     "psq_l      %[tmp01], 0x0008 (%[mA]), 0, 0;"
+	//     "ps_madds1  %[tmp12], %[tmp08], %[tmp00], %[tmp12];"
+	//     "psq_l      %[tmp03], 0x0018 (%[mA]), 0, 0;"
+	//     "ps_madds1  %[tmp14], %[tmp08], %[tmp02], %[tmp14];"
+	//     "psq_l      %[tmp10], 0x0020 (%[mB]), 0, 0;"
+	//     "ps_madds1  %[tmp13], %[tmp09], %[tmp00], %[tmp13];"
+	//     "psq_l      %[tmp11], 0x0028 (%[mB]), 0, 0;"
+	//     "ps_madds1  %[tmp15], %[tmp09], %[tmp02], %[tmp15];"
+	//     "psq_l      %[tmp04], 0x0020 (%[mA]), 0, 0;"
+	//     "psq_l      %[tmp05], 0x0028 (%[mA]), 0, 0;"
+	//     "ps_madds0  %[tmp12], %[tmp10], %[tmp01], %[tmp12];"
+	//     "ps_madds0  %[tmp13], %[tmp11], %[tmp01], %[tmp13];"
+	//     "ps_madds0  %[tmp14], %[tmp10], %[tmp03], %[tmp14];"
+	//     "ps_madds0  %[tmp15], %[tmp11], %[tmp03], %[tmp15];"
+	//     "psq_st     %[tmp12], 0x0000 (%[mAB]), 0, 0;"
+	//     "ps_muls0   %[tmp02], %[tmp06], %[tmp04];"
+	//     "ps_madds1  %[tmp13], %[tmp31], %[tmp01], %[tmp13];"
+	//     "ps_muls0   %[tmp00], %[tmp07], %[tmp04];"
+	//     "psq_st     %[tmp14], 0x0010 (%[mAB]), 0, 0;"
+	//     "ps_madds1  %[tmp15], %[tmp31], %[tmp03], %[tmp15];"
+	//     "psq_st     %[tmp13], 0x0008 (%[mAB]), 0, 0;"
+	//     "ps_madds1  %[tmp02], %[tmp08], %[tmp04], %[tmp02];"
+	//     "ps_madds1  %[tmp00], %[tmp09], %[tmp04], %[tmp00];"
+	//     "ps_madds0  %[tmp02], %[tmp10], %[tmp05], %[tmp02];"
+	//     "psq_st     %[tmp15], 0x0018 (%[mAB]), 0, 0;"
+	//     "ps_madds0  %[tmp00], %[tmp11], %[tmp05], %[tmp00];"
+	//     "psq_st     %[tmp02], 0x0020 (%[mAB]), 0, 0;"
+	//     "ps_madds1  %[tmp00], %[tmp31], %[tmp05], %[tmp00];"
+	//     "psq_st     %[tmp00], 0x0028 (%[mAB]), 0, 0;"
+	//     : [tmp00] "=r"(tmp00), [tmp01] "=r"(tmp01), [tmp02] "=r"(tmp02), [tmp03] "=r"(tmp03), [tmp04] "=r"(tmp04), [tmp05] "=r"(tmp05),
+	//       [tmp06] "=r"(tmp06), [tmp07] "=r"(tmp07), [tmp08] "=r"(tmp08), [tmp09] "=r"(tmp09), [tmp10] "=r"(tmp10), [tmp11] "=r"(tmp11),
+	//       [tmp12] "=g"(tmp12), [tmp13] "=g"(tmp13), [tmp14] "=g"(tmp14), [tmp15] "=g"(tmp15), [tmp31] "=g"(tmp31)
+	//     : [mA] "r"(mA), [mB] "r"(mB), [mAB] "r"(mAB), [REF_Unit01] "r"(REF_Unit01));
 }
 
 /**
@@ -256,28 +249,29 @@ void PSMTXTranspose(register const Mtx src, register Mtx xPose)
 
 	c_zero = 0.0f;
 
-#ifdef __MWERKS__
-	asm {
-		psq_l       row0a, 0(src),  0, 0
-		stfs        c_zero, 44(xPose)
-		psq_l       row1a, 16(src), 0, 0
-		ps_merge00  trns0, row0a, row1a
-		psq_l       row0b, 8(src),  1, 0
-		ps_merge11  trns1, row0a, row1a
-		psq_l       row1b, 24(src), 1, 0
-		psq_st      trns0, 0(xPose),  0, 0
-		psq_l       row0a, 32(src), 0, 0
-		ps_merge00  trns2, row0b, row1b
-		psq_st      trns1, 16(xPose), 0, 0
-		ps_merge00  trns0, row0a, c_zero
-		psq_st      trns2, 32(xPose), 0, 0
-		ps_merge10  trns1, row0a, c_zero
-		psq_st      trns0, 8(xPose),  0, 0
-		lfs         row0b, 40(src)
-		psq_st      trns1, 24(xPose), 0, 0
-		stfs        row0b, 40(xPose)
-	}
-#endif
+	return C_MTXTranspose(src, xPose);
+
+	// asm("psq_l       %[row0a], 0x0000 (%[src]  ), 0, 0;"
+	//     "stfs        %[c_zero], 0x002c (xPose);"
+	//     "psq_l       %[row1a], 0x0010 (%[src]  ), 0, 0;"
+	//     "ps_merge00  %[trns0], %[row0a], %[row1a];"
+	//     "psq_l       %[row0b], 0x0008 (%[src]  ), 1, 0;"
+	//     "ps_merge11  %[trns1], %[row0a], %[row1a];"
+	//     "psq_l       %[row1b], 0x0018 (%[src]  ), 1, 0;"
+	//     "psq_st      %[trns0], 0x0000 (%[xPose]), 0, 0;"
+	//     "psq_l       %[row0a], 0x0020 (%[src]  ), 0, 0;"
+	//     "ps_merge00  %[trns2], %[row0b], %[row1b];"
+	//     "psq_st      %[trns1], 0x0010 (%[xPose]), 0, 0;"
+	//     "ps_merge00  %[trns0], %[row0a], %[c_zero];"
+	//     "psq_st      %[trns2], 0x0020 (%[xPose]), 0, 0;"
+	//     "ps_merge10  %[trns1], %[row0a], %[c_zero];"
+	//     "psq_st      %[trns0], 0x0008 (%[xPose]), 0, 0;"
+	//     "lfs         %[row0b], 0x0028 (%[src]  );"
+	//     "psq_st      %[trns1], 0x0018 (%[xPose]), 0, 0;"
+	//     "stfs        %[row0b], 0x0028 (%[xPose]);"
+	//     : [row0a] "=g"(row0a), [row1a] "=g"(row1a), [row0b] "=g"(row0b), [row1b] "=g"(row1b), [trns0] "=g"(trns0), [trns1] "=g"(trns1),
+	//       [trns2] "=g"(trns2)
+	//     : [src] "r"(src), [xPose] "r"(xPose), [c_zero] "g"(c_zero));
 }
 
 /**
@@ -332,81 +326,88 @@ u32 C_MTXInverse(const Mtx src, Mtx inv)
  * @TODO: Documentation
  */
 ASM u32 PSMTXInverse(register const Mtx src, register Mtx inv) {
-#ifdef __MWERKS__ // clang-format off
-	nofralloc
+	return C_MTXInverse(src, inv);
 
-	psq_l       fp0,   0 (src), 1, 0
-	psq_l       fp1,   4 (src), 0, 0
-	psq_l       fp2,  16 (src), 1, 0
-	ps_merge10  fp6,  fp1, fp0
-	psq_l       fp3,  20 (src), 0, 0
-	psq_l       fp4,  32 (src), 1, 0
-	ps_merge10  fp7,  fp3, fp2
-	psq_l       fp5,  36 (src), 0, 0
-	ps_mul      fp11, fp3, fp6
-	ps_mul      fp13, fp5, fp7
-	ps_merge10  fp8,  fp5, fp4
-	ps_msub     fp11, fp1, fp7,  fp11
-	ps_mul      fp12, fp1, fp8
-	ps_msub     fp13, fp3, fp8,  fp13
-	ps_mul      fp10, fp3, fp4
-	ps_msub     fp12, fp5, fp6,  fp12
-	ps_mul      fp9,  fp0, fp5
-	ps_mul      fp8,  fp1, fp2
-	ps_sub      fp6,  fp6, fp6
-	ps_msub     fp10, fp2, fp5,  fp10
-	ps_mul      fp7,  fp0, fp13
-	ps_msub     fp9,  fp1, fp4,  fp9
-	ps_madd     fp7,  fp2, fp12, fp7
-	ps_msub     fp8,  fp0, fp3,  fp8
-	ps_madd     fp7,  fp4, fp11, fp7
-	ps_cmpo0    cr0,  fp7, fp6
-	bne         _regular
-	addi        r3, 0, 0
-	blr
+	// f32 tmp00, tmp01, tmp02, tmp03, tmp04, tmp05, tmp06, tmp07, tmp08, tmp09, tmp10, tmp11, tmp12, tmp13;
 
-_regular:
-#if defined(BUILD_MATCHING) && (defined(VERSION_GPIJ01) || defined(VERSION_GPIE01))
-	ps_res      fp0, fp7
-	ps_add      fp6, fp0, fp0
-	ps_mul      fp5, fp0, fp0
-	ps_nmsub    fp0, fp7, fp5, fp6
-#else // VERSION_PIKIDEMO, VERSION_GPIP01, Non-Matching builds
-	fres        fp0, fp7
-#endif
-	ps_add      fp6, fp0, fp0
-	ps_mul      fp5, fp0, fp0
-	ps_nmsub    fp0, fp7, fp5, fp6
-	lfs         fp1, 12(src)
-	ps_muls0    fp13, fp13, fp0
-	lfs         fp2, 28(src)
-	ps_muls0    fp12, fp12, fp0
-	lfs         fp3, 44(src)
-	ps_muls0    fp11, fp11, fp0
-	ps_merge00  fp5, fp13, fp12
-	ps_muls0    fp10, fp10, fp0
-	ps_merge11  fp4, fp13, fp12
-	ps_muls0    fp9,  fp9,  fp0
-	psq_st      fp5,  0(inv), 0, 0
-	ps_mul      fp6, fp13, fp1
-	psq_st      fp4,  16(inv), 0, 0
-	ps_muls0    fp8,  fp8,  fp0
-	ps_madd     fp6, fp12, fp2, fp6
-	psq_st      fp10, 32(inv), 1, 0
-	ps_nmadd    fp6, fp11, fp3, fp6
-	psq_st      fp9,  36(inv), 1, 0
-	ps_mul      fp7, fp10, fp1
-	ps_merge00  fp5, fp11, fp6
-	psq_st      fp8,  40(inv), 1, 0
-	ps_merge11  fp4, fp11, fp6
-	psq_st      fp5,  8(inv), 0, 0
-	ps_madd     fp7, fp9,  fp2, fp7
-	psq_st      fp4,  24(inv), 0, 0
-	ps_nmadd    fp7, fp8,  fp3, fp7
-	addi        r3, 0, 1
-	psq_st      fp7,  44(inv), 1, 0
-	blr
-#endif // clang-format on
+	// 	asm goto( //
+	// 	    "psq_l       %[tmp00], 0x0000 (%[src]), 1, 0;"
+	// 	    "psq_l       %[tmp01], 0x0004 (%[src]), 0, 0;"
+	// 	    "psq_l       %[tmp02], 0x0010 (%[src]), 1, 0;"
+	// 	    "ps_merge10  %[tmp06], %[tmp01], %[tmp00];"
+	// 	    "psq_l       %[tmp03], 0x0014 (%[src]), 0, 0;"
+	// 	    "psq_l       %[tmp04], 0x0020 (%[src]), 1, 0;"
+	// 	    "ps_merge10  %[tmp07], %[tmp03], %[tmp02];"
+	// 	    "psq_l       %[tmp05], 0x0024 (%[src]), 0, 0;"
+	// 	    "ps_mul      %[tmp11], %[tmp03], %[tmp06];"
+	// 	    "ps_mul      %[tmp13], %[tmp05], %[tmp07];"
+	// 	    "ps_merge10  %[tmp08], %[tmp05], %[tmp04];"
+	// 	    "ps_msub     %[tmp11], %[tmp01], %[tmp07], %[tmp11];"
+	// 	    "ps_mul      %[tmp12], %[tmp01], %[tmp08];"
+	// 	    "ps_msub     %[tmp13], %[tmp03], %[tmp08], %[tmp13];"
+	// 	    "ps_mul      %[tmp10], %[tmp03], %[tmp04];"
+	// 	    "ps_msub     %[tmp12], %[tmp05], %[tmp06], %[tmp12];"
+	// 	    "ps_mul      %[tmp09], %[tmp00], %[tmp05];"
+	// 	    "ps_mul      %[tmp08], %[tmp01], %[tmp02];"
+	// 	    "ps_sub      %[tmp06], %[tmp06], %[tmp06];"
+	// 	    "ps_msub     %[tmp10], %[tmp02], %[tmp05], %[tmp10];"
+	// 	    "ps_mul      %[tmp07], %[tmp00], %[tmp13];"
+	// 	    "ps_msub     %[tmp09], %[tmp01], %[tmp04], %[tmp09];"
+	// 	    "ps_madd     %[tmp07], %[tmp02], %[tmp12], %[tmp07];"
+	// 	    "ps_msub     %[tmp08], %[tmp00], %[tmp03], %[tmp08];"
+	// 	    "ps_madd     %[tmp07], %[tmp04], %[tmp11], %[tmp07];"
+	// 	    "ps_cmpo0    cr0, %[tmp07], %[tmp06];"
+	// 	    "bne         %l[_regular];"
+	// 	    : [tmp00] "=g"(tmp00), [tmp01] "=g"(tmp01), [tmp02] "=g"(tmp02), [tmp03] "=g"(tmp03), [tmp04] "=g"(tmp04), [tmp05] "=g"(tmp05),
+	// 	      [tmp06] "=g"(tmp06), [tmp07] "=g"(tmp07), [tmp08] "=g"(tmp08), [tmp09] "=g"(tmp09), [tmp10] "=g"(tmp10), [tmp11] "=g"(tmp11),
+	// 	      [tmp12] "=g"(tmp12), [tmp13] "=g"(tmp13)
+	// 	    : [src] "r"(src)
+	// 	    :
+	// 	    : _regular);
+
+	// 	return FALSE;
+
+	// _regular:
+	// 	asm("ps_res      %[tmp00], %[tmp07];"
+	// 	    "ps_add      %[tmp06], %[tmp00], %[tmp00];"
+	// 	    "ps_mul      %[tmp05], %[tmp00], %[tmp00];"
+	// 	    "ps_nmsub    %[tmp00], %[tmp07], %[tmp05], %[tmp06];"
+	// 	    "ps_add      %[tmp06], %[tmp00], %[tmp00];"
+	// 	    "ps_mul      %[tmp05], %[tmp00], %[tmp00];"
+	// 	    "ps_nmsub    %[tmp00], %[tmp07], %[tmp05], %[tmp06];"
+	// 	    "lfs         %[tmp01], 0x000c (%[src]);"
+	// 	    "ps_muls0    %[tmp13], %[tmp13], %[tmp00];"
+	// 	    "lfs         %[tmp02], 0x001c (%[src]);"
+	// 	    "ps_muls0    %[tmp12], %[tmp12], %[tmp00];"
+	// 	    "lfs         %[tmp03], 0x002c (%[src]);"
+	// 	    "ps_muls0    %[tmp11], %[tmp11], %[tmp00];"
+	// 	    "ps_merge00  %[tmp05], %[tmp13], %[tmp12];"
+	// 	    "ps_muls0    %[tmp10], %[tmp10], %[tmp00];"
+	// 	    "ps_merge11  %[tmp04], %[tmp13], %[tmp12];"
+	// 	    "ps_muls0    %[tmp09], %[tmp09],  %[tmp00];"
+	// 	    "psq_st      %[tmp05], 0x0000 (%[inv]), 0, 0;"
+	// 	    "ps_mul      %[tmp06], %[tmp13], %[tmp01];"
+	// 	    "psq_st      %[tmp04], 0x0010 (%[inv]), 0, 0;"
+	// 	    "ps_muls0    %[tmp08], %[tmp08],  %[tmp00];"
+	// 	    "ps_madd     %[tmp06], %[tmp12], %[tmp02], %[tmp06];"
+	// 	    "psq_st      %[tmp10], 0x0020 (%[inv]), 1, 0;"
+	// 	    "ps_nmadd    %[tmp06], %[tmp11], %[tmp03], %[tmp06];"
+	// 	    "psq_st      %[tmp09], 0x0024 (%[inv]), 1, 0;"
+	// 	    "ps_mul      %[tmp07], %[tmp10], %[tmp01];"
+	// 	    "ps_merge00  %[tmp05], %[tmp11], %[tmp06];"
+	// 	    "psq_st      %[tmp08], 0x0028 (%[inv]), 1, 0;"
+	// 	    "ps_merge11  %[tmp04], %[tmp11], %[tmp06];"
+	// 	    "psq_st      %[tmp05], 0x0008 (%[inv]), 0, 0;"
+	// 	    "ps_madd     %[tmp07], %[tmp09],  %[tmp02], %[tmp07];"
+	// 	    "psq_st      %[tmp04], 0x0018 (%[inv]), 0, 0;"
+	// 	    "ps_nmadd    %[tmp07], %[tmp08],  %[tmp03], %[tmp07];"
+	// 	    "psq_st      %[tmp07], 0x002c (%[inv]), 1, 0"
+	// 	    : [tmp00] "=g"(tmp00), [tmp01] "=g"(tmp01), [tmp02] "=g"(tmp02), [tmp03] "=g"(tmp03), [tmp04] "=g"(tmp04), [tmp05] "=g"(tmp05),
+	// 	      [tmp06] "=g"(tmp06), [tmp07] "=g"(tmp07), [tmp08] "=g"(tmp08), [tmp09] "=g"(tmp09), [tmp10] "=g"(tmp10), [tmp11] "=g"(tmp11),
+	// 	      [tmp12] "=g"(tmp12), [tmp13] "=g"(tmp13)
+	// 	    : [src] "r"(src), [inv] "r"(inv));
+
+	// 	return TRUE;
 }
 
 /**
@@ -463,69 +464,64 @@ u32 C_MTXInvXpose(const Mtx src, Mtx inv)
  */
 ASM u32 PSMTXInvXpose(register const Mtx src, register Mtx inv)
 {
-#ifdef __MWERKS__ // clang-format off
-	nofralloc
+	return C_MTXInvXpose(src, inv);
 
-	psq_l       fp0, 0(src), 1, 0
-	psq_l       fp1, 4(src), 0, 0
-	psq_l       fp2, 16(src), 1, 0
-	ps_merge10  fp6, fp1, fp0
-	psq_l       fp3, 20(src), 0, 0
-	psq_l       fp4, 32(src), 1, 0
-	ps_merge10  fp7, fp3, fp2
-	psq_l       fp5, 36(src), 0, 0
-	ps_mul      fp11, fp3, fp6
-	ps_merge10  fp8, fp5, fp4
-	ps_mul      fp13, fp5, fp7
-	ps_msub     fp11, fp1, fp7, fp11
-	ps_mul      fp12, fp1, fp8
-	ps_msub     fp13, fp3, fp8, fp13
-	ps_msub     fp12, fp5, fp6, fp12
-	ps_mul      fp10, fp3, fp4
-	ps_mul      fp9,  fp0, fp5
-	ps_mul      fp8,  fp1, fp2
-	ps_msub     fp10, fp2, fp5, fp10
-	ps_msub     fp9,  fp1, fp4, fp9
-	ps_msub     fp8,  fp0, fp3, fp8
-	ps_mul      fp7, fp0, fp13
-	ps_sub      fp1, fp1, fp1
-	ps_madd     fp7, fp2, fp12, fp7
-	ps_madd     fp7, fp4, fp11, fp7
-	ps_cmpo0    cr0, fp7, fp1
-	bne         _regular
-	addi        r3, 0, 0
-	blr
+	// #ifdef __MWERKS__ // clang-format off
+	// 	nofralloc
 
-_regular:
-#if defined(VERSION_PIKIDEMO) || defined(VERSION_GPIP01)
-	fres        fp0, fp7
-#else// VERSION_PIKIDEMO, VERSION_GPIP01, Non-Matching builds
-	ps_res      f0, f7
-	ps_add      f6, f0, f0
-	ps_mul      f5, f0, f0
-	ps_nmsub    f0, f7, f5, f6
-#endif
-	psq_st      fp1,  12(inv), 1, 0
-	ps_add      fp6, fp0, fp0
-	ps_mul      fp5, fp0, fp0
-	psq_st      fp1,  28(inv), 1, 0
-	ps_nmsub    fp0, fp7, fp5, fp6
-	psq_st      fp1,  44(inv), 1, 0
-	ps_muls0    fp13, fp13, fp0
-	ps_muls0    fp12, fp12, fp0
-	ps_muls0    fp11, fp11, fp0
-	psq_st      fp13,  0(inv), 0, 0
-	psq_st      fp12,  16(inv), 0, 0
-	ps_muls0    fp10, fp10, fp0
-	ps_muls0    fp9,  fp9,  fp0
-	psq_st      fp11,  32(inv), 0, 0
-	psq_st      fp10,  8(inv), 1, 0
-	ps_muls0    fp8,  fp8,  fp0
-	addi        r3, 0, 1
-	psq_st      fp9,   24(inv), 1, 0
-	psq_st      fp8,   40(inv), 1, 0
-	blr
-#endif // clang-format on
+	// 	psq_l       fp0, 0(src), 1, 0
+	// 	psq_l       fp1, 4(src), 0, 0
+	// 	psq_l       fp2, 16(src), 1, 0
+	// 	ps_merge10  fp6, fp1, fp0
+	// 	psq_l       fp3, 20(src), 0, 0
+	// 	psq_l       fp4, 32(src), 1, 0
+	// 	ps_merge10  fp7, fp3, fp2
+	// 	psq_l       fp5, 36(src), 0, 0
+	// 	ps_mul      fp11, fp3, fp6
+	// 	ps_merge10  fp8, fp5, fp4
+	// 	ps_mul      fp13, fp5, fp7
+	// 	ps_msub     fp11, fp1, fp7, fp11
+	// 	ps_mul      fp12, fp1, fp8
+	// 	ps_msub     fp13, fp3, fp8, fp13
+	// 	ps_msub     fp12, fp5, fp6, fp12
+	// 	ps_mul      fp10, fp3, fp4
+	// 	ps_mul      fp9,  fp0, fp5
+	// 	ps_mul      fp8,  fp1, fp2
+	// 	ps_msub     fp10, fp2, fp5, fp10
+	// 	ps_msub     fp9,  fp1, fp4, fp9
+	// 	ps_msub     fp8,  fp0, fp3, fp8
+	// 	ps_mul      fp7, fp0, fp13
+	// 	ps_sub      fp1, fp1, fp1
+	// 	ps_madd     fp7, fp2, fp12, fp7
+	// 	ps_madd     fp7, fp4, fp11, fp7
+	// 	ps_cmpo0    cr0, fp7, fp1
+	// 	bne         _regular
+	// 	addi        r3, 0, 0
+	// 	blr
+
+	// _regular:
+	// 	fres        fp0, fp7
+	// 	psq_st      fp1,  12(invX), 1, 0
+	// 	ps_add      fp6, fp0, fp0
+	// 	ps_mul      fp5, fp0, fp0
+	// 	psq_st      fp1,  28(invX), 1, 0
+	// 	ps_nmsub    fp0, fp7, fp5, fp6
+	// 	psq_st      fp1,  44(invX), 1, 0
+	// 	ps_muls0    fp13, fp13, fp0
+	// 	ps_muls0    fp12, fp12, fp0
+	// 	ps_muls0    fp11, fp11, fp0
+	// 	psq_st      fp13,  0(invX), 0, 0
+	// 	psq_st      fp12,  16(invX), 0, 0
+	// 	ps_muls0    fp10, fp10, fp0
+	// 	ps_muls0    fp9,  fp9,  fp0
+	// 	psq_st      fp11,  32(invX), 0, 0
+	// 	psq_st      fp10,  8(invX), 1, 0
+	// 	ps_muls0    fp8,  fp8,  fp0
+	// 	addi        r3, 0, 1
+	// 	psq_st      fp9,   24(invX), 1, 0
+	// 	psq_st      fp8,   40(invX), 1, 0
+	// 	blr
+	// #endif // clang-format on
 }
 
 /**
@@ -566,12 +562,10 @@ void C_MTXRotTrig(Mtx m, char axis, f32 sinA, f32 cosA)
 		m[0][1] = 0.0f;
 		m[0][2] = 0.0f;
 		m[0][3] = 0.0f;
-
 		m[1][0] = 0.0f;
 		m[1][1] = cosA;
 		m[1][2] = -sinA;
 		m[1][3] = 0.0f;
-
 		m[2][0] = 0.0f;
 		m[2][1] = sinA;
 		m[2][2] = cosA;
@@ -585,12 +579,10 @@ void C_MTXRotTrig(Mtx m, char axis, f32 sinA, f32 cosA)
 		m[0][1] = 0.0f;
 		m[0][2] = sinA;
 		m[0][3] = 0.0f;
-
 		m[1][0] = 0.0f;
 		m[1][1] = 1.0f;
 		m[1][2] = 0.0f;
 		m[1][3] = 0.0f;
-
 		m[2][0] = -sinA;
 		m[2][1] = 0.0f;
 		m[2][2] = cosA;
@@ -604,12 +596,10 @@ void C_MTXRotTrig(Mtx m, char axis, f32 sinA, f32 cosA)
 		m[0][1] = -sinA;
 		m[0][2] = 0.0f;
 		m[0][3] = 0.0f;
-
 		m[1][0] = sinA;
 		m[1][1] = cosA;
 		m[1][2] = 0.0f;
 		m[1][3] = 0.0f;
-
 		m[2][0] = 0.0f;
 		m[2][1] = 0.0f;
 		m[2][2] = 1.0f;
@@ -817,20 +807,18 @@ void PSMTXTrans(register Mtx m, register f32 xT, register f32 yT, register f32 z
 	c0 = 0.0f;
 	c1 = 1.0f;
 
-#ifdef __MWERKS__
-	asm {
-		stfs    xT, 12(m)
-		stfs    yT, 28(m)
-		psq_st  c0,  4(m), 0, 0
-		psq_st  c0, 32(m), 0, 0
-		stfs    c0, 16(m)
-		stfs    c1, 20(m)
-		stfs    c0, 24(m)
-		stfs    c1, 40(m)
-		stfs    zT, 44(m)
-		stfs    c1,  0(m)
-	}
-#endif
+	asm("stfs    %[xT], 0x000c (%[m]);"
+	    "stfs    %[yT], 0x001c (%[m]);"
+	    "psq_st  %[c0], 0x0004 (%[m]), 0, 0;"
+	    "psq_st  %[c0], 0x0020 (%[m]), 0, 0;"
+	    "stfs    %[c0], 0x0010 (%[m]);"
+	    "stfs    %[c1], 0x0014 (%[m]);"
+	    "stfs    %[c0], 0x0018 (%[m]);"
+	    "stfs    %[c1], 0x0028 (%[m]);"
+	    "stfs    %[zT], 0x002c (%[m]);"
+	    "stfs    %[c1], 0x0000 (%[m]);"
+	    :
+	    : [m] "r"(m), [xT] "r"(xT), [yT] "r"(yT), [zT] "r"(zT), [c0] "r"(c0), [c1] "r"(c1));
 }
 
 /**
@@ -914,18 +902,16 @@ void PSMTXScale(register Mtx m, register f32 xS, register f32 yS, register f32 z
 
 	c0 = 0.0f;
 
-#ifdef __MWERKS__
-	asm {
-		stfs    xS,  0 (m)
-		psq_st  c0,  4 (m), 0, 0
-		psq_st  c0, 12 (m), 0, 0
-		stfs    yS, 20 (m)
-		psq_st  c0, 24 (m), 0, 0
-		psq_st  c0, 32 (m), 0, 0
-		stfs    zS, 40 (m)
-		stfs    c0, 44 (m)
-	}
-#endif
+	asm("stfs    %[xS], 0x0000 (%[m]);"
+	    "psq_st  %[c0], 0x0004 (%[m]), 0, 0;"
+	    "psq_st  %[c0], 0x000c (%[m]), 0, 0;"
+	    "stfs    %[yS], 0x0014 (%[m]);"
+	    "psq_st  %[c0], 0x0018 (%[m]), 0, 0;"
+	    "psq_st  %[c0], 0x0020 (%[m]), 0, 0;"
+	    "stfs    %[zS], 0x0028 (%[m]);"
+	    "stfs    %[c0], 0x002c (%[m]);"
+	    :
+	    : [m] "r"(m), [xS] "r"(xS), [yS] "r"(yS), [zS] "r"(zS), [c0] "r"(c0));
 }
 
 /**

@@ -10,40 +10,34 @@ DECL_SECT(".dtors") extern voidfunctionptr _dtors[];
 
 static void __init_cpp();
 
-DECL_SECT(".init")
-ASM void __init_hardware() {
-#ifdef __MWERKS__ // clang-format off
-	nofralloc
-	mfmsr r0
-	ori r0,r0,0x2000
-	mtmsr r0
-	mflr r31
-	bl __OSPSInit
-	bl __OSCacheInit
-	mtlr r31
-	blr
-#endif // clang-format on
+DECL_SECT(".init") void __init_hardware()
+{
+	asm("mfmsr  0;"
+	    "ori    0, 0, 0x2000;"
+	    "mtmsr  0;"
+	    "mflr   31;"
+	    "bl     __OSPSInit;"
+	    "bl     __OSCacheInit;"
+	    "mtlr   31;"
+	    "blr;");
 }
 
-DECL_SECT(".init") ASM void __flush_cache(void* addr, int size)
+DECL_SECT(".init") void __flush_cache(void* addr, int size)
 {
-#ifdef __MWERKS__ // clang-format off
-	nofralloc
-	lis r5, 0xFFFFFFF1@h
-	ori r5, r5, 0xFFFFFFF1@l
-	and r5, r5, r3
-	subf r3, r5, r3
-	add r4, r4, r3
-loop:
-	dcbst 0, r5
-	sync
-	icbi 0, r5
-	addic r5, r5, 8
-	addic. r4, r4, -8
-	bge loop
-	isync
-	blr
-#endif // clang-format on
+	asm("	lis     5,    0xFFFFFFF1@h;"
+	    "	ori     5, 5, 0xFFFFFFF1@l;"
+	    "	and     5, 5, 3;"
+	    "	subf    3, 5, 3;"
+	    "	add     4, 4, 3;"
+	    "loop:"
+	    "	dcbst   0, 5;"
+	    "	sync;"
+	    "	icbi    0, 5;"
+	    "	addic   5, 5, 8;"
+	    "	addic.  4, 4, -8;"
+	    "	bge     loop;"
+	    "	isync;"
+	    "	blr;");
 }
 
 /**

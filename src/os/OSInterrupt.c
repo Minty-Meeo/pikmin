@@ -24,53 +24,59 @@ static OSInterruptMask InterruptPrioTable[] = {
 /**
  * @TODO: Documentation
  */
-ASM BOOL OSDisableInterrupts(void) {
-#ifdef __MWERKS__ // clang-format off
-	nofralloc
-entry    __RAS_OSDisableInterrupts_begin
-	mfmsr   r3
-	rlwinm  r4, r3, 0, 17, 15
-	mtmsr   r4
-	rlwinm  r3, r3, 17, 31, 31
-entry    __RAS_OSDisableInterrupts_end
-	blr
-#endif // clang-format on
+BOOL OSDisableInterrupts(void)
+{
+	int res, tmp;
+
+	// asm(".global __RAS_OSDisableInterrupts_begin"
+	//     "__RAS_OSDisableInterrupts_begin:"
+	//     "	mfmsr   %[res];"
+	//     "	rlwinm  %[tmp], %[res], 0, 17, 15;"
+	//     "	mtmsr   %[tmp];"
+	//     "	rlwinm  %[res], %[res], 17, 31, 31;"
+	//     ".global __RAS_OSDisableInterrupts_end"
+	//     "__RAS_OSDisableInterrupts_end:"
+	//     : [res] "=r"(res), [tmp] "=r"(tmp));
+
+	return res;
 }
 
 /**
  * @TODO: Documentation
  */
-ASM BOOL OSEnableInterrupts(void) {
-#ifdef __MWERKS__ // clang-format off
-	nofralloc
+BOOL OSEnableInterrupts(void)
+{
+	int res, tmp;
 
-	mfmsr   r3
-	ori     r4, r3, 0x8000
-	mtmsr   r4
-	rlwinm  r3, r3, 17, 31, 31
-	blr
-#endif // clang-format on
+	// asm("mfmsr   %[res]"
+	//     "ori     %[tmp], %[res], 0x8000"
+	//     "mtmsr   %[tmp]"
+	//     "rlwinm  %[res], %[res], 17, 31, 31"
+	//     : [res] "=r"(res), [tmp] "=r"(tmp));
+
+	return res;
 }
 
 /**
  * @TODO: Documentation
  */
-ASM BOOL OSRestoreInterrupts(register BOOL level) {
-#ifdef __MWERKS__ // clang-format off
-	nofralloc
+BOOL OSRestoreInterrupts(BOOL level)
+{
+	int tmp;
 
-	cmpwi   level, 0
-	mfmsr   r4
-	beq     _disable
-	ori     r5, r4, 0x8000
-	b       _restore
-_disable:
-	rlwinm  r5, r4, 0, 17, 15
-_restore:
-	mtmsr   r5
-	rlwinm  r4, r4, 17, 31, 31
-	blr
-#endif // clang-format on
+	// asm("	cmpwi   %[level], 0;"
+	//     "	mfmsr   %[tmp];"
+	//     "	beq     _disable;"
+	//     "	ori     %[tmp], %[tmp], 0x8000;"
+	//     "	b       _restore;"
+	//     "_disable:"
+	//     "	rlwinm  %[tmp], %[tmp], 0, 17, 15;"
+	//     "_restore:"
+	//     "	mtmsr   %[tmp];"
+	//     : [tmp] "=r"(tmp)
+	//     : [level] "r"(level));
+
+	return level;
 }
 
 /**

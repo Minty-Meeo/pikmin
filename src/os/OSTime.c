@@ -15,33 +15,25 @@ static s32 LeapYearDays[OS_TIME_MONTH_MAX] = { 0, 31, 60, 91, 121, 152, 182, 213
 /**
  * @TODO: Documentation
  */
-ASM OSTime OSGetTime(void) {
-#ifdef __MWERKS__ // clang-format off
-	nofralloc
-
-	mftbu r3
-	mftb r4
-
-	// Check for possible carry from TBL to TBU
-	mftbu r5
-	cmpw r3, r5
-	bne OSGetTime
-
-	blr
-#endif // clang-format on
+OSTime OSGetTime(void)
+{
+	// TODO: This sucks
+	asm("mftbu  3;"
+	    "mftb   4;"
+	    // Check for possible carry from TBL to TBU
+	    "mftbu  5;"
+	    "cmpw   3, 5;"
+	    "bne OSGetTime;");
 }
 
 /**
  * @TODO: Documentation
  */
-ASM u32 OSGetTick(void)
+u32 OSGetTick(void)
 {
-#ifdef __MWERKS__ // clang-format off
-	nofralloc
-
-	mftb r3
-	blr
-#endif // clang-format on
+	u32 tick;
+	asm("mftb %[tick]" : [tick] "=g"(tick));
+	return tick;
 }
 
 /**
