@@ -1,7 +1,6 @@
 #include "Dolphin/mtx.h"
 
 #include "Dolphin/os.h"
-#include "fdlibm.h"
 #include <math.h>
 #include <stddef.h>
 

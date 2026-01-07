@@ -63,14 +63,7 @@ f32 qdist3(f32 x0, f32 y0, f32 z0, f32 x1, f32 y1, f32 z1);
 
 inline f32 speedy_sqrtf(f32 x)
 {
-	vf32 y;
-	if (x > 0.0f) {
-
-		f64 guess = __frsqrte((f64)x);
-		y         = (f32)(x * guess);
-		return y;
-	}
-	return x;
+	return __builtin_sqrtf(x);
 }
 
 #endif // _SYSMATH_H
