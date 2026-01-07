@@ -3342,39 +3342,39 @@ void BaseShape::calcWeightedMatrices()
 			weights[1]             = weight;
 
 			// could probably make this a static inline but eh.
-			ASM
-			{
-				psq_l f0, 0x0(weightsR), 0, 0;
-				psq_l f1, 0x0(animMtx), 0, 0;
-				psq_l f2, 0x0(mtx1), 0, 0;
-				ps_madd f1, f2, f0, f1;
-				psq_st f1, 0x0(animMtx), 0, 0;
+			// ASM
+			// {
+			// 	psq_l f0, 0x0(weightsR), 0, 0;
+			// 	psq_l f1, 0x0(animMtx), 0, 0;
+			// 	psq_l f2, 0x0(mtx1), 0, 0;
+			// 	ps_madd f1, f2, f0, f1;
+			// 	psq_st f1, 0x0(animMtx), 0, 0;
 
-				psq_l f3, 0x8(animMtx), 0, 0;
-				psq_l f2, 0x8(mtx1), 0, 0;
-				ps_madd f3, f2, f0, f3;
-				psq_st f3, 0x8(animMtx), 0, 0;
+			// 	psq_l f3, 0x8(animMtx), 0, 0;
+			// 	psq_l f2, 0x8(mtx1), 0, 0;
+			// 	ps_madd f3, f2, f0, f3;
+			// 	psq_st f3, 0x8(animMtx), 0, 0;
 
-				psq_l f1, 0x10(animMtx), 0, 0;
-				psq_l f2, 0x10(mtx1), 0, 0;
-				ps_madd f1, f2, f0, f1;
-				psq_st f1, 0x10(animMtx), 0, 0;
+			// 	psq_l f1, 0x10(animMtx), 0, 0;
+			// 	psq_l f2, 0x10(mtx1), 0, 0;
+			// 	ps_madd f1, f2, f0, f1;
+			// 	psq_st f1, 0x10(animMtx), 0, 0;
 
-				psq_l f3, 0x18(animMtx), 0, 0;
-				psq_l f2, 0x18(mtx1), 0, 0;
-				ps_madd f3, f2, f0, f3;
-				psq_st f3, 0x18(animMtx), 0, 0;
+			// 	psq_l f3, 0x18(animMtx), 0, 0;
+			// 	psq_l f2, 0x18(mtx1), 0, 0;
+			// 	ps_madd f3, f2, f0, f3;
+			// 	psq_st f3, 0x18(animMtx), 0, 0;
 
-				psq_l f1, 0x20(animMtx), 0, 0;
-				psq_l f2, 0x20(mtx1), 0, 0;
-				ps_madd f1, f2, f0, f1;
-				psq_st f1, 0x20(animMtx), 0, 0;
+			// 	psq_l f1, 0x20(animMtx), 0, 0;
+			// 	psq_l f2, 0x20(mtx1), 0, 0;
+			// 	ps_madd f1, f2, f0, f1;
+			// 	psq_st f1, 0x20(animMtx), 0, 0;
 
-				psq_l f3, 0x28(animMtx), 0, 0;
-				psq_l f2, 0x28(mtx1), 0, 0;
-				ps_madd f3, f2, f0, f3;
-				psq_st f3, 0x28(animMtx), 0, 0;
-			};
+			// 	psq_l f3, 0x28(animMtx), 0, 0;
+			// 	psq_l f2, 0x28(mtx1), 0, 0;
+			// 	ps_madd f3, f2, f0, f3;
+			// 	psq_st f3, 0x28(animMtx), 0, 0;
+			// };
 		}
 	}
 }
