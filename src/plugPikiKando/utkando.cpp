@@ -151,11 +151,11 @@ void LoopChecker::update()
 void drawBatten(Graphics& gfx, immut Vector3f& pos, f32 size)
 {
 	gfx.useMatrix(gfx.mCamera->mLookAtMtx, 0);
-	Vector3f p1, p2, p3, p4;
-	p1 = pos + Vector3f(size, 0.0f, size);
-	p2 = pos + Vector3f(size, 0.0f, -size);
-	p3 = pos + Vector3f(-size, 0.0f, -size);
-	p4 = pos + Vector3f(-size, 0.0f, size);
+
+	Vector3f p1 = pos + Vector3f(size, 0.0f, size);
+	Vector3f p2 = pos + Vector3f(size, 0.0f, -size);
+	Vector3f p3 = pos + Vector3f(-size, 0.0f, -size);
+	Vector3f p4 = pos + Vector3f(-size, 0.0f, size);
 
 	gfx.drawLine(p1, p3);
 	gfx.drawLine(p2, p4);

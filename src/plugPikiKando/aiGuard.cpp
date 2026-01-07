@@ -288,13 +288,11 @@ void ActGuard::setGoal()
 		return;
 	}
 
-	Vector3f targetPos(target->mSRT.t);
 	f32 rad = 2.5f * target->getSize();
 
 	f32 angle = (mFormationSide == Right) ? _2C : PI - _2C;
 
-	targetPos = targetPos + Vector3f(rad * sinf(angle), 0.0f, rad * cosf(angle));
-	_20       = targetPos;
+	_20 = target->mSRT.t + Vector3f(rad * sinf(angle), 0.0f, rad * cosf(angle));
 }
 
 /**
