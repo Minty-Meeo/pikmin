@@ -271,6 +271,11 @@ inline void padStack(void)
 #define __mwerks_rlwinm(S, SH, MB, ME)    /* int    */ __rlwinm(S, SH, MB, ME)    // int, int, int, int
 #define __mwerks_rlwnm(S, SH, MB, ME)     /* int    */ __rlwnm(S, SH, MB, ME)     // int, int, int, int
 #define __mwerks_rlwimi(A, S, SH, MB, ME) /* int    */ __rlwimi(A, S, SH, MB, ME) // int, int, int, int, int
+#else
+#define __mwerks_eieio()                  asm("eieio")
+#define __mwerks_sync()                   asm("sync")
+#define __mwerks_isync()                  asm("isync")
+#define __mwerks_cntlzw(value)            __builtin_clz((unsigned int)(value))
 #endif
 
 // Disable clangd warnings
