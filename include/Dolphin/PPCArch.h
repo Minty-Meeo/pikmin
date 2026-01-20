@@ -290,9 +290,9 @@ BEGIN_SCOPE_EXTERN_C
 
 /////////////// Functions /////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-void PPCSync(void);  // Executes a system call to sync data
-void PPCEieio(void); // TODO
-void PPCHalt(void);  // Spins infinitely
+void PPCSync(void);              // Executes a system call to sync data
+void PPCEieio(void);             // TODO
+[[noreturn]] void PPCHalt(void); // Spins infinitely
 
 u32 PPCMfmsr(void);         // Get Machine State Register (MSR)
 void PPCMtmsr(u32 value);   // Set Machine State Register (MSR)
