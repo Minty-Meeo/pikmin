@@ -2,6 +2,10 @@ add_library(sysBootup OBJECT
     sysBootup.cpp
 )
 
+add_library(newlibStub OBJECT
+    newlibStub.c
+)
+
 # Ensure it is compiled as C++
 set_target_properties(sysBootup PROPERTIES
     LINKER_LANGUAGE CXX
@@ -46,6 +50,7 @@ add_executable(main.elf)
 # Add the standalone object file
 target_sources(main.elf PRIVATE
     $<TARGET_OBJECTS:sysBootup>
+    $<TARGET_OBJECTS:newlibStub>
 )
 
 # Link all static libraries
