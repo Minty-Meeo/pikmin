@@ -265,6 +265,26 @@ inline void padStack(void)
 #define __mwerks_rlwinm(S, SH, MB, ME)    /* int    */ __rlwinm(S, SH, MB, ME)    // int, int, int, int
 #define __mwerks_rlwnm(S, SH, MB, ME)     /* int    */ __rlwnm(S, SH, MB, ME)     // int, int, int, int
 #define __mwerks_rlwimi(A, S, SH, MB, ME) /* int    */ __rlwimi(A, S, SH, MB, ME) // int, int, int, int, int
+#else
+#define __mwerks_eieio()                  asm volatile("eieio")
+#define __mwerks_sync()                   asm volatile("sync")
+#define __mwerks_isync()                  asm volatile("isync")
+#define __mwerks_abs(value)               0
+#define __mwerks_fabs(value)              0.0f
+#define __mwerks_fnabs(value)             0.0f
+#define __mwerks_labs(value)              0L
+#define __mwerks_cntlzw(value)            0
+#define __mwerks_lhbrx(base, idx)         0
+#define __mwerks_lwbrx(base, idx)         0
+#define __mwerks_sthbrx(base, idx)        ((void)0)
+#define __mwerks_stwbrx(base, idx)        ((void)0)
+#define __mwerks_setflm(value)            0.0f
+#define __mwerks_fres(B)                  0.0f
+#define __mwerks_fsqrte(B)                0.0
+#define __mwerks_fsel(A, C, B)            0.0
+#define __mwerks_rlwinm(S, SH, MB, ME)    0
+#define __mwerks_rlwnm(S, SH, MB, ME)     0
+#define __mwerks_rlwimi(A, S, SH, MB, ME) 0
 #endif
 
 // Disable clangd warnings
