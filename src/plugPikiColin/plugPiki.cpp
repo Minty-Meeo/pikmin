@@ -121,7 +121,7 @@ void PlugPikiApp::draw(Graphics& gfx)
 		gfx.texturePrintf(gsys->mConsFont, TIMER_STATE_X, TIMER_STATE_Y + 2 * TIMER_STATE_LINE_HEIGHT, "%d mats", gsys->mMaterialCount);
 		gfx.texturePrintf(gsys->mConsFont, TIMER_STATE_X, TIMER_STATE_Y + 3 * TIMER_STATE_LINE_HEIGHT, "%d disps", gsys->mDispCount);
 		gfx.texturePrintf(gsys->mConsFont, TIMER_STATE_X, TIMER_STATE_Y + 4 * TIMER_STATE_LINE_HEIGHT, "%d mtxs",
-		                  gsys->mDGXGfx->mNextFreeMatrixIdx);
+		                  gsys->mGraphics->mNextFreeMatrixIdx);
 		gfx.texturePrintf(gsys->mConsFont, TIMER_STATE_X, TIMER_STATE_Y + 5 * TIMER_STATE_LINE_HEIGHT, "%d / %d lighting skips / sets",
 		                  gsys->mLightingSkips, gsys->mLightingSets);
 		gfx.texturePrintf(gsys->mConsFont, TIMER_STATE_X, TIMER_STATE_Y + 6 * TIMER_STATE_LINE_HEIGHT, "%d light sets", gsys->mLightSetNum);
@@ -216,7 +216,7 @@ int PlugPikiApp::idle()
 	renderall();
 	// also render any DVD errors
 	if (gsys->mDvdErrorCallback) {
-		gsys->mDvdErrorCallback->invoke(*gsys->mDGXGfx);
+		gsys->mDvdErrorCallback->invoke(*gsys->mGraphics);
 	}
 	gsys->mTimer->start("render", true);
 	gsys->doneRender();

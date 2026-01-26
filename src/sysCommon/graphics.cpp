@@ -536,7 +536,7 @@ void PVWTevColReg::animate(f32* framePtr, ShortColour& color)
  */
 void Material::attach()
 {
-	gsys->mDGXGfx->useDList(gsys->mDGXGfx->compileMaterial(this));
+	gsys->mGraphics->useDList(gsys->mGraphics->compileMaterial(this));
 }
 
 /**
@@ -797,61 +797,6 @@ void MaterialHandler::setMaterial(Material* mat)
 void MaterialHandler::setTexMatrix(bool enable)
 {
 	mGfx->initReflectTex(enable);
-}
-
-/**
- * @todo: Documentation
- */
-Graphics::Graphics()
-{
-	PRINT("dgxgraphics constructor\n");
-
-	mRenderMode = 0;
-
-	for (int i = 0; i < 0x1000; i++) {
-		sintable[i] = NMathF::sin(TAU * (i / 4096.0f));
-		costable[i] = NMathF::cos(TAU * (i / 4096.0f));
-	}
-
-	mActiveTexture[0] = nullptr;
-	mActiveTexture[1] = nullptr;
-	mActiveTexture[2] = nullptr;
-	mActiveTexture[3] = nullptr;
-	mActiveTexture[4] = nullptr;
-	mActiveTexture[5] = nullptr;
-	mActiveTexture[6] = nullptr;
-	mActiveTexture[7] = nullptr;
-
-	_308 = 0;
-
-	mCurrentMaterial = nullptr;
-	mLightCam        = nullptr;
-
-	// Well I suppose this has to initialize *somewhere*.
-	const_cast<Matrix4f&>(Matrix4f::ident).makeIdentity();
-
-	mCurrentMaterialHandler = nullptr;
-	mDefaultMaterialHandler = new MaterialHandler();
-
-	mMaxMatrixCount = gsys->mMatrixCount;
-	mMatrixBuffer   = gsys->mMatrices;
-
-	mCachedShapeMax = 1000;
-	mCachedShapes   = new CachedShape[mCachedShapeMax];
-
-	mAmbientColour.set(0, 0, 48, 255);
-	mLightIntensity = 1.0f;
-}
-
-/**
- * @todo: Documentation
- */
-void Graphics::initRender(int, int)
-{
-	mActiveLightMask = 0;
-	mLight.initCore("");
-	resetMatrixBuffer();
-	resetCacheBuffer();
 }
 
 /**

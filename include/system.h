@@ -14,7 +14,6 @@
 #include <stddef.h>
 #include <stdlib.h>
 
-struct DGXGraphics;
 struct BaseApp;
 struct CacheTexture;
 struct TextureCacher;
@@ -410,7 +409,6 @@ struct System : public StdSystem {
 	// _00-_248 = StdSystem
 	u32 mHeapStart;                                  // _244
 	u32 mHeapEnd;                                    // _248
-	Graphics* mDGXGfx;                               // _24C, cast to DGXGraphics in DOL
 	u32 _250;                                        // _250, unknown/unused - set to 0 by GameFlow::softReset.
 	Delegate1<System, Graphics&>* mDvdErrorCallback; // _254
 	int mDvdErrorCode;                               // _258
