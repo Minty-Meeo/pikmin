@@ -72,8 +72,8 @@ struct NinLogoSetupSection : public Node {
 			zen::DrawProgre::returnStatusFlag scanMode = progresWindow->update(mController);
 			if (scanMode == zen::DrawProgre::RETSTATE_Progressive) {
 				OSSetProgressiveMode(TRUE);
-				gsys->mDGXGfx->mRenderMode = 1;
-				gsys->mDGXGfx->videoReset();
+				gsys->mGraphics->mRenderMode = 1;
+				gsys->mGraphics->videoReset();
 				progresWindow = nullptr;
 				return;
 			}

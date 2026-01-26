@@ -189,8 +189,8 @@ void System::initSoftReset()
 {
 	gsys->mPrevAllocType = FALSE;
 	StdSystem::initSoftReset();
-	if (mDGXGfx) {
-		static_cast<DGXGraphics*>(mDGXGfx)->setupRender();
+	if (mGraphics) {
+		mGraphics->setupRender();
 	}
 }
 
@@ -200,13 +200,13 @@ void System::initSoftReset()
 void System::beginRender()
 {
 	mRetraceCount = 0;
-	static_cast<DGXGraphics*>(mDGXGfx)->beginRender();
-	mDGXGfx->clearBuffer(3, false);
+	mGraphics->beginRender();
+	mGraphics->clearBuffer(3, false);
 	GXSetViewport(0.0f, 0.0f, glnWidth, glnHeight, 0.0f, 1.0f);
 	GXSetScissor(0, 0, glnWidth, glnHeight);
 	GXSetColorUpdate(GX_TRUE);
-	mDGXGfx->useTexture(nullptr, GX_TEXMAP0);
-	mDGXGfx->initRender(glnWidth, glnHeight);
+	mGraphics->useTexture(nullptr, GX_TEXMAP0);
+	mGraphics->initRender(glnWidth, glnHeight);
 }
 
 /**
@@ -214,7 +214,7 @@ void System::beginRender()
  */
 void System::doneRender()
 {
-	static_cast<DGXGraphics*>(mDGXGfx)->doneRender();
+	mGraphics->doneRender();
 }
 
 /**
@@ -222,7 +222,7 @@ void System::doneRender()
  */
 void System::waitRetrace()
 {
-	static_cast<DGXGraphics*>(mDGXGfx)->waitRetrace();
+	mGraphics->waitRetrace();
 }
 
 /**
@@ -925,8 +925,7 @@ void System::Initialise()
 
 	onceInit();
 
-	mDGXGfx          = new DGXGraphics(false);
-	mGraphics        = mDGXGfx;
+	mGraphics        = new Graphics(false);
 	mIsRendering     = 0;
 	mIsLoadingActive = 0;
 
@@ -1041,16 +1040,15 @@ void* loadFunc(void* idler)
 		frameCount++;
 		GXSetZMode(GX_TRUE, GX_LEQUAL, GX_TRUE);
 		if (!gsys->mIsLoadScreenActive) {
-			GXCopyDisp(static_cast<DGXGraphics*>(gsys->mDGXGfx)->mDisplayBuffer, GX_FALSE);
+			GXCopyDisp(gsys->mGraphics->mDisplayBuffer, GX_FALSE);
 		} else {
-			GXCopyDisp(static_cast<DGXGraphics*>(gsys->mDGXGfx)->mDisplayBuffer,
-			           (frameCount >= gsys->mLoadTimeBeforeIdling) ? GX_TRUE : GX_FALSE);
+			GXCopyDisp(gsys->mGraphics->mDisplayBuffer, (frameCount >= gsys->mLoadTimeBeforeIdling) ? GX_TRUE : GX_FALSE);
 		}
 
 		gsys->beginRender();
 		STACK_PAD_VAR(1);
 		Matrix4f mtx;
-		DGXGraphics* gfx = static_cast<DGXGraphics*>(gsys->mDGXGfx);
+		Graphics* gfx = gsys->mGraphics;
 		gfx->setOrthogonal(mtx.mMtx, RectArea(0, 0, gfx->mScreenWidth, gfx->mScreenHeight));
 
 		if (gsys->mIsLoadScreenActive) {
@@ -1064,11 +1062,10 @@ void* loadFunc(void* idler)
 		}
 
 		if (gsys->mDvdErrorCallback) {
-			// gross but necessary to avoid a Delegate1 weak function spawning too early
-			static_cast<IDelegate1<Graphics&>*>(gsys->mDvdErrorCallback)->invoke(*gsys->mDGXGfx);
+			gsys->mDvdErrorCallback->invoke(*gfx);
 		}
 
-		static_cast<DGXGraphics*>(gsys->mDGXGfx)->doneRender();
+		gfx->doneRender();
 		if (b && --b == 0) {
 			VISetBlack(FALSE);
 			VIFlush();

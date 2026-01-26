@@ -4,6 +4,7 @@
 #include "Graphics.h"
 #include "Mesh.h"
 #include "Shape.h"
+#include "nlib/Math.h"
 #include "sysNew.h"
 
 /**
@@ -164,8 +165,46 @@ static GXVtxAttrFmtList meshVAT[] = {
 /**
  * @todo: Documentation
  */
-DGXGraphics::DGXGraphics(bool flag)
+Graphics::Graphics(bool flag)
 {
+	PRINT("dgxgraphics constructor\n");
+
+	mRenderMode = 0;
+
+	for (int i = 0; i < 0x1000; i++) {
+		sintable[i] = NMathF::sin(TAU * (i / 4096.0f));
+		costable[i] = NMathF::cos(TAU * (i / 4096.0f));
+	}
+
+	mActiveTexture[0] = nullptr;
+	mActiveTexture[1] = nullptr;
+	mActiveTexture[2] = nullptr;
+	mActiveTexture[3] = nullptr;
+	mActiveTexture[4] = nullptr;
+	mActiveTexture[5] = nullptr;
+	mActiveTexture[6] = nullptr;
+	mActiveTexture[7] = nullptr;
+
+	_308 = 0;
+
+	mCurrentMaterial = nullptr;
+	mLightCam        = nullptr;
+
+	// Well I suppose this has to initialize *somewhere*.
+	const_cast<Matrix4f&>(Matrix4f::ident).makeIdentity();
+
+	mCurrentMaterialHandler = nullptr;
+	mDefaultMaterialHandler = new MaterialHandler();
+
+	mMaxMatrixCount = gsys->mMatrixCount;
+	mMatrixBuffer   = gsys->mMatrices;
+
+	mCachedShapeMax = 1000;
+	mCachedShapes   = new CachedShape[mCachedShapeMax];
+
+	mAmbientColour.set(0, 0, 48, 255);
+	mLightIntensity = 1.0f;
+
 	mDefaultFifoBuffer = new (0x20) u8[kDefaultFifoSize];
 	mTempFifoBuffer    = new (0x20) u8[kTempFifoSize];
 	mDefaultDLBuffer   = new (0x20) u8[kDefaultDLSize];
@@ -265,7 +304,7 @@ DGXGraphics::DGXGraphics(bool flag)
 /**
  * @todo: Documentation
  */
-void DGXGraphics::setVerticalFilter(u8* vf)
+void Graphics::setVerticalFilter(u8* vf)
 {
 	sScreenMode[mRenderMode]->vfilter[0] = vf[0];
 	sScreenMode[mRenderMode]->vfilter[1] = vf[1];
@@ -279,7 +318,7 @@ void DGXGraphics::setVerticalFilter(u8* vf)
 /**
  * @todo: Documentation
  */
-void DGXGraphics::getVerticalFilter(u8* vf)
+void Graphics::getVerticalFilter(u8* vf)
 {
 	vf[0] = sScreenMode[mRenderMode]->vfilter[0];
 	vf[1] = sScreenMode[mRenderMode]->vfilter[1];
@@ -293,7 +332,7 @@ void DGXGraphics::getVerticalFilter(u8* vf)
 /**
  * @todo: Documentation
  */
-void DGXGraphics::videoReset()
+void Graphics::videoReset()
 {
 #if defined(VERSION_PIKIDEMO) || defined(VERSION_GPIJ01)
 #else
@@ -322,12 +361,12 @@ void DGXGraphics::videoReset()
 /**
  * @todo: Documentation
  */
-void DGXGraphics::resetCopyFilter()
+void Graphics::resetCopyFilter()
 {
 	GXSetCopyFilter(sScreenMode[mRenderMode]->aa, sScreenMode[mRenderMode]->sample_pattern, GX_TRUE, sScreenMode[mRenderMode]->vfilter);
 }
 
-DGXGraphics* DGXGraphics::gfx;
+Graphics* Graphics::gfx;
 
 static bool sendTxIndx;  // type unsure
 static bool sendColIndx; // type unsure
@@ -336,7 +375,7 @@ static bool sendNbtIndx; // type unsure
 /**
  * @todo: Documentation
  */
-void DGXGraphics::setupRender()
+void Graphics::setupRender()
 {
 	mRetraceCount    = VIGetRetraceCount();
 	mDisplayListPtr  = mDefaultDLBuffer;
@@ -346,7 +385,7 @@ void DGXGraphics::setupRender()
 /**
  * @todo: Documentation
  */
-u8* DGXGraphics::getDListPtr()
+u8* Graphics::getDListPtr()
 {
 	return mDisplayListPtr;
 }
@@ -354,7 +393,7 @@ u8* DGXGraphics::getDListPtr()
 /**
  * @todo: Documentation
  */
-u32 DGXGraphics::getDListRemainSize()
+u32 Graphics::getDListRemainSize()
 {
 	return mDisplayListSize;
 }
@@ -362,7 +401,7 @@ u32 DGXGraphics::getDListRemainSize()
 /**
  * @todo: Documentation
  */
-void DGXGraphics::useDList(u32 num)
+void Graphics::useDList(u32 num)
 {
 	if (mDisplayListPtr + num >= mDefaultDLBuffer + kDefaultDLSize) {
 		ERROR("Used too much displaylist buffer");
@@ -374,7 +413,7 @@ void DGXGraphics::useDList(u32 num)
 /**
  * @todo: Documentation
  */
-u32 DGXGraphics::compileMaterial(Material* mat)
+u32 Graphics::compileMaterial(Material* mat)
 {
 	if (!(mat->mFlags & MATFLAG_PVW)) {
 		return 0;
@@ -384,7 +423,7 @@ u32 DGXGraphics::compileMaterial(Material* mat)
 		ERROR("Cannot make material DL when using GP\n");
 	}
 
-	u8* dl               = gsys->mDGXGfx->getDListPtr();
+	u8* dl               = gsys->mGraphics->getDListPtr();
 	mat->mDisplayListPtr = dl;
 	GXBeginDisplayList(dl, getDListRemainSize());
 
@@ -474,10 +513,13 @@ u32 DGXGraphics::compileMaterial(Material* mat)
 /**
  * @todo: Documentation
  */
-void DGXGraphics::initRender(int a1, int a2)
+void Graphics::initRender(int a1, int a2)
 {
 	frameNum++;
-	Graphics::initRender(a1, a2);
+	mActiveLightMask = 0;
+	mLight.initCore("");
+	resetMatrixBuffer();
+	resetCacheBuffer();
 	mLightIntensity = 1.0f;
 	oldCull         = 0;
 	GXSetCullMode(GX_CULL_BACK);
@@ -526,7 +568,7 @@ void DGXGraphics::initRender(int a1, int a2)
 /**
  * @todo: Documentation
  */
-void DGXGraphics::beginRender()
+void Graphics::beginRender()
 {
 	if (gsys->mIsRendering) {
 		ERROR("still busy with GP!\n");
@@ -540,7 +582,7 @@ void DGXGraphics::beginRender()
  * @todo: Documentation
  * @note UNUSED Size: 000084
  */
-void DGXGraphics::GXReInit()
+void Graphics::GXReInit()
 {
 	// UNUSED FUNCTION
 }
@@ -548,7 +590,7 @@ void DGXGraphics::GXReInit()
 /**
  * @todo: Documentation
  */
-void DGXGraphics::doneRender()
+void Graphics::doneRender()
 {
 	GXFlush();
 	GXDrawDone();
@@ -558,7 +600,7 @@ void DGXGraphics::doneRender()
 /**
  * @todo: Documentation
  */
-void DGXGraphics::waitRetrace()
+void Graphics::waitRetrace()
 {
 	waitPostRetrace();
 	if (sFirstFrame) {
@@ -585,7 +627,7 @@ void DGXGraphics::waitRetrace()
 /**
  * @todo: Documentation
  */
-void DGXGraphics::waitPostRetrace()
+void Graphics::waitPostRetrace()
 {
 	BOOL interrupt = OSDisableInterrupts();
 
@@ -601,7 +643,7 @@ void DGXGraphics::waitPostRetrace()
 /**
  * @todo: Documentation
  */
-void DGXGraphics::retraceProc(u32)
+void Graphics::retraceProc(u32)
 {
 	gsys->nudgeDvdThread();
 	if (gsys->mIsLoadingActive) {
@@ -618,7 +660,7 @@ void DGXGraphics::retraceProc(u32)
 /**
  * @todo: Documentation
  */
-void DGXGraphics::setCamera(Camera* a1)
+void Graphics::setCamera(Camera* a1)
 {
 	mCamera = a1;
 }
@@ -629,7 +671,7 @@ void DGXGraphics::setCamera(Camera* a1)
  * @param modelMtx Matrix for an object (in world space).
  * @param viewMtx Output matrix, now in view space.
  */
-void DGXGraphics::calcViewMatrix(immut Matrix4f& modelMtx, Matrix4f& viewMtx)
+void Graphics::calcViewMatrix(immut Matrix4f& modelMtx, Matrix4f& viewMtx)
 {
 	mLastModelMatrix = &modelMtx;
 	mCamera->mLookAtMtx.multiplyTo(modelMtx, viewMtx);
@@ -638,7 +680,7 @@ void DGXGraphics::calcViewMatrix(immut Matrix4f& modelMtx, Matrix4f& viewMtx)
 /**
  * @todo: Documentation
  */
-f32 DGXGraphics::setLineWidth(f32 width)
+f32 Graphics::setLineWidth(f32 width)
 {
 	f32 old    = mLineWidth;
 	mLineWidth = width;
@@ -649,7 +691,7 @@ f32 DGXGraphics::setLineWidth(f32 width)
 /**
  * @todo: Documentation
  */
-u8 DGXGraphics::setDepth(bool enabled)
+u8 Graphics::setDepth(bool enabled)
 {
 	bool old        = mIsDepthEnabled;
 	mIsDepthEnabled = enabled;
@@ -664,7 +706,7 @@ u8 DGXGraphics::setDepth(bool enabled)
 /**
  * @todo: Documentation
  */
-int DGXGraphics::setCullFront(int cull)
+int Graphics::setCullFront(int cull)
 {
 	mCullMode = cull;
 	if (oldCull != mCullMode) {
@@ -683,7 +725,7 @@ int DGXGraphics::setCullFront(int cull)
 /**
  * @todo: Documentation
  */
-void DGXGraphics::setAmbient()
+void Graphics::setAmbient()
 {
 	GColors[0].mAmbColor.r = mAmbientColour.r;
 	GColors[0].mAmbColor.g = mAmbientColour.g;
@@ -697,7 +739,7 @@ void DGXGraphics::setAmbient()
 /**
  * @todo: Documentation
  */
-bool DGXGraphics::setLighting(bool set, PVWLightingInfo* lightInfo)
+bool Graphics::setLighting(bool set, PVWLightingInfo* lightInfo)
 {
 	bool prevSetting   = mIsLightingEnabled;
 	mIsLightingEnabled = set;
@@ -738,7 +780,7 @@ bool DGXGraphics::setLighting(bool set, PVWLightingInfo* lightInfo)
 /**
  * @todo: Documentation
  */
-void DGXGraphics::setLight(Light* light, int idx)
+void Graphics::setLight(Light* light, int idx)
 {
 	gsys->mLightSetNum++;
 	GXLightObj* gxLight = &mGXLights[idx];
@@ -778,7 +820,7 @@ void DGXGraphics::setLight(Light* light, int idx)
 /**
  * @todo: Documentation
  */
-void DGXGraphics::setPerspective(Mtx mtx, f32 a1, f32 a2, f32 a3, f32 a4, f32 a5)
+void Graphics::setPerspective(Mtx mtx, f32 a1, f32 a2, f32 a3, f32 a4, f32 a5)
 {
 	MTXPerspective(mtx, a1, a2, a3, a4);
 	GXSetProjection(mtx, GX_PERSPECTIVE);
@@ -796,7 +838,7 @@ void DGXGraphics::setPerspective(Mtx mtx, f32 a1, f32 a2, f32 a3, f32 a4, f32 a5
  * @param orthoMtx Output orthogonal matrix in device coordinates.
  * @param bounds Bounds to use when constructing the orthogonal matrix.
  */
-void DGXGraphics::setOrthogonal(Mtx orthoMtx, immut RectArea& bounds)
+void Graphics::setOrthogonal(Mtx orthoMtx, immut RectArea& bounds)
 {
 	MTXOrtho(orthoMtx, bounds.mMinY, bounds.mMaxY, bounds.mMinX, bounds.mMaxX, 0.0f, -1.0f);
 	GXSetProjection(orthoMtx, GX_ORTHOGRAPHIC);
@@ -816,7 +858,7 @@ void DGXGraphics::setOrthogonal(Mtx orthoMtx, immut RectArea& bounds)
 /**
  * @todo: Documentation
  */
-void DGXGraphics::setScissor(immut RectArea& bounds)
+void Graphics::setScissor(immut RectArea& bounds)
 {
 	GXSetScissor(bounds.mMinX, bounds.mMinY, bounds.width(), bounds.height());
 }
@@ -824,7 +866,7 @@ void DGXGraphics::setScissor(immut RectArea& bounds)
 /**
  * @todo: Documentation
  */
-void DGXGraphics::setViewport(immut RectArea& bounds)
+void Graphics::setViewport(immut RectArea& bounds)
 {
 	GXSetViewport(bounds.mMinX, bounds.mMinY, bounds.width(), bounds.height(), 0.0f, 1.0f);
 }
@@ -832,7 +874,7 @@ void DGXGraphics::setViewport(immut RectArea& bounds)
 /**
  * @todo: Documentation
  */
-void DGXGraphics::setViewportOffset(immut RectArea& bounds)
+void Graphics::setViewportOffset(immut RectArea& bounds)
 {
 	GXSetScissorBoxOffset(-bounds.mMinX, -bounds.mMinY);
 }
@@ -840,14 +882,14 @@ void DGXGraphics::setViewportOffset(immut RectArea& bounds)
 /**
  * @todo: Documentation
  */
-void DGXGraphics::initReflectTex(bool)
+void Graphics::initReflectTex(bool)
 {
 }
 
 /**
  * @todo: Documentation
  */
-void DGXGraphics::initProjTex(bool enableProj, LightCamera* projCamera)
+void Graphics::initProjTex(bool enableProj, LightCamera* projCamera)
 {
 	STACK_PAD_VAR(0x40);
 	Mtx finalProjTexMtx;
@@ -867,7 +909,7 @@ void DGXGraphics::initProjTex(bool enableProj, LightCamera* projCamera)
 /**
  * @todo: Documentation
  */
-void DGXGraphics::useMatrixQuick(immut Matrix4f& mtx, int id)
+void Graphics::useMatrixQuick(immut Matrix4f& mtx, int id)
 {
 	int gxID      = id * 3;
 	mActiveMatrix = &mtx;
@@ -916,7 +958,7 @@ void DGXGraphics::useMatrixQuick(immut Matrix4f& mtx, int id)
 /**
  * @todo: Documentation
  */
-void DGXGraphics::useMatrix(immut Matrix4f& mtx, int a)
+void Graphics::useMatrix(immut Matrix4f& mtx, int a)
 {
 	useMatrixQuick(mtx, a);
 	mCurrentMatrixId = a * 3;
@@ -926,7 +968,7 @@ void DGXGraphics::useMatrix(immut Matrix4f& mtx, int a)
 /**
  * @todo: Documentation
  */
-void DGXGraphics::useTexture(Texture* texture, int id)
+void Graphics::useTexture(Texture* texture, int id)
 {
 	mHasTexGen = FALSE;
 	if (!texture || texture != mActiveTexture[id]) {
@@ -950,7 +992,7 @@ void DGXGraphics::useTexture(Texture* texture, int id)
 /**
  * @todo: Documentation
  */
-void DGXGraphics::setMatMatrices(Material* mat, int p2)
+void Graphics::setMatMatrices(Material* mat, int p2)
 {
 	mHasTexGen = (mat->mTextureInfo.mTevStageCount) ? true : false;
 	GXSetNumTexGens(mat->mTextureInfo.mTexGenDataCount);
@@ -993,7 +1035,7 @@ void DGXGraphics::setMatMatrices(Material* mat, int p2)
 /**
  * @todo: Documentation
  */
-void DGXGraphics::setMaterial(Material* mat, bool p2)
+void Graphics::setMaterial(Material* mat, bool p2)
 {
 	if (mat) {
 		gsys->mMaterialCount++;
@@ -1178,7 +1220,7 @@ void DGXGraphics::setMaterial(Material* mat, bool p2)
 /**
  * @todo: Documentation
  */
-void DGXGraphics::initMesh(Shape* model)
+void Graphics::initMesh(Shape* model)
 {
 	oldTevGroup = 0;
 	GXSetVtxAttrFmtv(GX_VTXFMT0, meshVAT);
@@ -1244,7 +1286,7 @@ void DGXGraphics::initMesh(Shape* model)
 /**
  * @todo: Documentation
  */
-void DGXGraphics::setupVtxDesc(Shape* model, Material* mat, Mesh* mesh)
+void Graphics::setupVtxDesc(Shape* model, Material* mat, Mesh* mesh)
 {
 	if (mesh->mVertexDescriptor & 0x1) {
 		if (!sendMtxIndx) {
@@ -1318,7 +1360,7 @@ void DGXGraphics::setupVtxDesc(Shape* model, Material* mat, Mesh* mesh)
 /**
  * @todo: Documentation
  */
-void DGXGraphics::drawSingleMatpoly(Shape* model, Joint::MatPoly* matPoly)
+void Graphics::drawSingleMatpoly(Shape* model, Joint::MatPoly* matPoly)
 {
 	Mesh& mesh    = model->mMeshList[matPoly->mMeshIndex];
 	Material& mat = model->mMaterialList[matPoly->mIndex];
@@ -1371,7 +1413,7 @@ void DGXGraphics::drawSingleMatpoly(Shape* model, Joint::MatPoly* matPoly)
 /**
  * @todo: Documentation
  */
-void DGXGraphics::drawMeshes(Camera&, Shape* shape)
+void Graphics::drawMeshes(Camera&, Shape* shape)
 {
 	initMesh(shape);
 	for (int i = shape->mTotalMatpolyCount - 1; i >= 0; i--) {
@@ -1383,7 +1425,7 @@ void DGXGraphics::drawMeshes(Camera&, Shape* shape)
 /**
  * @todo: Documentation
  */
-void DGXGraphics::setColour(immut Colour& color, bool set)
+void Graphics::setColour(immut Colour& color, bool set)
 {
 	mPrimaryColour = color;
 	if (set) {
@@ -1403,7 +1445,7 @@ void DGXGraphics::setColour(immut Colour& color, bool set)
 /**
  * @todo: Documentation
  */
-void DGXGraphics::setAuxColour(immut Colour& color)
+void Graphics::setAuxColour(immut Colour& color)
 {
 	mAuxiliaryColour = color;
 }
@@ -1411,7 +1453,7 @@ void DGXGraphics::setAuxColour(immut Colour& color)
 /**
  * @todo: Documentation
  */
-void DGXGraphics::setPrimEnv(immut Colour* col1, immut Colour* col2)
+void Graphics::setPrimEnv(immut Colour* col1, immut Colour* col2)
 {
 	if (col1) {
 		GXSetTevColor(GX_TEVREG0, *(GXColor*)col1);
@@ -1424,7 +1466,7 @@ void DGXGraphics::setPrimEnv(immut Colour* col1, immut Colour* col2)
 /**
  * @todo: Documentation
  */
-void DGXGraphics::setClearColour(immut Colour& color)
+void Graphics::setClearColour(immut Colour& color)
 {
 	mBufferClearColour = color;
 }
@@ -1432,7 +1474,7 @@ void DGXGraphics::setClearColour(immut Colour& color)
 /**
  * @todo: Documentation
  */
-void DGXGraphics::clearBuffer(int, bool)
+void Graphics::clearBuffer(int, bool)
 {
 	GXSetCopyClear(*(GXColor*)&mBufferClearColour, 0xFFFFFF); // max clear_z value
 }
@@ -1440,7 +1482,7 @@ void DGXGraphics::clearBuffer(int, bool)
 /**
  * @todo: Documentation
  */
-void DGXGraphics::setFog(bool set)
+void Graphics::setFog(bool set)
 {
 	if (set) {
 #if defined(VERSION_PIKIDEMO) || defined(VERSION_GPIJ01)
@@ -1464,7 +1506,7 @@ void DGXGraphics::setFog(bool set)
 /**
  * @todo: Documentation
  */
-void DGXGraphics::setFog(bool set, immut Colour& color, f32 density, f32 start, f32 end)
+void Graphics::setFog(bool set, immut Colour& color, f32 density, f32 start, f32 end)
 {
 	mFogColour  = color;
 	mFogStart   = start;
@@ -1476,7 +1518,7 @@ void DGXGraphics::setFog(bool set, immut Colour& color, f32 density, f32 start, 
 /**
  * @todo: Documentation
  */
-void DGXGraphics::setBlendMode(u8 blendFactor, u8 zMode, u8 blendMode)
+void Graphics::setBlendMode(u8 blendFactor, u8 zMode, u8 blendMode)
 {
 	GXSetBlendMode(GX_BM_BLEND, (GXBlendFactor)(blendFactor & 0xf), (GXBlendFactor)(blendFactor >> 4), GX_LO_SET);
 
@@ -1521,7 +1563,7 @@ void DGXGraphics::setBlendMode(u8 blendFactor, u8 zMode, u8 blendMode)
  * @param blendMode Preset to set the color blending mode to - see `BlendMode` enum.
  * @return The previous `BlendMode` being overridden.
  */
-int DGXGraphics::setCBlending(int blendMode)
+int Graphics::setCBlending(int blendMode)
 {
 	int old    = mBlendMode;
 	mBlendMode = blendMode;
@@ -1616,7 +1658,7 @@ int DGXGraphics::setCBlending(int blendMode)
 /**
  * @todo: Documentation
  */
-bool DGXGraphics::initParticle(bool a)
+bool Graphics::initParticle(bool a)
 {
 	if (!mActiveTexture[0]) {
 		return false;
@@ -1639,7 +1681,7 @@ bool DGXGraphics::initParticle(bool a)
 /**
  * @todo: Documentation
  */
-void DGXGraphics::drawRotParticle(Camera& cam, immut Vector3f& pos, u16 angle, f32 radius)
+void Graphics::drawRotParticle(Camera& cam, immut Vector3f& pos, u16 angle, f32 radius)
 {
 	if (!mActiveTexture[0]) {
 		ERROR("no texture set!!");
@@ -1676,7 +1718,7 @@ void DGXGraphics::drawRotParticle(Camera& cam, immut Vector3f& pos, u16 angle, f
 /**
  * @todo: Documentation
  */
-void DGXGraphics::drawParticle(Camera& cam, immut Vector3f& pos, f32 size)
+void Graphics::drawParticle(Camera& cam, immut Vector3f& pos, f32 size)
 {
 	if (!mActiveTexture[0]) {
 		ERROR("no texture set!!");
@@ -1713,7 +1755,7 @@ void DGXGraphics::drawParticle(Camera& cam, immut Vector3f& pos, f32 size)
 /**
  * @todo: Documentation
  */
-void DGXGraphics::drawCamParticle(Camera& cam, immut Vector3f& pos, immut Vector2f& extents, immut Vector2f& uvMin, immut Vector2f& uvMax)
+void Graphics::drawCamParticle(Camera& cam, immut Vector3f& pos, immut Vector2f& extents, immut Vector2f& uvMin, immut Vector2f& uvMax)
 {
 	if (!mActiveTexture[0]) {
 		ERROR("no texture set!!");
@@ -1757,7 +1799,7 @@ void DGXGraphics::drawCamParticle(Camera& cam, immut Vector3f& pos, immut Vector
 /**
  * @todo: Documentation
  */
-void DGXGraphics::drawLine(immut Vector3f& start, immut Vector3f& end)
+void Graphics::drawLine(immut Vector3f& start, immut Vector3f& end)
 {
 	useTexture(nullptr, GX_TEXMAP0);
 	GXClearVtxDesc();
@@ -1780,7 +1822,7 @@ void DGXGraphics::drawLine(immut Vector3f& start, immut Vector3f& end)
 /**
  * @todo: Documentation
  */
-void DGXGraphics::drawPoints(immut Vector3f* points, int count)
+void Graphics::drawPoints(immut Vector3f* points, int count)
 {
 	useTexture(nullptr, GX_TEXMAP0);
 	GXClearVtxDesc();
@@ -1802,7 +1844,7 @@ void DGXGraphics::drawPoints(immut Vector3f* points, int count)
 /**
  * @todo: Documentation
  */
-void DGXGraphics::drawOneTri(immut Vector3f* vertices, immut Vector3f* normals, immut Vector2f* texCoords, int count)
+void Graphics::drawOneTri(immut Vector3f* vertices, immut Vector3f* normals, immut Vector2f* texCoords, int count)
 {
 	gsys->mPolygonCount++;
 	GXClearVtxDesc();
@@ -1840,7 +1882,7 @@ void DGXGraphics::drawOneTri(immut Vector3f* vertices, immut Vector3f* normals, 
 /**
  * @todo: Documentation
  */
-void DGXGraphics::blatRectangle(immut RectArea& rect)
+void Graphics::blatRectangle(immut RectArea& rect)
 {
 	if (!mActiveTexture[0]) {
 		ERROR("no texture set!!");
@@ -1887,7 +1929,7 @@ void DGXGraphics::blatRectangle(immut RectArea& rect)
 /**
  * @todo: Documentation
  */
-void DGXGraphics::testRectangle(immut RectArea& rect)
+void Graphics::testRectangle(immut RectArea& rect)
 {
 	u32 primClr = *(u32*)&mPrimaryColour;
 	GXClearVtxDesc();
@@ -1924,7 +1966,7 @@ void DGXGraphics::testRectangle(immut RectArea& rect)
 /**
  * @todo: Documentation
  */
-void DGXGraphics::drawRectangle(immut RectArea& bounds, immut RectArea& texCoords, immut Vector3f* offset)
+void Graphics::drawRectangle(immut RectArea& bounds, immut RectArea& texCoords, immut Vector3f* offset)
 {
 	if (!mActiveTexture[0]) {
 		ERROR("no texture set!!");
@@ -1963,7 +2005,7 @@ void DGXGraphics::drawRectangle(immut RectArea& bounds, immut RectArea& texCoord
 /**
  * @todo: Documentation
  */
-void DGXGraphics::lineRectangle(immut RectArea& rect)
+void Graphics::lineRectangle(immut RectArea& rect)
 {
 	GXClearVtxDesc();
 	GXSetVtxDesc(GX_VA_POS, GX_DIRECT);
@@ -1998,7 +2040,7 @@ void DGXGraphics::lineRectangle(immut RectArea& rect)
 /**
  * @todo: Documentation
  */
-void DGXGraphics::fillRectangle(immut RectArea& rect)
+void Graphics::fillRectangle(immut RectArea& rect)
 {
 	GXClearVtxDesc();
 	GXSetVtxDesc(GX_VA_POS, GX_DIRECT);
@@ -2030,7 +2072,7 @@ void DGXGraphics::fillRectangle(immut RectArea& rect)
 /**
  * @todo: Documentation
  */
-void DGXGraphics::texturePrintf(Font* font, int x, int y, immut char* format, ...)
+void Graphics::texturePrintf(Font* font, int x, int y, immut char* format, ...)
 {
 	char buf[PATH_MAX];
 	va_list vlist;
@@ -2116,7 +2158,7 @@ void DGXGraphics::texturePrintf(Font* font, int x, int y, immut char* format, ..
  * @todo: Documentation
  * @note UNUSED Size: 0001A0
  */
-void DGXGraphics::showCrash(u16, OSContext*)
+void Graphics::showCrash(u16, OSContext*)
 {
 	OSReport("Unknown addr !!");
 	// UNUSED FUNCTION
@@ -2126,7 +2168,7 @@ void DGXGraphics::showCrash(u16, OSContext*)
  * @todo: Documentation
  * @note UNUSED Size: 000184
  */
-void DGXGraphics::showError(immut char* msg1, immut char* fileName, int line)
+void Graphics::showError(immut char* msg1, immut char* fileName, int line)
 {
 	OSReport("ERROR: %s", msg1);
 	OSReport("ERROR: in %s at line %d", fileName, line);
@@ -2161,7 +2203,7 @@ static char sFontData[] = {
  * @todo: Documentation
  * @note UNUSED Size: 0000D0
  */
-void DGXGraphics::directDrawChar(int, int, int)
+void Graphics::directDrawChar(int, int, int)
 {
 	// UNUSED FUNCTION
 }
@@ -2170,7 +2212,7 @@ void DGXGraphics::directDrawChar(int, int, int)
  * @todo: Documentation
  * @note UNUSED Size: 0000F8
  */
-void DGXGraphics::directDrawChar(RectArea&, RectArea&)
+void Graphics::directDrawChar(RectArea&, RectArea&)
 {
 	// UNUSED FUNCTION
 }
@@ -2179,7 +2221,7 @@ void DGXGraphics::directDrawChar(RectArea&, RectArea&)
  * @todo: Documentation
  * @note UNUSED Size: 0001D8
  */
-void DGXGraphics::directPrint(int, int, immut char*, ...)
+void Graphics::directPrint(int, int, immut char*, ...)
 {
 	// UNUSED FUNCTION
 }
@@ -2193,7 +2235,7 @@ void DGXGraphics::directPrint(int, int, immut char*, ...)
  * @todo: Documentation
  * @note UNUSED Size: 000108
  */
-void DGXGraphics::directErase(RectArea& bounds, bool set)
+void Graphics::directErase(RectArea& bounds, bool set)
 {
 	// NON-MATCHING (JP)
 	u16* screen = (u16*)(mDisplayBuffer + u32(bounds.mMinX + bounds.mMinY * 640 << 1));

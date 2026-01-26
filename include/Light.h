@@ -58,7 +58,7 @@ enum LightFlag {
 // this is in here to avoid include looping with Graphics.h
 
 /**
- * @brief Color blending preset modes, for use with `DGXGraphics::setCBlending`.
+ * @brief Color blending preset modes, for use with `Graphics::setCBlending`.
  */
 enum BlendMode {
 	BLEND_Alpha         = 0, ///< 0, standard transparency, fades out with alpha - debug text, default map drawing.
