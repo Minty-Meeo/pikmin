@@ -156,6 +156,10 @@ void AIPerf::addMenu(Menu* menu)
 	menu->addKeyEvent(Menu::KeyEventType::OnInputRelease, TERNARY_BUGFIX(KBBTN_A, KBBTN_Y),
 	                  new Delegate1<AIPerf, Menu&>(this, &AIPerf::collectPikis));
 
+	menu->addOption(0, "COLLECT NAVIS", nullptr);
+	menu->addKeyEvent(Menu::KeyEventType::OnInputRelease, TERNARY_BUGFIX(KBBTN_A, KBBTN_Y),
+	                  new Delegate1<AIPerf, Menu&>(this, &AIPerf::collectNavis));
+
 	menu->addOption(0, "FULLFILL PIKI", nullptr);
 	menu->addKeyEvent(Menu::KeyEventType::OnInputRelease, TERNARY_BUGFIX(KBBTN_A, KBBTN_Y),
 	                  new Delegate1<AIPerf, Menu&>(this, &AIPerf::fullfillPiki));
@@ -476,6 +480,21 @@ void AIPerf::collectPikis(Menu& menu)
 		Creature* piki = *iter;
 		if (piki->isAlive() && !piki->isStickTo()) {
 			piki->mSRT.t = playerPos;
+		}
+	}
+}
+
+/**
+ * @todo: Documentation
+ */
+void AIPerf::collectNavis(Menu& menu)
+{
+	Iterator iter(naviMgr);
+	CI_LOOP(iter)
+	{
+		Navi* navi = static_cast<Navi*>(*iter);
+		if (navi->isAlive() && !navi->isStickTo()) {
+			navi->mSRT.t = navi->mCursorWorldPos;
 		}
 	}
 }
