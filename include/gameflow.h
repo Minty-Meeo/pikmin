@@ -635,8 +635,12 @@ public:
 	void drawLoadLogo(Graphics& gfx, bool force60FPSSpin, Texture* logoTex, f32 alphaFactor);
 	void menuToggleTimers(Menu& menu);
 	void menuTogglePrint(Menu& menu);
-	void menuToggleDInfo(Menu& menu);
-	void menuToggleDExtra(Menu& menu);
+	void menuToggleDInfoTeki(Menu& menu);
+	void menuToggleDInfoBoss(Menu& menu);
+	void menuToggleDInfoGenerator(Menu& menu);
+	void menuToggleDInfoShapeRoute(Menu& menu);
+	void menuToggleDInfoShapeCull(Menu& menu);
+	void menuToggleDInfoExtra(Menu& menu);
 	void menuToggleBlur(Menu& menu);
 	void menuToggleInfo(Menu& menu);
 	void menuToggleColls(Menu& menu);
@@ -653,6 +657,7 @@ public:
 
 	void addOptionsMenu(Menu* parent);
 	void addFilterMenu(Menu* parent);
+	void addDInfoMenu(Menu* parent);
 
 	// _00     = VTBL
 	// _00-_20 = Node

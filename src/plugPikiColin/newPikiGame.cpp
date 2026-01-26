@@ -1850,6 +1850,16 @@ public:
 
 		gameflow.addOptionsMenu(optionsMenu);
 
+		// set up debug info toggles menu
+		Menu* dInfoMenu               = new Menu(mController, gsys->mConsFont);
+		dInfoMenu->mCenterPoint.mMinX = glnWidth / 2;
+		dInfoMenu->mCenterPoint.mMinY = glnHeight / 2;
+		dInfoMenu->mGradBGTopColour.set(MENU_COLOUR_TEAL);
+		dInfoMenu->mGradBGBottomColour.set(MENU_COLOUR_MEDIUM_GREY);
+		dInfoMenu->addKeyEvent(Menu::KeyEventType::OnCancel, KBBTN_B, new Delegate1<Menu, Menu&>(dInfoMenu, &Menu::menuCloseMenu));
+
+		gameflow.addDInfoMenu(dInfoMenu);
+
 		// set up movie player debug menu
 		Menu* movieMenu               = new Menu(mController, gsys->mConsFont);
 		movieMenu->mCenterPoint.mMinX = glnWidth - 110;
@@ -1894,6 +1904,7 @@ public:
 		mDebugMenu->addOption(0, "Change Course", new NPGSSDelegate1(this, &NewPikiGameSetupSection::menuChangeCourse));
 		mDebugMenu->addOption(0, "Day End", new NPGSSDelegate1(this, &NewPikiGameSetupSection::menuDayEnd));
 		mDebugMenu->addMenu(optionsMenu, 0, "Options");
+		mDebugMenu->addMenu(dInfoMenu, 0, "Debug Info");
 		mDebugMenu->addMenu(gamecore->mAiPerfDebugMenu, 0, "Kando Options");
 		if (mapMgr->mDayMgr) {
 			mDebugMenu->addMenu(mapMgr->mDayMgr->mDebugMenu, 0, "Lighting");
