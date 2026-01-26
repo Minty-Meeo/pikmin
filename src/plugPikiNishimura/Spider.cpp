@@ -1,6 +1,7 @@
 #include "Spider.h"
 #include "DayMgr.h"
 #include "DebugLog.h"
+#include "Font.h"
 #include "Graphics.h"
 #include "MapMgr.h"
 
@@ -161,9 +162,17 @@ void Spider::drawShape(Graphics& gfx)
 			gfx.setColour(Colour(255, 0, 0, 255), true);
 			gfx.drawSphere(*getInitPosition(), SPIDER_PROP.mSpawnTriggerDist(), transformMtx);
 		}
-		CollPart* body = mCollInfo->getSphere('tama');
+		Vector3f floorSpot = mCollInfo->getSphere('tama')->mCentre;
+		floorSpot.y        = mapMgr->getMaxY(floorSpot.x, floorSpot.z, true);
 		gfx.setColour(Colour(255, 0, 0, 255), true);
-		gfx.drawSphere(body->mCentre, body->mRadius, transformMtx);
+		gfx.drawSphere(floorSpot, 5.0f, transformMtx);
+
+		char qdistText[16];
+		sprintf(qdistText, "sss %1.f", BOSS_PROP.mTerritoryRadius() - qdist2(mSRT.t.x, mSRT.t.z, mInitPosition.x, mInitPosition.z));
+		floorSpot.y += 10.0f;
+		floorSpot.multMatrix(gfx.mCamera->mLookAtMtx);
+		gfx.perspPrintf(gsys->mConsFont, floorSpot, -gsys->mConsFont->stringWidth(qdistText) / 2, 0, qdistText);
+		PRINT("%s\n", qdistText);
 
 		for (int i = 0; i < 4; i++) {
 			// Fabricated name

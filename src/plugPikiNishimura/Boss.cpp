@@ -574,7 +574,8 @@ void Boss::drawShape(Graphics& gfx)
 		gfx.drawSphere(boundingSphere->mCentre, boundingSphere->mRadius, transformMtx);
 
 		gfx.setColour(Colour(255, 255, 0, 255), true);
-		gfx.drawSphere(mInitPosition, BOSS_PROP.mTerritoryRadius(), transformMtx);
+		gfx.drawCylinder(mInitPosition - Vector3f(0.0f, 100.0f, 0.0f), mInitPosition + Vector3f(0.0f, 100.0f, 0.0f),
+		                 BOSS_PROP.mTerritoryRadius(), transformMtx);
 
 		gfx.setColour(Colour(0, 255, 0, 255), true);
 		gfx.drawSphere(mTargetPosition, 10.0f, transformMtx);
