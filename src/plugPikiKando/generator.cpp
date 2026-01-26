@@ -670,7 +670,7 @@ void Generator::update()
  */
 void Generator::render(Graphics& gfx)
 {
-	if (gsys->mToggleDebugInfo) {
+	if (gsys->mToggleDebugInfo & DInfoFlags::Generator) {
 		Matrix4f mtx1;
 		Matrix4f mtx2;
 

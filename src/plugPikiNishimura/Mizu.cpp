@@ -132,7 +132,7 @@ void Mizu::drawShape(Graphics& gfx)
 
 	// This is really distracting to be enabled by default, so I've taken the liberty of adding a toggle.
 #if !defined(BUILD_MATCHING)
-	if (gsys->mToggleDebugInfo)
+	if (gsys->mToggleDebugInfo & DInfoFlags::Boss)
 #endif
 	{
 		Matrix4f transformMtx;

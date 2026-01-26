@@ -237,6 +237,16 @@ struct TitleSetupSection : public Node {
 		optionsMenu->addKeyEvent(Menu::KeyEventType::OnCancel, KBBTN_B, new Delegate1<Menu, Menu&>(mDebugMenu, &Menu::menuCloseMenu));
 		gameflow.addOptionsMenu(optionsMenu);
 
+		// set up debug info toggles menu
+		Menu* dInfoMenu               = new Menu(mController, gsys->mConsFont);
+		dInfoMenu->mCenterPoint.mMinX = glnWidth / 2;
+		dInfoMenu->mCenterPoint.mMinY = glnHeight / 2;
+		dInfoMenu->mGradBGTopColour.set(MENU_COLOUR_TEAL);
+		dInfoMenu->mGradBGBottomColour.set(MENU_COLOUR_MEDIUM_GREY);
+		dInfoMenu->addKeyEvent(Menu::KeyEventType::OnCancel, KBBTN_B, new Delegate1<Menu, Menu&>(dInfoMenu, &Menu::menuCloseMenu));
+
+		gameflow.addDInfoMenu(dInfoMenu);
+
 		mDebugMenu = new Menu(mController, gsys->mConsFont);
 
 		mDebugMenu->mCenterPoint.mMinX = glnWidth / 2;
@@ -257,6 +267,7 @@ struct TitleSetupSection : public Node {
 		mDebugMenu->addMenu(mDayMgr->mDebugMenu, 0, "Lighting");
 		mDebugMenu->addOption(MENU_FAKE_OPTION_FOR_GAP);
 		mDebugMenu->addMenu(optionsMenu, 0, "Options");
+		mDebugMenu->addMenu(dInfoMenu, 0, "Debug Info");
 #endif
 
 		// default next section is back to the loading logo

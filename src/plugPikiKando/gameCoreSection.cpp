@@ -1828,7 +1828,7 @@ void GameCoreSection::draw1D(Graphics& gfx)
 	}
 	naviMgr->refresh2d(gfx);
 
-	if (gsys->mToggleDebugExtra) {
+	if (gsys->mToggleDebugInfo & DInfoFlags::Extra) {
 		gfx.setColour(COLOUR_WHITE, true);
 		gfx.setAuxColour(COLOUR_WHITE);
 		gfx.useTexture(nullptr, GX_TEXMAP0);

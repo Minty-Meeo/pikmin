@@ -157,6 +157,19 @@ enum {
 } END_ENUM_TYPE;
 
 /**
+ * @todo
+ */
+BEGIN_ENUM_TYPE(DInfoFlags)
+enum {
+	Teki       = 1 << 0,
+	Boss       = 1 << 1,
+	Generator  = 1 << 2,
+	ShapeRoute = 1 << 3,
+	ShapeCull  = 1 << 4,
+	Extra      = 1 << 5,
+} END_ENUM_TYPE;
+
+/**
  * @brief TODO
  *
  * @note Size: 0x244.
@@ -232,7 +245,6 @@ struct StdSystem {
 	u32 mTimerState;               // _18, see TimerState enum
 	u32 mTogglePrint;              // _1C
 	u32 mToggleDebugInfo;          // _20
-	u32 mToggleDebugExtra;         // _24
 	u32 mToggleBlur;               // _28
 	u32 mToggleFileInfo;           // _2C
 	u32 mToggleColls;              // _30

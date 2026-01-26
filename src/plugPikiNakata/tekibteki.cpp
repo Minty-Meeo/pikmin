@@ -1867,7 +1867,7 @@ void BTeki::drawDefault(Graphics& gfx)
 		drawTekiShape(gfx);
 	}
 
-	if (gsys->mToggleDebugInfo) {
+	if (gsys->mToggleDebugInfo & DInfoFlags::Teki) {
 		drawTekiDebugInfo(gfx);
 	}
 

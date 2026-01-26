@@ -1971,7 +1971,7 @@ void BaseShape::drawculled(Graphics& gfx, Camera& cam, ShapeDynMaterials* dynMat
 		}
 	}
 
-	if (gsys->mToggleDebugInfo) {
+	if (gsys->mToggleDebugInfo & DInfoFlags::ShapeCull) {
 		for (int i = 0; i < mJointCount; i++) {
 			gfx.useMatrix(gfx.mCamera->mLookAtMtx, 0);
 			gfx.useTexture(nullptr, GX_TEXMAP0);
@@ -2026,7 +2026,7 @@ void BaseShape::drawshape(Graphics& gfx, Camera& cam, ShapeDynMaterials* dynMats
 			gfx.drawMeshes(cam, (Shape*)this);
 			gfx.useMatrix(*activeMtx, 0);
 			drawlights(gfx, cam);
-			if (gsys->mToggleDebugInfo && (gfx.mMatRenderMask & MATFLAG_AlphaBlend)) {
+			if ((gsys->mToggleDebugInfo & DInfoFlags::ShapeRoute) && (gfx.mMatRenderMask & MATFLAG_AlphaBlend)) {
 				gfx.useMatrix(gfx.mCamera->mLookAtMtx, 0);
 				drawroutes(gfx, cam);
 			}
