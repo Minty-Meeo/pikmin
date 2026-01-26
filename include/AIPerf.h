@@ -39,6 +39,7 @@ protected:
 	void decUfoLevel(Menu&);
 	void toggleUpdateSearchBuffer(Menu&);
 	void collectPikis(Menu&);
+	void collectNavis(Menu&);
 	void fullfillPiki(Menu&);
 	void flowerPiki(Menu&);
 	void breakSluice(Menu&);
