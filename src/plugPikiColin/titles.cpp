@@ -236,7 +236,6 @@ struct TitleSetupSection : public Node {
 
 		optionsMenu->addKeyEvent(Menu::KeyEventType::OnCancel, KBBTN_B, new Delegate1<Menu, Menu&>(mDebugMenu, &Menu::menuCloseMenu));
 		gameflow.addOptionsMenu(optionsMenu);
-#endif
 
 		mDebugMenu = new Menu(mController, gsys->mConsFont);
 
@@ -247,7 +246,6 @@ struct TitleSetupSection : public Node {
 		                        new Delegate1<TitleSetupSection, Menu&>(this, &TitleSetupSection::menuSelectOption));
 		mDebugMenu->addKeyEvent(Menu::KeyEventType::OnCancel, KBBTN_B, new Delegate1<Menu, Menu&>(mDebugMenu, &Menu::menuCloseMenu));
 
-#if defined(DEVELOP) || defined(WIN32)
 		mDebugMenu->addOption(PACK_NEXT_ONEPLAYER(ONEPLAYER_GameSetup), "Start GL Game", nullptr);
 		mDebugMenu->addOption(PACK_NEXT_ONEPLAYER(ONEPLAYER_GameSetup), "Challenge Mode",
 		                      new Delegate1<TitleSetupSection, Menu&>(this, &TitleSetupSection::menuChallengeOption));
