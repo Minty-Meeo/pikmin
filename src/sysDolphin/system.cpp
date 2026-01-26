@@ -576,8 +576,7 @@ System::System()
 {
 	mTimerState       = TS_Off;
 	mTogglePrint      = TERNARY_DEVELOP(TRUE, FALSE);
-	mToggleDebugInfo  = FALSE;
-	mToggleDebugExtra = FALSE;
+	mToggleDebugInfo  = DInfoFlags::Type();
 	mToggleBlur       = TRUE;
 	mToggleColls      = FALSE;
 #if defined(VERSION_PIKIDEMO)

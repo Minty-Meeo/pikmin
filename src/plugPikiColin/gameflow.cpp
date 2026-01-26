@@ -238,25 +238,57 @@ void GameFlow::menuTogglePrint(Menu& menu)
 }
 
 /**
- * @brief Toggles the debug info display and updates the debug menu text.
- *
- * @param menu Caller debug menu.
+ * @todo
  */
-void GameFlow::menuToggleDInfo(Menu& menu)
+void GameFlow::menuToggleDInfoTeki(Menu& menu)
 {
-	gsys->mToggleDebugInfo ^= TRUE;
-	sprintf(menu.mCurrentItem->mLabel, "Toggle DInfo %s", (gsys->mToggleDebugInfo) ? " [on]" : "[off]");
+	gsys->mToggleDebugInfo ^= DInfoFlags::Teki;
+	sprintf(menu.mCurrentItem->mLabel, "Teki %s", (gsys->mToggleDebugInfo & DInfoFlags::Teki) ? " [on]" : "[off]");
 }
 
 /**
- * @brief Toggles the debug extra info display and updates the debug menu text.
- *
- * @param menu Caller debug menu.
+ * @todo
  */
-void GameFlow::menuToggleDExtra(Menu& menu)
+void GameFlow::menuToggleDInfoBoss(Menu& menu)
 {
-	gsys->mToggleDebugExtra ^= TRUE;
-	sprintf(menu.mCurrentItem->mLabel, "Toggle DExtra %s", (gsys->mToggleDebugExtra) ? " [on]" : "[off]");
+	gsys->mToggleDebugInfo ^= DInfoFlags::Boss;
+	sprintf(menu.mCurrentItem->mLabel, "Boss %s", (gsys->mToggleDebugInfo & DInfoFlags::Boss) ? " [on]" : "[off]");
+}
+
+/**
+ * @todo
+ */
+void GameFlow::menuToggleDInfoGenerator(Menu& menu)
+{
+	gsys->mToggleDebugInfo ^= DInfoFlags::Generator;
+	sprintf(menu.mCurrentItem->mLabel, "Generator %s", (gsys->mToggleDebugInfo & DInfoFlags::Generator) ? " [on]" : "[off]");
+}
+
+/**
+ * @todo
+ */
+void GameFlow::menuToggleDInfoShapeRoute(Menu& menu)
+{
+	gsys->mToggleDebugInfo ^= DInfoFlags::ShapeRoute;
+	sprintf(menu.mCurrentItem->mLabel, "Shape Route %s", (gsys->mToggleDebugInfo & DInfoFlags::ShapeRoute) ? " [on]" : "[off]");
+}
+
+/**
+ * @todo
+ */
+void GameFlow::menuToggleDInfoShapeCull(Menu& menu)
+{
+	gsys->mToggleDebugInfo ^= DInfoFlags::ShapeCull;
+	sprintf(menu.mCurrentItem->mLabel, "Shape Cull %s", (gsys->mToggleDebugInfo & DInfoFlags::ShapeCull) ? " [on]" : "[off]");
+}
+
+/**
+ * @todo
+ */
+void GameFlow::menuToggleDInfoExtra(Menu& menu)
+{
+	gsys->mToggleDebugInfo ^= DInfoFlags::Extra;
+	sprintf(menu.mCurrentItem->mLabel, "Extra %s", (gsys->mToggleDebugInfo & DInfoFlags::Extra) ? " [on]" : "[off]");
 }
 
 /**
@@ -307,14 +339,6 @@ void GameFlow::addOptionsMenu(Menu* parent)
 	char* printBuf = new char[0x40];
 	sprintf(printBuf, "Toggle Print %s", (gsys->mTogglePrint) ? " [on]" : "[off]");
 	parent->addOption(0, printBuf, new Delegate1<GameFlow, Menu&>(this, &GameFlow::menuTogglePrint));
-
-	char* debugInfoBuf = new char[0x40];
-	sprintf(debugInfoBuf, "Toggle DInfo %s", (gsys->mToggleDebugInfo) ? " [on]" : "[off]");
-	parent->addOption(0, debugInfoBuf, new Delegate1<GameFlow, Menu&>(this, &GameFlow::menuToggleDInfo));
-
-	char* debugExtraBuf = new char[0x40];
-	sprintf(debugExtraBuf, "Toggle DExtra %s", (gsys->mToggleDebugExtra) ? " [on]" : "[off]");
-	parent->addOption(0, debugExtraBuf, new Delegate1<GameFlow, Menu&>(this, &GameFlow::menuToggleDExtra));
 
 	char* blurBuf = new char[0x40];
 	sprintf(blurBuf, "Toggle Blur %s", (gsys->mToggleBlur) ? " [on]" : "[off]");
@@ -404,6 +428,35 @@ void GameFlow::addFilterMenu(Menu* parent)
 		parent->addKeyEvent(Menu::KeyEventType::OnInputRelease, KBBTN_X,
 		                    new Delegate1<GameFlow, Menu&>(this, &GameFlow::menuIncreaseFilter));
 	}
+}
+
+void GameFlow::addDInfoMenu(Menu* parent)
+{
+	char* buffer = new char[6 * 20];
+
+	sprintf(buffer, "Teki %s", (gsys->mToggleDebugInfo & DInfoFlags::Teki) ? " [on]" : "[off]");
+	parent->addOption(0, buffer, new Delegate1<GameFlow, Menu&>(this, &GameFlow::menuToggleDInfoTeki));
+	buffer += 20;
+
+	sprintf(buffer, "Boss %s", (gsys->mToggleDebugInfo & DInfoFlags::Boss) ? " [on]" : "[off]");
+	parent->addOption(0, buffer, new Delegate1<GameFlow, Menu&>(this, &GameFlow::menuToggleDInfoBoss));
+	buffer += 20;
+
+	sprintf(buffer, "Generator %s", (gsys->mToggleDebugInfo & DInfoFlags::Generator) ? " [on]" : "[off]");
+	parent->addOption(0, buffer, new Delegate1<GameFlow, Menu&>(this, &GameFlow::menuToggleDInfoGenerator));
+	buffer += 20;
+
+	sprintf(buffer, "Shape Route %s", (gsys->mToggleDebugInfo & DInfoFlags::ShapeRoute) ? " [on]" : "[off]");
+	parent->addOption(0, buffer, new Delegate1<GameFlow, Menu&>(this, &GameFlow::menuToggleDInfoShapeRoute));
+	buffer += 20;
+
+	sprintf(buffer, "Shape Cull %s", (gsys->mToggleDebugInfo & DInfoFlags::ShapeCull) ? " [on]" : "[off]");
+	parent->addOption(0, buffer, new Delegate1<GameFlow, Menu&>(this, &GameFlow::menuToggleDInfoShapeCull));
+	buffer += 20;
+
+	sprintf(buffer, "Extra %s", (gsys->mToggleDebugInfo & DInfoFlags::Extra) ? " [on]" : "[off]");
+	parent->addOption(0, buffer, new Delegate1<GameFlow, Menu&>(this, &GameFlow::menuToggleDInfoExtra));
+	buffer += 20;
 }
 
 /**
