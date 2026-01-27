@@ -833,6 +833,9 @@ void BossMgr::refresh(Graphics& gfx)
 			{
 				node->mBoss->refresh(gfx);
 				node->mBoss->drawShape(gfx);
+				if (gsys->mToggleDebugInfo & DInfoFlags::Atari) {
+					node->mBoss->renderAtari(gfx);
+				}
 			}
 		}
 
@@ -849,6 +852,10 @@ void BossMgr::refresh(Graphics& gfx)
 
 				if (node->mBoss->aiCullable()) {
 					node->mBoss->drawShape(gfx);
+				}
+
+				if (gsys->mToggleDebugInfo & DInfoFlags::Atari) {
+					node->mBoss->renderAtari(gfx);
 				}
 			}
 		}

@@ -135,6 +135,9 @@ void ObjectMgr::refresh(Graphics& gfx)
 	{
 		Creature* obj = *it;
 		obj->refresh(gfx);
+		if (gsys->mToggleDebugInfo & DInfoFlags::Atari) {
+			obj->renderAtari(gfx);
+		}
 	}
 }
 
@@ -273,6 +276,9 @@ void MonoObjectMgr::refresh(Graphics& gfx)
 		if (mEntryStatus[i] == 0) {
 			Creature* obj = mObjectList[i];
 			obj->refresh(gfx);
+			if (gsys->mToggleDebugInfo & DInfoFlags::Atari) {
+				obj->renderAtari(gfx);
+			}
 		}
 	}
 }
@@ -646,6 +652,9 @@ void PolyObjectMgr::refresh(Graphics& gfx)
 			Creature* obj = get(i);
 			if (obj) {
 				obj->refresh(gfx);
+				if (gsys->mToggleDebugInfo & DInfoFlags::Atari) {
+					obj->renderAtari(gfx);
+				}
 			}
 		}
 	}

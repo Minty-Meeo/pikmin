@@ -166,7 +166,8 @@ enum {
 	Generator  = 1 << 2,
 	ShapeRoute = 1 << 3,
 	ShapeCull  = 1 << 4,
-	Extra      = 1 << 5,
+	Atari      = 1 << 5,
+	Extra      = 1 << 6,
 } END_ENUM_TYPE;
 
 /**
