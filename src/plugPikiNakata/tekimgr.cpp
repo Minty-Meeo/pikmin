@@ -237,6 +237,9 @@ void TekiMgr::refresh(Graphics& gfx)
 			Teki* teki = (Teki*)mObjectList[i];
 			if (isVisibleType(teki->mTekiType)) {
 				teki->refresh(gfx);
+				if (gsys->mToggleDebugInfo & DInfoFlags::Atari) {
+					teki->renderAtari(gfx);
+				}
 			}
 		}
 	}
