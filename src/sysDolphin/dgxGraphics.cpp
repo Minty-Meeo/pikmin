@@ -1880,6 +1880,89 @@ void Graphics::drawOneTri(immut Vector3f* vertices, immut Vector3f* normals, imm
 }
 
 /**
+ * @brief 8 angles evenly spaced from 0 to pi.
+ */
+static const f32 halfPeriod[16] = {
+	(PI * 0 / 8), (PI * 1 / 8), (PI * 2 / 8), (PI * 3 / 8), (PI * 4 / 8), (PI * 5 / 8), (PI * 6 / 8), (PI * 7 / 8),
+};
+
+/**
+ * @todo: Documentation
+ */
+void Graphics::drawCylinder(immut Vector3f& start, immut Vector3f& end, f32 radius, immut Matrix4f& transformMtx)
+{
+	useTexture(nullptr, GX_TEXMAP0);
+	GXClearVtxDesc();
+	GXSetVtxDesc(GX_VA_POS, GX_DIRECT);
+	GXSetVtxDesc(GX_VA_CLR0, GX_DIRECT);
+	GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_POS, GX_POS_XYZ, GX_F32, 0);
+	GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_CLR0, GX_CLR_RGBA, GX_RGBA8, 0);
+
+	Vector3f center(start);
+	Vector3f stride((end - start) / 16.0f);
+
+	for (int i = 0; i < 16; i++) {
+		Matrix4f mtx1;
+		Matrix4f mtx2;
+
+		mtx1.makeSRT(Vector3f(radius, radius, radius), Vector3f(), center);
+		transformMtx.multiplyTo(mtx1, mtx2);
+		useMatrix(mtx2, 0);
+
+		GXBegin(GX_LINESTRIP, GX_VTXFMT0, 17);
+		for (int j = 0; j < 16; j++) {
+			GXPosition3f32(sinShort(j << 12), 0.0f, cosShort(j << 12));
+			GXColor1u32(reinterpret_cast<u32&>(mPrimaryColour));
+		}
+		GXPosition3f32(sinShort(0), 0.0f, cosShort(0));
+		GXColor1u32(reinterpret_cast<u32&>(mPrimaryColour));
+		GXEnd();
+
+		center.add(stride);
+	}
+}
+
+/**
+ * @todo: Documentation
+ * @note UNUSED Size: 0001E8
+ */
+void Graphics::drawCircle(immut Vector3f&, f32, immut Matrix4f&)
+{
+	// UNUSED FUNCTION
+}
+
+/**
+ * @todo: Documentation
+ */
+void Graphics::drawSphere(immut Vector3f& center, f32 radius, immut Matrix4f& transformMtx)
+{
+	useTexture(nullptr, GX_TEXMAP0);
+	GXClearVtxDesc();
+	GXSetVtxDesc(GX_VA_POS, GX_DIRECT);
+	GXSetVtxDesc(GX_VA_CLR0, GX_DIRECT);
+	GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_POS, GX_POS_XYZ, GX_F32, 0);
+	GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_CLR0, GX_CLR_RGBA, GX_RGBA8, 0);
+
+	for (int i = 0; i < 8; i++) {
+		Matrix4f mtx1;
+		Matrix4f mtx2;
+
+		mtx1.makeSRT(Vector3f(radius, radius, radius), Vector3f(0.0f, halfPeriod[i], 0.0f), center);
+		transformMtx.multiplyTo(mtx1, mtx2);
+		useMatrix(mtx2, 0);
+
+		GXBegin(GX_LINESTRIP, GX_VTXFMT0, 17);
+		for (int j = 0; j < 16; j++) {
+			GXPosition3f32(sinShort(j << 12), cosShort(j << 12), 0.0f);
+			GXColor1u32(reinterpret_cast<u32&>(mPrimaryColour));
+		}
+		GXPosition3f32(sinShort(0), cosShort(0), 0.0f);
+		GXColor1u32(reinterpret_cast<u32&>(mPrimaryColour));
+		GXEnd();
+	}
+}
+
+/**
  * @todo: Documentation
  */
 void Graphics::blatRectangle(immut RectArea& rect)
