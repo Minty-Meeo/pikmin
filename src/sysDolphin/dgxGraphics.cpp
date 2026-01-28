@@ -171,9 +171,8 @@ Graphics::Graphics(bool flag)
 
 	mRenderMode = 0;
 
-	for (int i = 0; i < 0x1000; i++) {
-		sintable[i] = NMathF::sin(TAU * (i / 4096.0f));
-		costable[i] = NMathF::cos(TAU * (i / 4096.0f));
+	for (int i = 0; i < ARRAY_SIZE(sincostable); i++) {
+		sincostable[i] = NMathF::sin(i * (TAU / (ARRAY_SIZE(sincostable) * 4 / 5)));
 	}
 
 	mActiveTexture[0] = nullptr;
