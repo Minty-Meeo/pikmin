@@ -107,17 +107,18 @@ struct Matrix4f {
 	Mtx44 mMtx; // _00-_40
 };
 
-// this is a weird place to put these, but they get initialised in matMath.cpp, so?
-extern f32 sintable[0x1000];
-extern f32 costable[0x1000];
+/**
+ * @brief 5/4 period of a pre-calculated sine curve.  Cosine can be found by adding 1/4 period.
+ */
+extern f32 sincostable[5 * 0x400];
 
 static inline f32 sinShort(u16 x)
 {
-	return sintable[(x >> 4) & 0xFFF];
+	return sincostable[(x >> 4)];
 }
 static inline f32 cosShort(u16 x)
 {
-	return costable[(x >> 4) & 0xFFF];
+	return sincostable[(x >> 4) + (ARRAY_SIZE(sincostable) / 5)];
 }
 
 #endif
