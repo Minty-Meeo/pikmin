@@ -100,7 +100,11 @@ GoalItem* ItemMgr::getNearestContainer(immut Vector3f& pos, f32 radius)
 		Creature* creature = *iter;
 		if (creature->mObjType == OBJTYPE_Goal) {
 			GoalItem* newGoal = static_cast<GoalItem*>(creature);
-			f32 dist          = qdist2(creature->mSRT.t.x, creature->mSRT.t.z, pos.x, pos.z);
+			// Do not search for undiscovered onyons (this is important for Smoky Progg).
+			if (newGoal->getCurrState()->getID() < GoalAI::GOAL_BootInit) {
+				continue;
+			}
+			f32 dist = qdist2(creature->mSRT.t.x, creature->mSRT.t.z, pos.x, pos.z);
 			if (dist < minDist) {
 				minDist = dist;
 				goal    = newGoal;
