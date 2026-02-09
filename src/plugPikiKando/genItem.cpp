@@ -252,21 +252,7 @@ Creature* GenObjectItem::birth(BirthInfo& info)
 		}
 
 		if (item->mObjType == OBJTYPE_Pikihead) {
-			Iterator it(itemMgr);
-			GoalItem* goal = nullptr;
-			f32 maxDist    = 12800.0f;
-			CI_LOOP(it)
-			{
-				Creature* obj = *it;
-				if (obj->mObjType == OBJTYPE_Goal) {
-					f32 dist = sphereDist(obj, item);
-					if (dist < maxDist) {
-						maxDist = dist;
-						goal    = (GoalItem*)obj;
-					}
-				}
-			}
-			((PikiHeadItem*)item)->mParentOnion = goal;
+			((PikiHeadItem*)item)->mParentOnion = itemMgr->getNearestContainer(item->getPosition(), 12800.0f);
 		}
 	}
 	return item;
