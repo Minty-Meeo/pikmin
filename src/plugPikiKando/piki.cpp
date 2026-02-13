@@ -2233,17 +2233,7 @@ Piki::Piki(CreatureProp* prop)
  */
 void Piki::setSpeed(f32 speedRatio)
 {
-	f32 scale = 1.0f; // i guess they were playing around with this?
-	f32 max   = pikiMgr->mPikiParms->mPikiParms.mMaxLeafMoveSpeed() * scale;
-	if (AIConstant::_instance->mConstants.mDoScaleHappaMoveSpeed() && mHappa == Flower) {
-		max = pikiMgr->mPikiParms->mPikiParms.mMaxFlowerMoveSpeed();
-	} else if (AIConstant::_instance->mConstants.mDoScaleHappaMoveSpeed() && mHappa == Bud) {
-		max = pikiMgr->mPikiParms->mPikiParms.mMaxBudMoveSpeed();
-	}
-
-	f32 min = pikiMgr->mPikiParms->mPikiParms.mMinMoveSpeed() * scale;
-
-	mMoveSpeed = (max - min) * speedRatio + min;
+	mMoveSpeed = getSpeed(speedRatio);
 }
 
 /**
@@ -2251,15 +2241,16 @@ void Piki::setSpeed(f32 speedRatio)
  */
 f32 Piki::getSpeed(f32 speedRatio)
 {
-	f32 scale = 1.0f; // i guess they were playing around with this?
-	f32 max   = pikiMgr->mPikiParms->mPikiParms.mMaxLeafMoveSpeed() * scale;
-	if (AIConstant::_instance->mConstants.mDoScaleHappaMoveSpeed() && mHappa == Flower) {
+	f32 max;
+	if (mHappa == Flower) {
 		max = pikiMgr->mPikiParms->mPikiParms.mMaxFlowerMoveSpeed();
-	} else if (AIConstant::_instance->mConstants.mDoScaleHappaMoveSpeed() && mHappa == Bud) {
+	} else if (mHappa == Bud) {
 		max = pikiMgr->mPikiParms->mPikiParms.mMaxBudMoveSpeed();
+	} else {
+		max = pikiMgr->mPikiParms->mPikiParms.mMaxLeafMoveSpeed();
 	}
 
-	f32 min = pikiMgr->mPikiParms->mPikiParms.mMinMoveSpeed() * scale;
+	f32 min = pikiMgr->mPikiParms->mPikiParms.mMinMoveSpeed();
 
 	return (max - min) * speedRatio + min;
 }
@@ -2269,16 +2260,7 @@ f32 Piki::getSpeed(f32 speedRatio)
  */
 void Piki::setSpeed(f32 speedRatio, immut Vector3f& direction)
 {
-	f32 scale = 1.0f; // i guess they were playing around with this?
-	f32 max   = pikiMgr->mPikiParms->mPikiParms.mMaxLeafMoveSpeed() * scale;
-	f32 min   = pikiMgr->mPikiParms->mPikiParms.mMinMoveSpeed() * scale;
-	if (AIConstant::_instance->mConstants.mDoScaleHappaMoveSpeed() && mHappa == Flower) {
-		max = pikiMgr->mPikiParms->mPikiParms.mMaxFlowerMoveSpeed();
-	} else if (AIConstant::_instance->mConstants.mDoScaleHappaMoveSpeed() && mHappa == Bud) {
-		max = pikiMgr->mPikiParms->mPikiParms.mMaxBudMoveSpeed();
-	}
-
-	mMoveSpeed      = (max - min) * speedRatio + min;
+	setSpeed(speedRatio);
 	mTargetVelocity = mMoveSpeed * direction;
 }
 
@@ -2287,17 +2269,7 @@ void Piki::setSpeed(f32 speedRatio, immut Vector3f& direction)
  */
 void Piki::setSpeed(f32 speedRatio, f32 angle)
 {
-	f32 scale = 1.0f; // i guess they were playing around with this?
-	f32 max   = pikiMgr->mPikiParms->mPikiParms.mMaxLeafMoveSpeed() * scale;
-	if (AIConstant::_instance->mConstants.mDoScaleHappaMoveSpeed() && mHappa == Flower) {
-		max = pikiMgr->mPikiParms->mPikiParms.mMaxFlowerMoveSpeed();
-	} else if (AIConstant::_instance->mConstants.mDoScaleHappaMoveSpeed() && mHappa == Bud) {
-		max = pikiMgr->mPikiParms->mPikiParms.mMaxBudMoveSpeed();
-	}
-
-	f32 min = pikiMgr->mPikiParms->mPikiParms.mMinMoveSpeed() * scale;
-
-	mMoveSpeed = (max - min) * speedRatio + min;
+	setSpeed(speedRatio);
 	mTargetVelocity.set(mMoveSpeed * cosf(angle), 0.0f, mMoveSpeed * sinf(angle));
 }
 

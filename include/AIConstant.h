@@ -34,7 +34,6 @@ struct AIConstant : public Node {
 		    , mJumpTriangleAngleThreshold(this, 90.0f, 0.0f, 0.0f, "p11", "オートジャンプ角度")
 		    , _E4(this, 1, 0, 0, "p12", "投げ=1 転がし=0")
 		    , mDoPluckWithCursor(this, 1, 0, 0, "p13", "カーソル抜き")
-		    , mDoScaleHappaMoveSpeed(this, 1, 0, 0, "p14", "花ピキ足早")
 		    , mMaxPikisOnField(this, MAX_PIKI_ON_FIELD, 0, 0, "p15", "ピキ＋芽 リミット")
 		    , _124(this, 1, 0, 0, "p16", "爆弾方式")
 		    , mWeakSlipFactor(this, 1.0f, 0.0f, 0.0f, "p17", "すべり弱")
@@ -61,7 +60,6 @@ struct AIConstant : public Node {
 		Parm<f32> mJumpTriangleAngleThreshold; // _D4, p11
 		Parm<int> _E4;                         // _E4, p12, meeo: throw toggle (vs rolling pikis lol)?
 		Parm<int> mDoPluckWithCursor;          // _F4, p13, i.e. pluckaphone toggle
-		Parm<int> mDoScaleHappaMoveSpeed;      // _104, p14, bud and flower pikis walk faster than leaves
 		Parm<int> mMaxPikisOnField;            // _114, p15, THE field limit (100 by default)
 		Parm<int> _124;                        // _124, p16, meeo: drop bomb type (immediately vs whistled)?
 		Parm<f32> mWeakSlipFactor;             // _134, p17
