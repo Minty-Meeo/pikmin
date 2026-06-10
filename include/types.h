@@ -278,6 +278,14 @@ inline void padStack(void)
 #define __mwerks_cntlzw(value)            __builtin_clz((unsigned int)(value))
 #endif
 
+// Linker-Generated Symbols (TODO: This is a horrible place for these)
+DECL_SECT(".init") extern char _stack_end[];
+DECL_SECT(".init") extern char _stack_addr[];
+DECL_SECT(".init") extern char _db_stack_end[];
+DECL_SECT(".init") extern char _db_stack_addr[];
+DECL_SECT(".init") extern char __ArenaLo[];
+DECL_SECT(".init") extern char __ArenaHi[];
+
 // Disable clangd warnings
 #ifdef __clang__
 // Allow string literals to be converted to char*

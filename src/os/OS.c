@@ -16,8 +16,6 @@
 #define DB_EXCEPTIONRET_OFFSET  0xC
 #define DB_EXCEPTIONDEST_OFFSET 0x8
 
-extern u8 __ArenaHi[];
-extern u8 __ArenaLo[];
 extern u32 __DVDLongFileNameFlag;
 extern u32 __PADSpec;
 
