@@ -49,6 +49,9 @@ typedef u32 HWND;
 #define BUILD_MATCHING
 #endif
 
+// Temporarily, we shall force USA rev 1.  TODO: remove this.
+#define VERSION_GPIE01_01
+
 // The following version group macro is for conditionally-compiled code shared among Japanese retail versions.
 #if defined(VERSION_GPIJ01_01) || defined(VERSION_GPIJ01_02)
 #define VERSION_GPIJ01
