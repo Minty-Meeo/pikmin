@@ -81,9 +81,9 @@ OSResetCallback OSSetResetCallback(OSResetCallback callback);
 
 extern BOOL __OSIsGcam;
 
-extern u32 OS_RESET_CODE AT_ADDRESS(0x800030F0);
+#define OS_RESET_CODE (*(u32*)(0x800030F0))
 // Set to true by `__OSReboot`, checked if true in `OSGetResetCode`.
-extern volatile u8 OS_REBOOT_BOOL AT_ADDRESS(0x800030E2);
+#define OS_REBOOT_BOOL (*(volatile u8*)(0x800030E2))
 
 //////////////////////////////////
 

@@ -10,7 +10,7 @@ static u32 LatencyTable[8] = {
 	4, 8, 16, 32, 64, 128, 256, 512,
 };
 
-extern u8 GameChoice AT_ADDRESS(OS_BASE_CACHED | 0x30E3);
+#define GameChoice (*(u8*)(OS_BASE_CACHED | 0x30E3))
 
 static void DoUnmount(s32 channel, s32 result);
 

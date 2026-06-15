@@ -13,8 +13,8 @@ typedef s64 OSTime;
 typedef u32 OSTick;
 
 // Clock speeds.
-extern u32 __OSBusClock AT_ADDRESS(OS_BASE_CACHED | 0x00F8);
-extern u32 __OSCoreClock AT_ADDRESS(OS_BASE_CACHED | 0x00FC);
+#define __OSBusClock  (*(u32*)(OS_BASE_CACHED | 0x00F8))
+#define __OSCoreClock (*(u32*)(OS_BASE_CACHED | 0x00FC))
 
 OSTime __OSGetSystemTime();
 

@@ -33,8 +33,8 @@ static void SPEC1_MakeStatus(s32 chan, PADStatus* status, u32 data[2]);
 static void SPEC2_MakeStatus(s32 chan, PADStatus* status, u32 data[2]);
 static BOOL OnReset(BOOL f);
 
-extern u16 __OSWirelessPadFixMode AT_ADDRESS(OS_BASE_CACHED | 0x30E0);
-extern u8 GameChoice AT_ADDRESS(OS_BASE_CACHED | 0x30E3);
+#define __OSWirelessPadFixMode (*(u16*)(OS_BASE_CACHED | 0x30E0))
+#define GameChoice             (*(u8*)(OS_BASE_CACHED | 0x30E3))
 
 static BOOL Initialized = FALSE;
 

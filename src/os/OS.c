@@ -28,7 +28,7 @@ void __OSResetSWInterruptHandler(__OSInterrupt interrupt, OSContext* context);
 #define OS_EXCEPTIONTABLE_ADDR 0x3000
 #define OS_DBJUMPPOINT_ADDR    0x60
 
-extern vu16 __OSDeviceCode AT_ADDRESS(OS_BASE_CACHED | OS_DVD_DEVICECODE);
+#define __OSDeviceCode (*(vu16*)(OS_BASE_CACHED | OS_DVD_DEVICECODE))
 
 // flags and system info
 static OSBootInfo* BootInfo;

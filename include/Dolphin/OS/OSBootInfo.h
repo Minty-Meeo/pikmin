@@ -43,8 +43,8 @@ typedef struct BI2Debug {
 
 #define OS_BOOTROM_ADDR 0x81300000
 
-extern void* OS_BOOT_REGION_START AT_ADDRESS(0x812FDFF0);
-extern void* OS_BOOT_REGION_END AT_ADDRESS(0x812FDFEC);
+#define OS_BOOT_REGION_START (*(void**)(0x812FDFF0))
+#define OS_BOOT_REGION_END   (*(void**)(0x812FDFEC))
 
 //////////////////////////////////
 

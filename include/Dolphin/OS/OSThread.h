@@ -72,10 +72,10 @@ struct OSThread {
 };
 
 // Thread global addresses.
-extern volatile OSContext* __OSCurrentContext AT_ADDRESS((u32)OSPhysicalToCached(0x00D4));
-extern volatile OSContext* __OSFPUContext AT_ADDRESS((u32)OSPhysicalToCached(0x00D8));
-extern OSThreadQueue __OSActiveThreadQueue AT_ADDRESS((u32)OSPhysicalToCached(0x00DC));
-extern OSThread* __OSCurrentThread AT_ADDRESS((u32)OSPhysicalToCached(0x00E4));
+#define __OSCurrentContext    (*(volatile OSContext**)(OSPhysicalToCached(0x00D4)))
+#define __OSFPUContext        (*(volatile OSContext**)(OSPhysicalToCached(0x00D8)))
+#define __OSActiveThreadQueue (*(OSThreadQueue*)(OSPhysicalToCached(0x00DC)))
+#define __OSCurrentThread     (*(OSThread**)(OSPhysicalToCached(0x00E4)))
 
 //////////////////////////////////
 

@@ -11,8 +11,8 @@ static void* SaveEnd   = NULL;
 
 static volatile BOOL Prepared;
 
-extern u32 OS_UNK_CODE AT_ADDRESS(0x817FFFF8);
-extern u32 OS_HOT_RESET_CODE AT_ADDRESS(0x817FFFFC);
+#define OS_UNK_CODE       (*(u32*)(0x817FFFF8))
+#define OS_HOT_RESET_CODE (*(u32*)(0x817FFFFC))
 
 extern void* __OSSavedRegionStart;
 extern void* __OSSavedRegionEnd;

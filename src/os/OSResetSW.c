@@ -8,7 +8,7 @@ static BOOL LastState;
 static OSTime HoldUp;
 static OSTime HoldDown;
 
-extern u8 GameChoice AT_ADDRESS(OS_BASE_CACHED | 0x30E3);
+#define GameChoice (*(u8*)(OS_BASE_CACHED | 0x30E3))
 
 /**
  * @TODO: Documentation
