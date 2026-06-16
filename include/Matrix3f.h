@@ -54,8 +54,10 @@ protected:
 public:
 	void identity()
 	{
-		for (int i = 0; i < 9; i++) {
-			mMtx[0][i] = 0.0f; // sure.
+		for (int i = 0; i < 3; i++) {
+			for (int j = 0; j < 3; j++) {
+				mMtx[i][j] = 0.0f;
+			}
 		}
 
 		mMtx[0][0] = mMtx[1][1] = mMtx[2][2] = 1.0f;

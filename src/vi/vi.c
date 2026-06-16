@@ -104,14 +104,12 @@ s32 getEncoderType(void)
 static int cntlzd(u64 bit)
 {
 	u32 hi, lo;
-	int value;
 
-	hi    = (u32)(bit >> 32);
-	lo    = (u32)(bit & 0xFFFFFFFF);
-	value = __mwerks_cntlzw(hi);
+	hi = bit >> 32;
+	lo = bit & 0xFFFFFFFF;
 
-	if (value < 32) {
-		return value;
+	if (hi != 0) {
+		return __mwerks_cntlzw(hi);
 	}
 
 	return (32 + __mwerks_cntlzw(lo));
