@@ -29,6 +29,8 @@ set(CMAKE_POSITION_INDEPENDENT_CODE OFF)
 
 add_compile_options(-msdata=eabi)
 # add_compile_options(-save-temps=obj)
+add_compile_options(-Wa,-mregnames)
+add_compile_options(-Wa,-I${PROJECT_SOURCE_DIR}/include)  # HACK
 
 add_compile_options(-Wno-multichar)
 add_compile_options(-Wno-write-strings)

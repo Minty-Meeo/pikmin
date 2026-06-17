@@ -92,10 +92,10 @@ void OSProtectRange(u32 chan, void* addr, u32 nBytes, u32 control)
 
 #if OS_BUILD_VERSION >= 20011112L
 
-static ASM void Config24MB()
-{
-#ifdef __MWERKS__ // clang-format off
-	nofralloc
+static void Config24MB();
+asm(R"(
+	.local Config24MB
+Config24MB:
 
 	li       r7,     0x00000000
 
@@ -132,19 +132,21 @@ static ASM void Config24MB()
 	isync
 
 	mfmsr    r3
-	ori      r3, r3, MSR_IR | MSR_DR
+	ori      r3, r3, 0x30  # MSR_IR | MSR_DR
 	mtsrr1   r3
 
 	mflr     r3
 	mtsrr0   r3
 	rfi
-#endif // clang-format on
-}
 
-static ASM void Config48MB()
-{
-#ifdef __MWERKS__ // clang-format off
-	nofralloc
+	.size Config24MB, . - Config24MB
+	.type Config24MB, @function
+)");
+
+static void Config48MB();
+asm(R"(
+	.local Config48MB
+Config48MB:
 
 	li       r7,     0x00000000
 
@@ -181,27 +183,32 @@ static ASM void Config48MB()
 	isync
 
 	mfmsr    r3
-	ori      r3, r3, MSR_IR | MSR_DR
+	ori      r3, r3, 0x30  # MSR_IR | MSR_DR
 	mtsrr1   r3
 
 	mflr     r3
 	mtsrr0   r3
 	rfi
-#endif // clang-format on
-}
 
-static ASM void RealMode(register u32 addr)
-{
-#ifdef __MWERKS__ // clang-format off
-	nofralloc
-	clrlwi  addr, addr, 2
-	mtsrr0  addr
+	.size Config48MB, . - Config48MB
+	.type Config48MB, @function
+)");
+
+static void RealMode(u32 addr);
+asm(R"(
+	.local RealMode
+RealMode:
+
+	clrlwi  r3, r3, 2
+	mtsrr0  r3
 	mfmsr   r3
-	rlwinm  r3, r3, 0, 28, 25  // ~(MSR_IR | MSR_DR)
+	rlwinm  r3, r3, 0, 28, 25  # ~(MSR_IR | MSR_DR)
 	mtsrr1  r3
 	rfi
-#endif // clang-format on
-}
+
+	.size RealMode, . - RealMode
+	.type RealMode, @function
+)");
 
 #endif
 

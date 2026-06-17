@@ -28,23 +28,32 @@ typedef struct _ApploaderHeader {
 
 static ApploaderHeader Header ATTRIBUTE_ALIGN(32);
 
-/**
- * @TODO: Documentation
- */
-static ASM void Run(register voidfunctionptr entrypoint)
+// This function exists to kick the following global ASM function back into the .text section
+static void PreASMDummyFunction(void)
 {
-#ifdef __MWERKS__ // clang-format off
-	fralloc
+}
+
+/**
+ * @note Don't try converting this function to C.  It looks very doable, but GCC refuses to perform the
+ * call to the entrypoint when optimizations cause this function to inline.  What UB am I even causing??
+ */
+[[noreturn]]
+static void Run(voidfunctionptr entrypoint);
+asm(R"(
+	.local Run
+Run:
+
+	mr     r31, r3
 	bl     OSDisableInterrupts
 	bl     ICFlashInvalidate
 	sync
 	isync
-	mtlr   entrypoint
+	mtlr   r31
 	blr
-	frfree
-	blr
-#endif // clang-format on
-}
+
+	.size Run, . - Run
+	.type Run, @function
+)");
 
 /**
  * @TODO: Documentation

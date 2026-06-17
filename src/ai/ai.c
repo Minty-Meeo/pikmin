@@ -18,7 +18,7 @@ static OSTime buffer;
 static void __AI_set_stream_sample_rate(u32 rate);
 static void __AISHandler(s16 interrupt, OSContext* context);
 static void __AIDHandler(s16 interrupt, OSContext* context);
-static void __AICallbackStackSwitch(register AIDCallback cb);
+static void __AICallbackStackSwitch(AIDCallback cb);
 static void __AI_SRC_INIT(void);
 
 /**
@@ -373,38 +373,23 @@ static void __AIDHandler(s16 interrupt, OSContext* context)
 /**
  * @TODO: Documentation
  */
-ASM static void __AICallbackStackSwitch(register AIDCallback cb)
+static void __AICallbackStackSwitch(AIDCallback cb)
 {
-#ifdef __MWERKS__ // clang-format off
-	// Allocate stack frame
-	fralloc
+	register u8* volatile sp asm("r1");
 
 	// Store current stack
-	lis   r5,     __OldStack @ha
-	addi  r5, r5, __OldStack @l
-	stw   r1, 0 (r5)
+	__OldStack = sp;
 
 	// Load stack for callback
-	lis   r5,     __CallbackStack @ha
-	addi  r5, r5, __CallbackStack @l
-	lwz   r1, 0 (r5)
+	sp = __CallbackStack;
 
 	// Move stack down 8 bytes
-	subi  r1, r1, 8
+	sp -= 8;
 	// Call callback
-	mtlr  cb
-	blrl
+	cb();
 
 	// Restore old stack
-	lis   r5,     __OldStack @ha
-	addi  r5, r5, __OldStack @l
-	lwz   r1, 0 (r5)
-
-	// Free stack frame
-	frfree
-
-	blr
-#endif // clang-format on
+	sp = __OldStack;
 }
 
 /**

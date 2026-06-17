@@ -187,6 +187,7 @@ void OSCancelAlarm(OSAlarm* alarm)
 /**
  * @TODO: Documentation
  */
+[[gnu::used]]
 static void DecrementerExceptionCallback(__OSException exception, OSContext* context)
 {
 	OSAlarm* alarm;
@@ -246,11 +247,18 @@ static void DecrementerExceptionCallback(__OSException exception, OSContext* con
 /**
  * @TODO: Documentation
  */
-static ASM void DecrementerExceptionHandler(register __OSException exception, register OSContext* context)
-{
-#ifdef __MWERKS__ // clang-format off
-	nofralloc
-	OS_EXCEPTION_SAVE_GPRS(context)
+static void DecrementerExceptionHandler(__OSException exception, OSContext* context);
+asm(R"(
+	.include "Dolphin/OS/OSContext.inc"
+	.include "Dolphin/PPCArch.inc"
+
+	.local DecrementerExceptionHandler
+DecrementerExceptionHandler:
+	)"                         //
+    OS_EXCEPTION_SAVE_GPRS(r4) //
+    R"(
 	b  DecrementerExceptionCallback
-#endif // clang-format on
-}
+
+	.size DecrementerExceptionHandler, . - DecrementerExceptionHandler
+	.type DecrementerExceptionHandler, @function
+	)");

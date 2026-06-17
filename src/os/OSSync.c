@@ -10,24 +10,28 @@ void __OSSystemCallVectorEnd();
 /**
  * @TODO: Documentation
  */
-static ASM void SystemCallVector(void)
-{
-#ifdef __MWERKS__ // clang-format off
-	nofralloc
+static void SystemCallVector(void);
+asm(R"(
+	.local SystemCallVector
+SystemCallVector:
 
-entry __OSSystemCallVectorStart
-	mfspr  r9, SPR_HID0
-	ori    r10, r9, HID0_ABE
-	mtspr  SPR_HID0, r10
+	.global __OSSystemCallVectorStart
+__OSSystemCallVectorStart:
+
+	mfhid0  r9
+	ori     r10, r9, 8  # HID0_ABE
+	mfhid0  r10
 	isync
 	sync
-	mtspr  SPR_HID0, r9
+	mfhid0  r9
 	rfi
 
-entry __OSSystemCallVectorEnd
-	nop
-#endif // clang-format on
-}
+	.global __OSSystemCallVectorEnd
+__OSSystemCallVectorEnd:
+
+	.size SystemCallVector, . - SystemCallVector
+	.type SystemCallVector, @function
+)");
 
 /**
  * @TODO: Documentation

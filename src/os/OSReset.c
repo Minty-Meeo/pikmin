@@ -75,16 +75,20 @@ BOOL CallResetFunctions(BOOL final)
 /**
  * @TODO: Documentation
  */
-static void ASM Reset(register s32 resetCode)
-{
-#ifdef __MWERKS__ // clang-format off
-	nofralloc
+[[noreturn]]
+static void Reset(s32 resetCode);
+asm(R"(
+	.include "Dolphin/hw_regs.inc"
+
+	.local Reset
+Reset:
+
 	b       _jump1
 
 _begin:
-	mfspr   r8, SPR_HID0
-	ori     r8, r8, HID0_ABE
-	mtspr   SPR_HID0, r8
+	mfhid0  r8
+	ori     r8, r8, 8  # HID0_ABE
+	mthid0  r8
 	isync
 	sync
 	nop
@@ -110,8 +114,8 @@ _setPIReg:
 	lis     r8,     __PIRegs @h
 	ori     r8, r8, __PIRegs @l
 	li      r4, 3
-	stw     r4, PI_RESETCODE * 4 (r8)
-	stw     resetCode, PI_RESETCODE * 4 (r8)
+	stw     r4, 0x24 (r8)  # PI_RESETCODE * 4
+	stw     r3, 0x24 (r8)  # PI_RESETCODE * 4
 	nop
 	b       _noptrap
 
@@ -124,8 +128,10 @@ _noptrap:
 
 _jump4:
 	b       _begin
-#endif // clang-format on
-}
+
+	.size Reset, . - Reset
+	.type Reset, @function
+)");
 
 /**
  * @TODO: Documentation

@@ -3315,43 +3315,46 @@ void BaseShape::updateAnim(Graphics& gfx, immut Matrix4f& mtx, f32* p3)
 /**
  * @brief Likely fabricated static inline function useful for DOL-exclusive code in `BaseShape::calcWeightedMatrices`.
  */
-static inline void addMatrixWeights(register f32* animMtx, register f32* weightedMtx, register f32 weights[2])
+static inline void addMatrixWeights(f32* animMtx, f32* weightedMtx, f32 weights[2])
 {
-#ifdef __MWERKS__
-	asm {
-		psq_l    f0, 0x00 (weights), 0, 0;
+	f64 tmp0, tmp1, tmp2, tmp3;
 
-		psq_l    f1, 0x00 (animMtx), 0, 0;
-		psq_l    f2, 0x00 (weightedMtx), 0, 0;
-		ps_madd  f1, f2, f0, f1;
-		psq_st   f1, 0x00 (animMtx), 0, 0;
+	asm(R"(
+		psq_l    %[tmp0], 0x00 (%[weights]), 0, 0
 
-		psq_l    f3, 0x08 (animMtx), 0, 0;
-		psq_l    f2, 0x08 (weightedMtx), 0, 0;
-		ps_madd  f3, f2, f0, f3;
-		psq_st   f3, 0x08 (animMtx), 0, 0;
+		psq_l    %[tmp1], 0x00 (%[animMtx]), 0, 0
+		psq_l    %[tmp2], 0x00 (%[weightedMtx]), 0, 0
+		ps_madd  %[tmp1], %[tmp2], %[tmp0], %[tmp1]
+		psq_st   %[tmp1], 0x00 (%[animMtx]), 0, 0
 
-		psq_l    f1, 0x10 (animMtx), 0, 0;
-		psq_l    f2, 0x10 (weightedMtx), 0, 0;
-		ps_madd  f1, f2, f0, f1;
-		psq_st   f1, 0x10 (animMtx), 0, 0;
+		psq_l    %[tmp3], 0x08 (%[animMtx]), 0, 0
+		psq_l    %[tmp2], 0x08 (%[weightedMtx]), 0, 0
+		ps_madd  %[tmp3], %[tmp2], %[tmp0], %[tmp3]
+		psq_st   %[tmp3], 0x08 (%[animMtx]), 0, 0
 
-		psq_l    f3, 0x18 (animMtx), 0, 0;
-		psq_l    f2, 0x18 (weightedMtx), 0, 0;
-		ps_madd  f3, f2, f0, f3;
-		psq_st   f3, 0x18 (animMtx), 0, 0;
+		psq_l    %[tmp1], 0x10 (%[animMtx]), 0, 0
+		psq_l    %[tmp2], 0x10 (%[weightedMtx]), 0, 0
+		ps_madd  %[tmp1], %[tmp2], %[tmp0], %[tmp1]
+		psq_st   %[tmp1], 0x10 (%[animMtx]), 0, 0
 
-		psq_l    f1, 0x20 (animMtx), 0, 0;
-		psq_l    f2, 0x20 (weightedMtx), 0, 0;
-		ps_madd  f1, f2, f0, f1;
-		psq_st   f1, 0x20 (animMtx), 0, 0;
+		psq_l    %[tmp3], 0x18 (%[animMtx]), 0, 0
+		psq_l    %[tmp2], 0x18 (%[weightedMtx]), 0, 0
+		ps_madd  %[tmp3], %[tmp2], %[tmp0], %[tmp3]
+		psq_st   %[tmp3], 0x18 (%[animMtx]), 0, 0
 
-		psq_l    f3, 0x28 (animMtx), 0, 0;
-		psq_l    f2, 0x28 (weightedMtx), 0, 0;
-		ps_madd  f3, f2, f0, f3;
-		psq_st   f3, 0x28 (animMtx), 0, 0;
-	}
-#endif
+		psq_l    %[tmp1], 0x20 (%[animMtx]), 0, 0
+		psq_l    %[tmp2], 0x20 (%[weightedMtx]), 0, 0
+		ps_madd  %[tmp1], %[tmp2], %[tmp0], %[tmp1]
+		psq_st   %[tmp1], 0x20 (%[animMtx]), 0, 0
+
+		psq_l    %[tmp3], 0x28 (%[animMtx]), 0, 0
+		psq_l    %[tmp2], 0x28 (%[weightedMtx]), 0, 0
+		ps_madd  %[tmp3], %[tmp2], %[tmp0], %[tmp3]
+		psq_st   %[tmp3], 0x28 (%[animMtx]), 0, 0
+		)"
+	    : [tmp0] "=&f"(tmp0), [tmp1] "=&f"(tmp1), [tmp2] "=&f"(tmp2), [tmp3] "=&f"(tmp3), "+m"(*(f32(*)[12])animMtx)
+	    : [animMtx] "r"(animMtx), [weightedMtx] "r"(weightedMtx), [weights] "r"(weights), "m"(*weights), "m"(*(f32(*)[12])weightedMtx)
+	    : "memory");
 }
 
 /**

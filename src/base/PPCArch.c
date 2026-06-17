@@ -5,7 +5,7 @@
  */
 u32 PPCMfmsr(void)
 {
-	register u32 result;
+	u32 result;
 	PPC_MOVE_FROM_MSR(result);
 	return result;
 }
@@ -13,7 +13,7 @@ u32 PPCMfmsr(void)
 /**
  * @TODO: Documentation
  */
-void PPCMtmsr(register u32 value)
+void PPCMtmsr(u32 value)
 {
 	PPC_MOVE_TO_MSR(value);
 }
@@ -47,7 +47,7 @@ void PPCAndCMsr(void)
  */
 u32 PPCMfhid0(void)
 {
-	register u32 result;
+	u32 result;
 	PPC_MOVE_FROM_SPR(SPR_HID0, result);
 	return result;
 }
@@ -56,7 +56,7 @@ u32 PPCMfhid0(void)
  * @TODO: Documentation
  * @note UNUSED Size: 000008 (Matching by size)
  */
-void PPCMthid0(register u32 value)
+void PPCMthid0(u32 value)
 {
 	PPC_MOVE_TO_SPR(SPR_HID0, value);
 }
@@ -67,7 +67,7 @@ void PPCMthid0(register u32 value)
  */
 u32 PPCMfhid1(void)
 {
-	register u32 result;
+	u32 result;
 	PPC_MOVE_FROM_SPR(SPR_HID1, result);
 	return result;
 }
@@ -77,7 +77,7 @@ u32 PPCMfhid1(void)
  */
 u32 PPCMfl2cr(void)
 {
-	register u32 result;
+	u32 result;
 	PPC_MOVE_FROM_SPR(SPR_L2CR, result);
 	return result;
 }
@@ -85,7 +85,7 @@ u32 PPCMfl2cr(void)
 /**
  * @TODO: Documentation
  */
-void PPCMtl2cr(register u32 value)
+void PPCMtl2cr(u32 value)
 {
 	PPC_MOVE_TO_SPR(SPR_L2CR, value);
 }
@@ -93,7 +93,7 @@ void PPCMtl2cr(register u32 value)
 /**
  * @TODO: Documentation
  */
-void PPCMtdec(register u32 value)
+void PPCMtdec(u32 value)
 {
 	PPC_MOVE_TO_SPR(SPR_DEC, value);
 }
@@ -104,7 +104,7 @@ void PPCMtdec(register u32 value)
  */
 u32 PPCMfdec(void)
 {
-	register u32 result;
+	u32 result;
 	PPC_MOVE_FROM_SPR(SPR_DEC, result);
 	return result;
 }
@@ -114,9 +114,7 @@ u32 PPCMfdec(void)
  */
 void PPCSync(void)
 {
-#ifdef __MWERKS__
-	asm { sc }
-#endif
+	asm("sc");
 }
 
 /**
@@ -125,23 +123,23 @@ void PPCSync(void)
  */
 void PPCEieio(void)
 {
-#ifdef __MWERKS__
-	asm {
-		mfmsr   r5
-		rlwinm  r6, r5, 0, 17, 15 // ~MSR_EE
-		mtmsr   r6
-		mfspr   r3, SPR_HID0
-		ori     r4, r3, HID0_ABE
-		mtspr   SPR_HID0, r4
-		isync
-		eieio
-		isync
+	u32 oldMsr, tmpMsr, oldHID0, tmpHID0;
 
-		mtspr   SPR_HID0, r3
-		mtmsr   r5
-		isync
-	}
-#endif
+	PPC_MOVE_FROM_MSR(oldMsr);
+	tmpMsr = oldMsr & ~MSR_EE;
+	PPC_MOVE_TO_MSR(tmpMsr);
+
+	PPC_MOVE_FROM_SPR(SPR_HID0, oldHID0);
+	tmpHID0 = oldHID0 | HID0_ABE;
+	PPC_MOVE_TO_SPR(SPR_HID0, tmpHID0);
+
+	__mwerks_isync();
+	__mwerks_eieio();
+	__mwerks_isync();
+
+	PPC_MOVE_TO_SPR(SPR_HID0, oldHID0);
+	PPC_MOVE_TO_MSR(oldMsr);
+	__mwerks_isync();
 }
 
 /**
@@ -151,13 +149,11 @@ void PPCHalt(void)
 {
 	__mwerks_sync();
 	for (;;) {
-#ifdef __MWERKS__
-		asm {
+		asm(R"(
 			nop
 			li   r3, 0
 			nop
-		}
-#endif
+			)");
 	}
 }
 
@@ -167,7 +163,7 @@ void PPCHalt(void)
  */
 u32 PPCMfmmcr0(void)
 {
-	register u32 result;
+	u32 result;
 	PPC_MOVE_FROM_SPR(SPR_MMCR0, result);
 	return result;
 }
@@ -176,7 +172,7 @@ u32 PPCMfmmcr0(void)
  * @TODO: Documentation
  * @note UNUSED Size: 000008 (Matching by size)
  */
-void PPCMtmmcr0(register u32 value)
+void PPCMtmmcr0(u32 value)
 {
 	PPC_MOVE_TO_SPR(SPR_MMCR0, value);
 }
@@ -187,7 +183,7 @@ void PPCMtmmcr0(register u32 value)
  */
 u32 PPCMfmmcr1(void)
 {
-	register u32 result;
+	u32 result;
 	PPC_MOVE_FROM_SPR(SPR_MMCR1, result);
 	return result;
 }
@@ -196,7 +192,7 @@ u32 PPCMfmmcr1(void)
  * @TODO: Documentation
  * @note UNUSED Size: 000008 (Matching by size)
  */
-void PPCMtmmcr1(register u32 value)
+void PPCMtmmcr1(u32 value)
 {
 	PPC_MOVE_TO_SPR(SPR_MMCR1, value);
 }
@@ -207,7 +203,7 @@ void PPCMtmmcr1(register u32 value)
  */
 u32 PPCMfpmc1(void)
 {
-	register u32 result;
+	u32 result;
 	PPC_MOVE_FROM_SPR(SPR_PMC1, result);
 	return result;
 }
@@ -216,7 +212,7 @@ u32 PPCMfpmc1(void)
  * @TODO: Documentation
  * @note UNUSED Size: 000008 (Matching by size)
  */
-void PPCMtpmc1(register u32 value)
+void PPCMtpmc1(u32 value)
 {
 	PPC_MOVE_TO_SPR(SPR_PMC1, value);
 }
@@ -227,7 +223,7 @@ void PPCMtpmc1(register u32 value)
  */
 u32 PPCMfpmc2(void)
 {
-	register u32 result;
+	u32 result;
 	PPC_MOVE_FROM_SPR(SPR_PMC2, result);
 	return result;
 }
@@ -236,7 +232,7 @@ u32 PPCMfpmc2(void)
  * @TODO: Documentation
  * @note UNUSED Size: 000008 (Matching by size)
  */
-void PPCMtpmc2(register u32 value)
+void PPCMtpmc2(u32 value)
 {
 	PPC_MOVE_TO_SPR(SPR_PMC2, value);
 }
@@ -247,7 +243,7 @@ void PPCMtpmc2(register u32 value)
  */
 u32 PPCMfpmc3(void)
 {
-	register u32 result;
+	u32 result;
 	PPC_MOVE_FROM_SPR(SPR_PMC3, result);
 	return result;
 }
@@ -256,7 +252,7 @@ u32 PPCMfpmc3(void)
  * @TODO: Documentation
  * @note UNUSED Size: 000008 (Matching by size)
  */
-void PPCMtpmc3(register u32 value)
+void PPCMtpmc3(u32 value)
 {
 	PPC_MOVE_TO_SPR(SPR_PMC3, value);
 }
@@ -267,7 +263,7 @@ void PPCMtpmc3(register u32 value)
  */
 u32 PPCMfpmc4(void)
 {
-	register u32 result;
+	u32 result;
 	PPC_MOVE_FROM_SPR(SPR_PMC4, result);
 	return result;
 }
@@ -276,7 +272,7 @@ u32 PPCMfpmc4(void)
  * @TODO: Documentation
  * @note UNUSED Size: 000008 (Matching by size)
  */
-void PPCMtpmc4(register u32 value)
+void PPCMtpmc4(u32 value)
 {
 	PPC_MOVE_TO_SPR(SPR_PMC4, value);
 }
@@ -287,7 +283,7 @@ void PPCMtpmc4(register u32 value)
  */
 u32 PPCMfsia(void)
 {
-	register u32 result;
+	u32 result;
 	PPC_MOVE_FROM_SPR(SPR_SIA, result);
 	return result;
 }
@@ -296,7 +292,7 @@ u32 PPCMfsia(void)
  * @TODO: Documentation
  * @note UNUSED Size: 000008 (Matching by size)
  */
-void PPCMtsia(register u32 value)
+void PPCMtsia(u32 value)
 {
 	PPC_MOVE_TO_SPR(SPR_SIA, value);
 }
@@ -306,7 +302,7 @@ void PPCMtsia(register u32 value)
  */
 u32 PPCMfhid2(void)
 {
-	register u32 result;
+	u32 result;
 	PPC_MOVE_FROM_SPR(SPR_HID2, result);
 	return result;
 }
@@ -314,7 +310,7 @@ u32 PPCMfhid2(void)
 /**
  * @TODO: Documentation
  */
-void PPCMthid2(register u32 value)
+void PPCMthid2(u32 value)
 {
 	PPC_MOVE_TO_SPR(SPR_HID2, value);
 }
@@ -325,7 +321,7 @@ void PPCMthid2(register u32 value)
  */
 u32 PPCMfwpar(void)
 {
-	register u32 result;
+	u32 result;
 	PPC_MOVE_FROM_SPR(SPR_WPAR, result);
 	return result;
 }
@@ -333,7 +329,7 @@ u32 PPCMfwpar(void)
 /**
  * @TODO: Documentation
  */
-void PPCMtwpar(register u32 value)
+void PPCMtwpar(u32 value)
 {
 	PPC_MOVE_TO_SPR(SPR_WPAR, value);
 }
@@ -344,7 +340,7 @@ void PPCMtwpar(register u32 value)
  */
 u32 PPCMfdmaU(void)
 {
-	register u32 result;
+	u32 result;
 	PPC_MOVE_FROM_SPR(SPR_DMA_U, result);
 	return result;
 }
@@ -355,7 +351,7 @@ u32 PPCMfdmaU(void)
  */
 u32 PPCMfdmaL(void)
 {
-	register u32 result;
+	u32 result;
 	PPC_MOVE_FROM_SPR(SPR_DMA_L, result);
 	return result;
 }
@@ -364,7 +360,7 @@ u32 PPCMfdmaL(void)
  * @TODO: Documentation
  * @note UNUSED Size: 000008 (Matching by size)
  */
-void PPCMtdmaU(register u32 value)
+void PPCMtdmaU(u32 value)
 {
 	PPC_MOVE_TO_SPR(SPR_DMA_U, value);
 }
@@ -373,7 +369,7 @@ void PPCMtdmaU(register u32 value)
  * @TODO: Documentation
  * @note UNUSED Size: 000008 (Matching by size)
  */
-void PPCMtdmaL(register u32 value)
+void PPCMtdmaL(u32 value)
 {
 	PPC_MOVE_TO_SPR(SPR_DMA_L, value);
 }
@@ -384,7 +380,7 @@ void PPCMtdmaL(register u32 value)
  */
 u32 PPCMfpvr(void)
 {
-	register u32 result;
+	u32 result;
 	PPC_MOVE_FROM_SPR(SPR_PVR, result);
 	return result;
 }

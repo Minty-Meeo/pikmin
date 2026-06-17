@@ -1,6 +1,7 @@
 #include "Dolphin/PPCArch.h"
 #include "Dolphin/db.h"
 #include "Dolphin/os.h"
+#include <stdint.h>
 
 /**
  * @TODO: Documentation
@@ -14,19 +15,13 @@ void DCFlashInvalidate(void)
 /**
  * @TODO: Documentation
  */
-ASM void DCEnable(void)
+void DCEnable(void)
 {
-#ifdef __MWERKS__ // clang-format off
-	nofralloc
-
-	sync
-
-	mfspr  r3, SPR_HID0
-	ori    r3, r3, HID0_DCE
-	mtspr  SPR_HID0, r3
-
-	blr
-#endif // clang-format on
+	int hid0;
+	__mwerks_sync();
+	PPC_MOVE_FROM_SPR(SPR_HID0, hid0);
+	hid0 |= HID0_DCE;
+	PPC_MOVE_TO_SPR(SPR_HID0, hid0);
 }
 
 /**
@@ -105,160 +100,166 @@ void DCBlockInvalidate(void)
  * @note Dolphin Emulator has a speedhack in its JITs to recognize the instructions in this
  * loop in order to batch data cache operations.  See `Jit64`/`JitArm64::dcbx` for details.
  */
-ASM void DCInvalidateRange(register void* addr, register u32 nBytes) {
-#ifdef __MWERKS__ // clang-format off
-	nofralloc
-	cmplwi   nBytes, 0
-	blelr-
-	rlwinm.  r5, addr, 0, 27, 31
-	beq      _noadd
-	addi     nBytes, nBytes, 0x20
-_noadd:
-	addi     nBytes, nBytes, 31
-	srwi     nBytes, nBytes, 5
-	mtctr    nBytes
-_loop:
-	dcbi     0, addr
-	addi     addr, addr, 32
-	bdnz     _loop
-	blr
-#endif // clang-format on
+void DCInvalidateRange(void* addr, u32 nBytes)
+{
+	if ((s32)nBytes <= 0)
+		return;
+
+	if ((uintptr_t)addr & 31)
+		nBytes += 32;
+	const u32 nLines = (nBytes + 31) / 32;
+
+	asm volatile(
+	    R"(
+		mtctr  %[nLines]
+	1:
+		dcbi   0, %[addr]
+		addi   %[addr], %[addr], 32
+		bdnz   1b
+		)"
+	    : [addr] "+r"(addr)
+	    : [nLines] "r"(nLines)
+	    : "ctr");
 }
 
 /**
  * @note Dolphin Emulator has a speedhack in its JITs to recognize the instructions in this
  * loop in order to batch data cache operations.  See `Jit64`/`JitArm64::dcbx` for details.
  */
-ASM void DCFlushRange(register void* addr, register u32 nBytes) {
-#ifdef __MWERKS__ // clang-format off
-	nofralloc
-	cmplwi   nBytes, 0
-	blelr-
-	rlwinm.  r5, addr, 0, 27, 31
-	beq      _noadd
-	addi     nBytes, nBytes, 0x20
-_noadd:
-	addi     nBytes, nBytes, 31
-	srwi     nBytes, nBytes, 5
-	mtctr    nBytes
-_loop:
-	dcbf     0, addr
-	addi     addr, addr, 32
-	bdnz     _loop
+void DCFlushRange(void* addr, u32 nBytes)
+{
+	if ((s32)nBytes <= 0)
+		return;
 
-	sc
+	if ((uintptr_t)addr & 31)
+		nBytes += 32;
+	const u32 nLines = (nBytes + 31) / 32;
 
-	blr
-#endif // clang-format on
+	asm volatile(
+	    R"(
+		mtctr  %[nLines]
+	1:
+		dcbf   0, %[addr]
+		addi   %[addr], %[addr], 32
+		bdnz   1b
+		)"
+	    : [addr] "+r"(addr)
+	    : [nLines] "r"(nLines)
+	    : "ctr");
+
+	__mwerks_sync();
 }
 
 /**
  * @note Dolphin Emulator has a speedhack in its JITs to recognize the instructions in this
  * loop in order to batch data cache operations.  See `Jit64`/`JitArm64::dcbx` for details.
  */
-ASM void DCStoreRange(register void* addr, register u32 nBytes) {
-#ifdef __MWERKS__ // clang-format off
-	nofralloc
-	cmplwi   nBytes, 0
-	blelr-
-	rlwinm.  r5, addr, 0, 27, 31
-	beq      _noadd
-	addi     nBytes, nBytes, 0x20
-_noadd:
-	addi     nBytes, nBytes, 31
-	srwi     nBytes, nBytes, 5
-	mtctr    nBytes
-_loop:
-	dcbst    0, addr
-	addi     addr, addr, 32
-	bdnz     _loop
+void DCStoreRange(void* addr, u32 nBytes)
+{
+	if ((s32)nBytes <= 0)
+		return;
 
-	sc
+	if ((uintptr_t)addr & 31)
+		nBytes += 32;
+	const u32 nLines = (nBytes + 31) / 32;
 
-	blr
-#endif // clang-format on
+	asm volatile(
+	    R"(
+		mtctr  %[nLines]
+	1:
+		dcbst  0, %[addr]
+		addi   %[addr], %[addr], 32
+		bdnz   1b
+		)"
+	    : [addr] "+r"(addr)
+	    : [nLines] "r"(nLines)
+	    : "ctr");
+
+	__mwerks_sync();
 }
 
 /**
  * @note Dolphin Emulator has a speedhack in its JITs to recognize the instructions in this
  * loop in order to batch data cache operations.  See `Jit64`/`JitArm64::dcbx` for details.
  */
-ASM void DCFlushRangeNoSync(register void* addr, register u32 nBytes) {
-#ifdef __MWERKS__ // clang-format off
-	nofralloc
-	cmplwi   nBytes, 0
-	blelr-
-	rlwinm.  r5, addr, 0, 27, 31
-	beq      _noadd
-	addi     nBytes, nBytes, 0x20
-_noadd:
-	addi     nBytes, nBytes, 31
-	srwi     nBytes, nBytes, 5
-	mtctr    nBytes
-_loop:
-	dcbf     0, addr
-	addi     addr, addr, 32
-	bdnz     _loop
+void DCFlushRangeNoSync(void* addr, u32 nBytes)
+{
+	if ((s32)nBytes <= 0)
+		return;
 
-	blr
-#endif // clang-format on
+	if ((uintptr_t)addr & 31)
+		nBytes += 32;
+	const u32 nLines = (nBytes + 31) / 32;
+
+	asm volatile(
+	    R"(
+		mtctr  %[nLines]
+	1:
+		dcbf   0, %[addr]
+		addi   %[addr], %[addr], 32
+		bdnz   1b
+		)"
+	    : [addr] "+r"(addr)
+	    : [nLines] "r"(nLines)
+	    : "ctr");
 }
 
 /**
  * @note Dolphin Emulator has a speedhack in its JITs to recognize the instructions in this
  * loop in order to batch data cache operations.  See `Jit64`/`JitArm64::dcbx` for details.
  */
-ASM void DCStoreRangeNoSync(register void* addr, register u32 nBytes) {
-#ifdef __MWERKS__ // clang-format off
-	nofralloc
-	cmplwi   nBytes, 0
-	blelr-
-	rlwinm.  r5, addr, 0, 27, 31
-	beq      _noadd
-	addi     nBytes, nBytes, 0x20
-_noadd:
-	addi     nBytes, nBytes, 31
-	srwi     nBytes, nBytes, 5
-	mtctr    nBytes
-_loop:
-	dcbst    0, addr
-	addi     addr, addr, 32
-	bdnz     _loop
+void DCStoreRangeNoSync(void* addr, u32 nBytes)
+{
+	if ((s32)nBytes <= 0)
+		return;
 
-	blr
-#endif // clang-format on
+	if ((uintptr_t)addr & 31)
+		nBytes += 32;
+	const u32 nLines = (nBytes + 31) / 32;
+
+	asm volatile(
+	    R"(
+		mtctr  %[nLines]
+	1:
+		dcbst  0, %[addr]
+		addi   %[addr], %[addr], 32
+		bdnz   1b
+		)"
+	    : [addr] "+r"(addr)
+	    : [nLines] "r"(nLines)
+	    : "ctr");
 }
 
 /**
  * @TODO: Documentation
  */
-ASM void DCZeroRange(register void* addr, register u32 nBytes)
+void DCZeroRange(void* addr, u32 nBytes)
 {
-#ifdef __MWERKS__ // clang-format off
-	nofralloc
-	cmplwi   nBytes, 0
-	blelr-
-	rlwinm.  r5, addr, 0, 27, 31
-	beq      _noadd
-	addi     nBytes, nBytes, 0x20
-_noadd:
-	addi     nBytes, nBytes, 31
-	srwi     nBytes, nBytes, 5
-	mtctr    nBytes
-_loop:
-	dcbz     0, addr
-	addi     addr, addr, 32
-	bdnz     _loop
+	if ((s32)nBytes <= 0)
+		return;
 
-	blr
-#endif // clang-format on
+	if ((uintptr_t)addr & 31)
+		nBytes += 32;
+	const u32 nLines = (nBytes + 31) / 32;
+
+	asm volatile(
+	    R"(
+		mtctr  %[nLines]
+	1:
+		dcbz   0, %[addr]
+		addi   %[addr], %[addr], 32
+		bdnz   1b
+		)"
+	    : [addr] "+r"(addr)
+	    : [nLines] "r"(nLines)
+	    : "ctr");
 }
 
 /**
  * @TODO: Documentation
  * @note UNUSED Size: 000030
  */
-void DCTouchRange(register void* addr, register u32 nBytes)
+void DCTouchRange(void* addr, u32 nBytes)
 {
 	// UNUSED FUNCTION
 }
@@ -266,61 +267,52 @@ void DCTouchRange(register void* addr, register u32 nBytes)
 /**
  * @TODO: Documentation
  */
-ASM void ICInvalidateRange(register void* addr, register u32 nBytes) {
-#ifdef __MWERKS__ // clang-format off
-	nofralloc
-	cmplwi   nBytes, 0
-	blelr-
-	rlwinm.  r5, addr, 0, 27, 31
-	beq      _noadd
-	addi     nBytes, nBytes, 0x20
-_noadd:
-	addi     nBytes, nBytes, 31
-	srwi     nBytes, nBytes, 5
-	mtctr    nBytes
-_loop:
-	icbi     0, addr
-	addi     addr, addr, 32
-	bdnz     _loop
-
-	sync
-	isync
-
-	blr
-#endif // clang-format on
-}
-
-/**
- * @TODO: Documentation
- */
-ASM void ICFlashInvalidate(void) {
-#ifdef __MWERKS__ // clang-format off
-	nofralloc
-
-	mfspr  r3, SPR_HID0
-	ori    r3, r3, HID0_ICFI
-	mtspr  SPR_HID0, r3
-
-	blr
-#endif // clang-format on
-}
-
-/**
- * @TODO: Documentation
- */
-ASM void ICEnable(void)
+void ICInvalidateRange(void* addr, u32 nBytes)
 {
-#ifdef __MWERKS__ // clang-format off
-	nofralloc
+	if ((s32)nBytes <= 0)
+		return;
 
-	isync
+	if ((uintptr_t)addr & 31)
+		nBytes += 32;
+	const u32 nLines = (nBytes + 31) / 32;
 
-	mfspr  r3, SPR_HID0
-	ori    r3, r3, HID0_ICE
-	mtspr  SPR_HID0, r3
+	asm volatile(
+	    R"(
+		mtctr  %[nLines]
+	1:
+		icbi   0, %[addr]
+		addi   %[addr], %[addr], 32
+		bdnz   1b
+		)"
+	    : [addr] "+r"(addr)
+	    : [nLines] "r"(nLines)
+	    : "ctr");
 
-	blr
-#endif // clang-format on
+	__mwerks_sync();
+	__mwerks_isync();
+}
+
+/**
+ * @TODO: Documentation
+ */
+void ICFlashInvalidate(void)
+{
+	int tmp;
+	PPC_MOVE_FROM_SPR(SPR_HID0, tmp);
+	tmp |= HID0_ICFI;
+	PPC_MOVE_TO_SPR(SPR_HID0, tmp);
+}
+
+/**
+ * @TODO: Documentation
+ */
+void ICEnable(void)
+{
+	int tmp;
+	__mwerks_isync();
+	PPC_MOVE_FROM_SPR(SPR_HID0, tmp);
+	tmp |= HID0_ICE;
+	PPC_MOVE_TO_SPR(SPR_HID0, tmp);
 }
 
 /**
@@ -391,23 +383,27 @@ void LCEnable(void)
  * loop in order to batch data cache operations.  See `Jit64`/`JitArm64::dcbx` for details.
  * @note UNUSED Size: 000028
  */
-ASM void LCDisable(void)
+void LCDisable(void)
 {
-	// UNUSED FUNCTION
-#ifdef __MWERKS__ // clang-format off
-	nofralloc
-	lis     r3, LC_BASE @ha
-	li      r4, LC_LINES
-	mtctr   r4
-@1
-	dcbi    r0, r3
-	addi    r3, r3, 32
-	bdnz    @1
-	mfspr   r4, SPR_HID2
-	rlwinm  r4, r4, 0, 4, 2  // HID2_LCE
-	mtspr   SPR_HID2, r4
-	blr
-#endif // clang-format on
+	u32 addr         = LC_BASE;
+	const u32 nLines = LC_LINES;
+
+	asm volatile(
+	    R"(
+		mtctr  %[nLines]
+	1:
+		dcbi   0, %[addr]
+		addi   %[addr], %[addr], 32
+		bdnz   1b
+		)"
+	    : [addr] "+r"(addr)
+	    : [nLines] "r"(nLines)
+	    : "ctr");
+
+	int tmp;
+	PPC_MOVE_FROM_SPR(SPR_HID2, tmp);
+	tmp &= ~HID2_LCE;
+	PPC_MOVE_TO_SPR(SPR_HID2, tmp);
 }
 
 /**
@@ -441,7 +437,7 @@ void LCLoadBlocks(void* destTag, void* srcAddr, u32 numBlocks)
  * @TODO: Documentation
  * @note UNUSED Size: 000024
  */
-void LCStoreBlocks(register void* destAddr, register void* srcTag, register u32 numBlocks)
+void LCStoreBlocks(void* destAddr, void* srcTag, u32 numBlocks)
 {
 	// UNUSED FUNCTION
 }
@@ -495,7 +491,7 @@ u32 LCQueueLength(void)
  * @TODO: Documentation
  * @note UNUSED Size: 000018
  */
-void LCQueueWait(register u32 len)
+void LCQueueWait(u32 len)
 {
 	// UNUSED FUNCTION
 }

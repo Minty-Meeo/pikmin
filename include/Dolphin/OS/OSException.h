@@ -43,26 +43,29 @@ __OSExceptionHandler __OSGetExceptionHandler(__OSException exception);
 
 ///////// CONTEXT SAVING /////////
 // Macro for saving context on exception (for asm functions).
+
+// clang-format off
 #define OS_EXCEPTION_SAVE_GPRS(context)               \
-	stw r0, context->gpr[0];                          \
-	stw r1, context->gpr[1];                          \
-	stw r2, context->gpr[2];                          \
-	stmw r6, context->gpr[6];                         \
+	"stw    r0, OSContext.gpr0 (" #context ");"       \
+	"stw    r1, OSContext.gpr1 (" #context ");"       \
+	"stw    r2, OSContext.gpr2 (" #context ");"       \
+	"stmw   r6, OSContext.gpr6 (" #context ");"       \
 	/* Save GQR1 to GQR7. GQR0 must always be zero */ \
-	mfspr r0, SPR_GQR1;                               \
-	stw r0, context->gqr[1];                          \
-	mfspr r0, SPR_GQR2;                               \
-	stw r0, context->gqr[2];                          \
-	mfspr r0, SPR_GQR3;                               \
-	stw r0, context->gqr[3];                          \
-	mfspr r0, SPR_GQR4;                               \
-	stw r0, context->gqr[4];                          \
-	mfspr r0, SPR_GQR5;                               \
-	stw r0, context->gqr[5];                          \
-	mfspr r0, SPR_GQR6;                               \
-	stw r0, context->gqr[6];                          \
-	mfspr r0, SPR_GQR7;                               \
-	stw r0, context->gqr[7];
+	"mfspr  r0, SPR_GQR1;"                            \
+	"stw    r0, OSContext.gqr1 (" #context ");"       \
+	"mfspr  r0, SPR_GQR2;"                            \
+	"stw    r0, OSContext.gqr2 (" #context ");"       \
+	"mfspr  r0, SPR_GQR3;"                            \
+	"stw    r0, OSContext.gqr3 (" #context ");"       \
+	"mfspr  r0, SPR_GQR4;"                            \
+	"stw    r0, OSContext.gqr4 (" #context ");"       \
+	"mfspr  r0, SPR_GQR5;"                            \
+	"stw    r0, OSContext.gqr5 (" #context ");"       \
+	"mfspr  r0, SPR_GQR6;"                            \
+	"stw    r0, OSContext.gqr6 (" #context ");"       \
+	"mfspr  r0, SPR_GQR7;"                            \
+	"stw    r0, OSContext.gqr7 (" #context ");"
+// clang-format on
 
 //////////////////////////////////
 

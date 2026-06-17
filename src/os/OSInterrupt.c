@@ -21,56 +21,65 @@ static OSInterruptMask InterruptPrioTable[] = {
 	0xFFFFFFFF,
 };
 
-/**
- * @TODO: Documentation
- */
-ASM BOOL OSDisableInterrupts(void) {
-#ifdef __MWERKS__ // clang-format off
-	nofralloc
-entry __RAS_OSDisableInterrupts_begin
-	mfmsr   r3
-	rlwinm  r4, r3, 0, 17, 15  // ~MSR_EE
-	mtmsr   r4
-	rlwinm  r3, r3, 17, 31, 31  // MSR_EE
-entry __RAS_OSDisableInterrupts_end
-	blr
-#endif // clang-format on
+// This function exists to kick the following global ASM function back into the .text section
+static void PreASMDummyFunction(void)
+{
 }
 
 /**
  * @TODO: Documentation
  */
-ASM BOOL OSEnableInterrupts(void) {
-#ifdef __MWERKS__ // clang-format off
-	nofralloc
+BOOL OSDisableInterrupts(void);
+asm(R"(
+	.global OSDisableInterrupts
+OSDisableInterrupts:
+
+	.global __RAS_OSDisableInterrupts_begin
+__RAS_OSDisableInterrupts_begin:
 
 	mfmsr   r3
-	ori     r4, r3, MSR_EE
+	rlwinm  r4, r3, 0, 17, 15  # ~MSR_EE
 	mtmsr   r4
-	rlwinm  r3, r3, 17, 31, 31 // MSR_EE
+	rlwinm  r3, r3, 17, 31, 31  # MSR_EE
+
+	.global __RAS_OSDisableInterrupts_end
+__RAS_OSDisableInterrupts_end:
+
 	blr
-#endif // clang-format on
+
+	.size OSDisableInterrupts, . - OSDisableInterrupts
+	.type OSDisableInterrupts, @function
+)");
+
+/**
+ * @TODO: Documentation
+ */
+BOOL OSEnableInterrupts(void)
+{
+	u32 oldMsr, newMsr;
+
+	PPC_MOVE_FROM_MSR(oldMsr);
+	newMsr = oldMsr | MSR_EE;
+	PPC_MOVE_TO_MSR(newMsr);
+
+	return (oldMsr & MSR_EE) >> 15;
 }
 
 /**
  * @TODO: Documentation
  */
-ASM BOOL OSRestoreInterrupts(register BOOL enabled) {
-#ifdef __MWERKS__ // clang-format off
-	nofralloc
+BOOL OSRestoreInterrupts(BOOL enabled)
+{
+	u32 oldMsr, newMsr;
 
-	cmpwi   enabled, 0
-	mfmsr   r4
-	beq     _disable
-	ori     r5, r4, MSR_EE
-	b       _restore
-_disable:
-	rlwinm  r5, r4, 0, 17, 15 // ~MSR_EE
-_restore:
-	mtmsr   r5
-	rlwinm  r4, r4, 17, 31, 31 // MSR_EE
-	blr
-#endif // clang-format on
+	PPC_MOVE_FROM_MSR(oldMsr);
+	if (enabled)
+		newMsr = oldMsr | MSR_EE;
+	else
+		newMsr = oldMsr & ~MSR_EE;
+	PPC_MOVE_TO_MSR(newMsr);
+
+	return (oldMsr & MSR_EE) >> 15;
 }
 
 /**
@@ -488,12 +497,18 @@ void __OSDispatchInterrupt(__OSException exception, OSContext* context)
 /**
  * @TODO: Documentation
  */
-static ASM void ExternalInterruptHandler(register __OSException exception, register OSContext* context)
-{
-#pragma unused(exception)
-#ifdef __MWERKS__ // clang-format off
-	nofralloc
-	OS_EXCEPTION_SAVE_GPRS(context)
+static void ExternalInterruptHandler(__OSException exception, OSContext* context);
+asm(R"(
+	.include "Dolphin/OS/OSContext.inc"
+	.include "Dolphin/PPCArch.inc"
+	
+	.local ExternalInterruptHandler
+ExternalInterruptHandler:
+	)"                         //
+    OS_EXCEPTION_SAVE_GPRS(r4) //
+    R"(
 	b  __OSDispatchInterrupt
-#endif // clang-format on
-}
+
+	.size ExternalInterruptHandler, . - ExternalInterruptHandler
+	.type ExternalInterruptHandler, @function
+	)");

@@ -34,8 +34,8 @@ void __OSResetSWInterruptHandler(__OSInterrupt interrupt, OSContext* context);
 static OSBootInfo* BootInfo;
 static vu32* BI2DebugFlag;
 static u32* BI2DebugFlagHolder;
-static f64 ZeroF             = 0.0;
-static BOOL AreWeInitialized = FALSE;
+[[gnu::used]] static f64 ZeroF = 0.0;
+static BOOL AreWeInitialized   = FALSE;
 static __OSExceptionHandler* OSExceptionTable;
 OSTime __OSStartTime;
 BOOL __OSInIPL;
@@ -60,44 +60,48 @@ u32 __OSIsDebuggerPresent(void)
  * @TODO: Documentation
  * @note UNUSED Size: 000084
  */
-static ASM void __OSInitFPRs(void) {
-#ifdef __MWERKS__ // clang-format off
-    nofralloc
-    lfd  fp0, ZeroF
-    fmr  fp1, fp0
-    fmr  fp2, fp0
-    fmr  fp3, fp0
-    fmr  fp4, fp0
-    fmr  fp5, fp0
-    fmr  fp6, fp0
-    fmr  fp7, fp0
-    fmr  fp8, fp0
-    fmr  fp9, fp0
-    fmr  fp10, fp0
-    fmr  fp11, fp0
-    fmr  fp12, fp0
-    fmr  fp13, fp0
-    fmr  fp14, fp0
-    fmr  fp15, fp0
-    fmr  fp16, fp0
-    fmr  fp17, fp0
-    fmr  fp18, fp0
-    fmr  fp19, fp0
-    fmr  fp20, fp0
-    fmr  fp21, fp0
-    fmr  fp22, fp0
-    fmr  fp23, fp0
-    fmr  fp24, fp0
-    fmr  fp25, fp0
-    fmr  fp26, fp0
-    fmr  fp27, fp0
-    fmr  fp28, fp0
-    fmr  fp29, fp0
-    fmr  fp30, fp0
-    fmr  fp31, fp0
+static void __OSInitFPRs(void);
+asm(R"(
+	.local __OSInitFPRs
+__OSInitFPRs:
+
+    lfd  f0, ZeroF @sda21 (r13)
+    fmr  f1, f0
+    fmr  f2, f0
+    fmr  f3, f0
+    fmr  f4, f0
+    fmr  f5, f0
+    fmr  f6, f0
+    fmr  f7, f0
+    fmr  f8, f0
+    fmr  f9, f0
+    fmr  f10, f0
+    fmr  f11, f0
+    fmr  f12, f0
+    fmr  f13, f0
+    fmr  f14, f0
+    fmr  f15, f0
+    fmr  f16, f0
+    fmr  f17, f0
+    fmr  f18, f0
+    fmr  f19, f0
+    fmr  f20, f0
+    fmr  f21, f0
+    fmr  f22, f0
+    fmr  f23, f0
+    fmr  f24, f0
+    fmr  f25, f0
+    fmr  f26, f0
+    fmr  f27, f0
+    fmr  f28, f0
+    fmr  f29, f0
+    fmr  f30, f0
+    fmr  f31, f0
     blr
-#endif // clang-format on
-}
+
+	.size __OSInitFPRs, . - __OSInitFPRs
+	.type __OSInitFPRs, @function
+)");
 
 /**
  * @TODO: Documentation
@@ -426,35 +430,50 @@ static void OSExceptionInit(void)
 /**
  * @TODO: Documentation
  */
-static ASM void __OSDBIntegrator(void)
-{
-#ifdef __MWERKS__ // clang-format off
-	nofralloc
-entry __OSDBINTSTART
-	li     r5, OS_DBINTERFACE_ADDR
+static void __OSDBIntegrator(void);
+asm(R"(
+	.local __OSDBIntegrator
+__OSDBIntegrator:
+
+	.global __OSDBINTSTART
+__OSDBINTSTART:
+
+	li     r5, 0x40  # OS_DBINTERFACE_ADDR
 	mflr   r3
-	stw    r3, DB_EXCEPTIONRET_OFFSET (r5)
-	lwz    r3, DB_EXCEPTIONDEST_OFFSET (r5)
-	oris   r3, r3, OS_BASE_CACHED @h
+	stw    r3, 0x0C (r5)  # DB_EXCEPTIONRET_OFFSET
+	lwz    r3, 0x08 (r5)  # DB_EXCEPTIONDEST_OFFSET
+	oris   r3, r3, 0x80000000 @h  # OS_BASE_CACHED
 	mtlr   r3
-	li     r3, MSR_IR | MSR_DR  // turn on memory addressing
+	li     r3, 0x30  # (MSR_IR | MSR_DR)  # turn on memory addressing
 	mtmsr  r3
 	blr
-entry __OSDBINTEND
-#endif // clang-format on
-}
+
+	.global __OSDBINTEND
+__OSDBINTEND:
+
+	.size __OSDBIntegrator, . - __OSDBIntegrator
+	.type __OSDBIntegrator, @function
+)");
 
 /**
  * @TODO: Documentation
  */
-static ASM void __OSDBJump(void) {
-#ifdef __MWERKS__ // clang-format off
-	nofralloc
-entry __OSDBJUMPSTART
-	bla  OS_DBJUMPPOINT_ADDR
-entry __OSDBJUMPEND
-#endif // clang-format on
-}
+static void __OSDBJump(void);
+asm(R"(
+	.local __OSDBJump
+__OSDBJump:
+
+	.global __OSDBJUMPSTART
+__OSDBJUMPSTART:
+
+	bla  0x60  # OS_DBJUMPPOINT_ADDR
+
+	.global __OSDBJUMPEND
+__OSDBJUMPEND:
+
+	.size __OSDBJump, . - __OSDBJump
+	.type __OSDBJump, @function
+)");
 
 /**
  * @TODO: Documentation
@@ -478,29 +497,33 @@ __OSExceptionHandler __OSGetExceptionHandler(__OSException exception)
 /**
  * @TODO: Documentation
  */
-static ASM void OSExceptionVector(void)
-{
-#ifdef __MWERKS__ // clang-format off
-	nofralloc
+static void OSExceptionVector(void);
+asm(R"(
+	.include "Dolphin/OS/OSContext.inc"
 
-entry __OSEVStart
-	// Save r4 into SPRG0
+	.local OSExceptionVector
+OSExceptionVector:
+
+	.global __OSEVStart
+__OSEVStart:
+
+	# Save r4 into SPRG0
 	mtsprg   0, r4
 
-	// Load current context physical address into r4
-	lwz      r4, OS_CURRENTCONTEXT_PADDR
+	# Load current context physical address into r4
+	lwz      r4, 0x00C0 (0)  # OS_CURRENTCONTEXT_PADDR
 
-	// Save r3 - r5 into the current context
-	stw      r3, OSContext.gpr[3] (r4)
+	# Save r3 - r5 into the current context
+	stw      r3, OSContext.gpr3 (r4)
 	mfsprg   r3, 0
-	stw      r3, OSContext.gpr[4] (r4)
-	stw      r5, OSContext.gpr[5] (r4)
+	stw      r3, OSContext.gpr4 (r4)
+	stw      r5, OSContext.gpr5 (r4)
 
 	lhz      r3, OSContext.state (r4)
-	ori      r3, r3, OS_CONTEXT_STATE_EXC
+	ori      r3, r3, 0x02  # OS_CONTEXT_STATE_EXC
 	sth      r3, OSContext.state (r4)
 
-	// Save misc registers
+	# Save misc registers
 	mfcr     r3
 	stw      r3, OSContext.cr (r4)
 	mflr     r3
@@ -515,70 +538,76 @@ entry __OSEVStart
 	stw      r3, OSContext.srr1 (r4)
 	mr       r5, r3
 
-	// This instruction may be overwritten by OSExceptionInit
-entry __DBVECTOR
+	# This instruction may be overwritten by OSExceptionInit
+	.global __DBVECTOR
+__DBVECTOR:
 	nop
 
-	// Set SRR1[IR|DR] to turn on address translation at the next RFI
+	# Set SRR1[IR|DR] to turn on address translation at the next RFI
 	mfmsr    r3
-	ori      r3, r3, MSR_IR | MSR_DR
+	ori      r3, r3, 0x30  # MSR_IR | MSR_DR
 	mtsrr1   r3
 
-	// This lets us change the exception number based on the exception we're installing.
-entry __OSEVSetNumber
+	# This lets us change the exception number based on the exception we're installing.
+	.global __OSEVSetNumber
+__OSEVSetNumber:
 	li       r3, 0x0000
 
-	// Load current context virtual address into r4
-	lwz      r4, 0xD4
+	# Load current context virtual address into r4
+	lwz      r4, 0xD4 (0)
 
-	// Check non-recoverable interrupt
-	rlwinm.  r5, r5, 0, 30, 30  // MSR_RI
+	# Check non-recoverable interrupt
+	rlwinm.  r5, r5, 0, 30, 30  # MSR_RI
 	bne      recoverable
 	lis      r5,     OSDefaultExceptionHandler @ha
 	addi     r5, r5, OSDefaultExceptionHandler @l
 	mtsrr0   r5
 	rfi
-	// NOT REACHED HERE
 
 recoverable:
-	// Locate exception handler.
-	rlwinm   r5, r3, 2, 22, 29               // r5 contains exception*4
-	lwz      r5, OS_EXCEPTIONTABLE_ADDR (r5)
+	# Locate exception handler.
+	rlwinm   r5, r3, 2, 22, 29               # r5 contains exception*4
+	lwz      r5, 0x3000 (r5)  # OS_EXCEPTIONTABLE_ADDR
 	mtsrr0   r5
 
-	// Final state
-	// r3 - exception number
-	// r4 - pointer to context
-	// r5 - garbage
-	// srr0 - exception handler
-	// srr1 - address translation enabled, not yet recoverable
+	# Final state
+	# r3 - exception number
+	# r4 - pointer to context
+	# r5 - garbage
+	# srr0 - exception handler
+	# srr1 - address translation enabled, not yet recoverable
 
 	rfi
-	// NOT REACHED HERE
-	// The handler will restore state
+	# The handler will restore state
 
-entry __OSEVEnd
-	nop
-#endif // clang-format on
-}
+	.global __OSEVEnd
+__OSEVEnd:
+
+	.size OSExceptionVector, . - OSExceptionVector
+	.type OSExceptionVector, @function
+)");
 
 /**
  * @TODO: Documentation
  */
-static ASM void OSDefaultExceptionHandler(register __OSException exception, register OSContext* context)
-{
-#pragma unused(exception)
-#ifdef __MWERKS__ // clang-format off
-	nofralloc
-	OS_EXCEPTION_SAVE_GPRS(context)
-	// Load DSISR and DAR
+static void OSDefaultExceptionHandler(__OSException exception, OSContext* context);
+asm(R"(
+	.include "Dolphin/OS/OSContext.inc"
+	.include "Dolphin/PPCArch.inc"
+	
+	.local OSDefaultExceptionHandler
+OSDefaultExceptionHandler:
+	)"                         //
+    OS_EXCEPTION_SAVE_GPRS(r4) //
+    R"(
+    # Load DSISR and DAR
 	mfdsisr  r5
 	mfdar    r6
-
 	b        __OSUnhandledException
-	// NOT REACHED HERE
-#endif // clang-format on
-}
+
+	.size OSDefaultExceptionHandler, . - OSDefaultExceptionHandler
+	.type OSDefaultExceptionHandler, @function
+	)");
 
 /**
  * @TODO: Documentation
@@ -588,12 +617,8 @@ void __OSPSInit(void)
 	PPCMthid2(PPCMfhid2() | (HID2_LSQE | HID2_PSE));
 	ICFlashInvalidate();
 	__mwerks_sync();
-#ifdef __MWERKS__
-	asm {
-		li     r3, 0
-		mtspr  SPR_GQR0, r3
-	}
-#endif
+	const u32 ldst = OS_GQR_F32 | (OS_GQR_F32 << 16);
+	PPC_MOVE_TO_SPR(SPR_GQR0, ldst);
 }
 
 #define DI_CONFIG_CONFIG_MASK 0xFF

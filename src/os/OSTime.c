@@ -12,36 +12,41 @@ static s32 YearDays[OS_TIME_MONTH_MAX] = { 0, 31, 59, 90, 120, 151, 181, 212, 24
 // End of each month in leap year
 static s32 LeapYearDays[OS_TIME_MONTH_MAX] = { 0, 31, 60, 91, 121, 152, 182, 213, 244, 274, 305, 335 };
 
-/**
- * @TODO: Documentation
- */
-ASM OSTime OSGetTime(void) {
-#ifdef __MWERKS__ // clang-format off
-	nofralloc
-
-	mftbu  r3
-	mftb   r4
-
-	// Check for possible carry from TBL to TBU
-	mftbu  r5
-	cmpw   r3, r5
-	bne    OSGetTime
-
-	blr
-#endif // clang-format on
+// This function exists to kick the following global ASM function back into the .text section
+static void PreASMDummyFunction(void)
+{
 }
 
 /**
  * @TODO: Documentation
  */
-ASM u32 OSGetTick(void)
-{
-#ifdef __MWERKS__ // clang-format off
-	nofralloc
+OSTime OSGetTime(void);
+asm(R"(
+	.global OSGetTime
+OSGetTime:
 
-	mftb  r3
+	mftbu  r3
+	mftb   r4
+
+	# Check for possible carry from TBL to TBU
+	mftbu  r5
+	cmpw   r3, r5
+	bne    OSGetTime
+
 	blr
-#endif // clang-format on
+
+	.size OSGetTime, . - OSGetTime
+	.type OSGetTime, @function
+)");
+
+/**
+ * @TODO: Documentation
+ */
+u32 OSGetTick(void)
+{
+	u32 tick;
+	asm("mftb %[tick]" : [tick] "=r"(tick));
+	return tick;
 }
 
 /**

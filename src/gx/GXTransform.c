@@ -123,76 +123,96 @@ void GXGetProjectionv(f32* ptr)
 /**
  * @TODO: Documentation
  */
-ASM void WriteMTXPS4x3(register const Mtx mtx, register volatile f32* dest) {
-#ifdef __MWERKS__ // clang-format off
-    psq_l   f0, 0x00 (mtx), 0, 0
-    psq_l   f1, 0x08 (mtx), 0, 0
-    psq_l   f2, 0x10 (mtx), 0, 0
-    psq_l   f3, 0x18 (mtx), 0, 0
-    psq_l   f4, 0x20 (mtx), 0, 0
-    psq_l   f5, 0x28 (mtx), 0, 0
-    psq_st  f0, 0 (dest), 0, 0
-    psq_st  f1, 0 (dest), 0, 0
-    psq_st  f2, 0 (dest), 0, 0
-    psq_st  f3, 0 (dest), 0, 0
-    psq_st  f4, 0 (dest), 0, 0
-    psq_st  f5, 0 (dest), 0, 0
-	#endif // clang-format on
+static void WriteMTXPS4x3(const Mtx mtx, volatile f32* dest)
+{
+	f32 tmp0, tmp1, tmp2, tmp3, tmp4, tmp5;
+
+	asm(R"(
+		psq_l   %[tmp0], 0x00 (%[mtx]), 0, 0
+	    psq_l   %[tmp1], 0x08 (%[mtx]), 0, 0
+	    psq_l   %[tmp2], 0x10 (%[mtx]), 0, 0
+	    psq_l   %[tmp3], 0x18 (%[mtx]), 0, 0
+	    psq_l   %[tmp4], 0x20 (%[mtx]), 0, 0
+	    psq_l   %[tmp5], 0x28 (%[mtx]), 0, 0
+	    psq_st  %[tmp0], 0 (%[dest]), 0, 0
+	    psq_st  %[tmp1], 0 (%[dest]), 0, 0
+	    psq_st  %[tmp2], 0 (%[dest]), 0, 0
+	    psq_st  %[tmp3], 0 (%[dest]), 0, 0
+	    psq_st  %[tmp4], 0 (%[dest]), 0, 0
+	    psq_st  %[tmp5], 0 (%[dest]), 0, 0
+		)"
+	    : [tmp0] "=r"(tmp0), [tmp1] "=r"(tmp1), [tmp2] "=r"(tmp2), [tmp3] "=r"(tmp3), [tmp4] "=r"(tmp4), [tmp5] "=r"(tmp5), "=m"(*mtx)
+	    : [mtx] "r"(mtx), [dest] "r"(dest), "m"(*dest));
 }
 
 /**
  * @TODO: Documentation
  */
-ASM void WriteMTXPS3x3from3x4(register const Mtx mtx, register volatile f32* dest) {
-#ifdef __MWERKS__ // clang-format off
-    psq_l   f0, 0x00 (mtx), 0, 0
-    lfs     f1, 0x08 (mtx)
-    psq_l   f2, 0x10 (mtx), 0, 0
-    lfs     f3, 0x18 (mtx)
-    psq_l   f4, 0x20 (mtx), 0, 0
-    lfs     f5, 0x28 (mtx)
-    psq_st  f0, 0 (dest), 0, 0
-    stfs    f1, 0 (dest)
-    psq_st  f2, 0 (dest), 0, 0
-    stfs    f3, 0 (dest)
-    psq_st  f4, 0 (dest), 0, 0
-    stfs    f5, 0 (dest)
-	#endif // clang-format on
+static void WriteMTXPS3x3from3x4(const Mtx mtx, volatile f32* dest)
+{
+	f32 tmp0, tmp1, tmp2, tmp3, tmp4, tmp5;
+
+	asm(R"(
+		psq_l   %[tmp0], 0x00 (%[mtx]), 0, 0
+	    lfs     %[tmp1], 0x08 (%[mtx])
+	    psq_l   %[tmp2], 0x10 (%[mtx]), 0, 0
+	    lfs     %[tmp3], 0x18 (%[mtx])
+	    psq_l   %[tmp4], 0x20 (%[mtx]), 0, 0
+	    lfs     %[tmp5], 0x28 (%[mtx])
+	    psq_st  %[tmp0], 0 (%[dest]), 0, 0
+	    stfs    %[tmp1], 0 (%[dest])
+	    psq_st  %[tmp2], 0 (%[dest]), 0, 0
+	    stfs    %[tmp3], 0 (%[dest])
+	    psq_st  %[tmp4], 0 (%[dest]), 0, 0
+	    stfs    %[tmp5], 0 (%[dest])
+		)"
+	    : [tmp0] "=r"(tmp0), [tmp1] "=r"(tmp1), [tmp2] "=r"(tmp2), [tmp3] "=r"(tmp3), [tmp4] "=r"(tmp4), [tmp5] "=r"(tmp5), "=m"(*mtx)
+	    : [mtx] "r"(mtx), [dest] "r"(dest), "m"(*dest));
 }
 
 /**
  * @TODO: Documentation
  * @note UNUSED Size: 00002C
  */
-ASM void WriteMTXPS3x3(register const Mtx33 mtx, register volatile f32* dest) {
-#ifdef __MWERKS__ // clang-format off
-    psq_l   f0, 0x00 (mtx), 0, 0
-    psq_l   f1, 0x08 (mtx), 0, 0
-    psq_l   f2, 0x10 (mtx), 0, 0
-    psq_l   f3, 0x18 (mtx), 0, 0
-    lfs     f4, 0x20 (mtx)
-    psq_st  f0, 0 (dest), 0, 0
-    psq_st  f1, 0 (dest), 0, 0
-    psq_st  f2, 0 (dest), 0, 0
-    psq_st  f3, 0 (dest), 0, 0
-    stfs    f4, 0 (dest)
-	#endif // clang-format on
+static void WriteMTXPS3x3(const Mtx33 mtx, volatile f32* dest)
+{
+	f32 tmp0, tmp1, tmp2, tmp3, tmp4;
+
+	asm(R"(
+		psq_l   %[tmp0], 0x00 (%[mtx]), 0, 0
+	    psq_l   %[tmp1], 0x08 (%[mtx]), 0, 0
+	    psq_l   %[tmp2], 0x10 (%[mtx]), 0, 0
+	    psq_l   %[tmp3], 0x18 (%[mtx]), 0, 0
+	    lfs     %[tmp4], 0x20 (%[mtx])
+	    psq_st  %[tmp0], 0 (%[dest]), 0, 0
+	    psq_st  %[tmp1], 0 (%[dest]), 0, 0
+	    psq_st  %[tmp2], 0 (%[dest]), 0, 0
+	    psq_st  %[tmp3], 0 (%[dest]), 0, 0
+	    stfs    %[tmp4], 0 (%[dest])
+		)"
+	    : [tmp0] "=r"(tmp0), [tmp1] "=r"(tmp1), [tmp2] "=r"(tmp2), [tmp3] "=r"(tmp3), [tmp4] "=r"(tmp4), "=m"(*mtx)
+	    : [mtx] "r"(mtx), [dest] "r"(dest), "m"(*dest));
 }
 
 /**
  * @TODO: Documentation
  */
-ASM void WriteMTXPS4x2(register const Mtx mtx, register volatile f32* dest) {
-#ifdef __MWERKS__ // clang-format off
-    psq_l   f0, 0x00 (mtx), 0, 0
-    psq_l   f1, 0x08 (mtx), 0, 0
-    psq_l   f2, 0x10 (mtx), 0, 0
-    psq_l   f3, 0x18 (mtx), 0, 0
-    psq_st  f0, 0 (dest), 0, 0
-    psq_st  f1, 0 (dest), 0, 0
-    psq_st  f2, 0 (dest), 0, 0
-    psq_st  f3, 0 (dest), 0, 0
-	#endif // clang-format on
+static void WriteMTXPS4x2(const Mtx mtx, volatile f32* dest)
+{
+	f32 tmp0, tmp1, tmp2, tmp3;
+
+	asm(R"(
+		psq_l   %[tmp0], 0x00 (%[mtx]), 0, 0
+	    psq_l   %[tmp1], 0x08 (%[mtx]), 0, 0
+	    psq_l   %[tmp2], 0x10 (%[mtx]), 0, 0
+	    psq_l   %[tmp3], 0x18 (%[mtx]), 0, 0
+	    psq_st  %[tmp0], 0 (%[dest]), 0, 0
+	    psq_st  %[tmp1], 0 (%[dest]), 0, 0
+	    psq_st  %[tmp2], 0 (%[dest]), 0, 0
+	    psq_st  %[tmp3], 0 (%[dest]), 0, 0
+		)"
+	    : [tmp0] "=r"(tmp0), [tmp1] "=r"(tmp1), [tmp2] "=r"(tmp2), [tmp3] "=r"(tmp3), "=m"(*mtx)
+	    : [mtx] "r"(mtx), [dest] "r"(dest), "m"(*dest));
 }
 
 #define GX_WRITE_MTX_ELEM(addr, value)          \

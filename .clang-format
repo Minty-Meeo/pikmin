@@ -25,6 +25,7 @@ AllowShortIfStatementsOnASingleLine: Never
 
 BreakAfterAttributes: Leave
 BreakBeforeBraces: Custom
+BreakBeforeInlineASMColon: OnlyMultiline
 
 BraceWrapping:
   AfterCaseLabel: true

@@ -40,16 +40,19 @@ void __DBExceptionDestinationAux(void)
 /**
  * @TODO: Documentation
  */
-ASM void __DBExceptionDestination(void)
-{
-#ifdef __MWERKS__ // clang-format off
-	nofralloc
+void __DBExceptionDestination(void);
+asm(R"(
+	.global __DBExceptionDestination
+__DBExceptionDestination:
+
 	mfmsr  r3
-	ori    r3, r3, MSR_IR | MSR_DR
+	ori    r3, r3, 0x30 # MSR_IR | MSR_DR
 	mtmsr  r3
 	b      __DBExceptionDestinationAux
-#endif // clang-format on
-}
+
+	.size __DBExceptionDestination, . - __DBExceptionDestination
+	.type __DBExceptionDestination, @function
+)");
 
 /**
  * @TODO: Documentation
