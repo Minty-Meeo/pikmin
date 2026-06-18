@@ -46,6 +46,7 @@ add_compile_options(-funsigned-char)
 add_compile_options(-O0)
 
 add_compile_options($<$<COMPILE_LANGUAGE:C>:-Werror=implicit>)
+add_compile_options(-Werror=return-type)
 
 # Add source tree
 add_subdirectory(src)

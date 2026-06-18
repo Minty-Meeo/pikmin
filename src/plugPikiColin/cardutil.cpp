@@ -68,6 +68,7 @@ s32* CardUtilByteNotUsed()
 s32 CardUtilBlocksNotUsed()
 {
 	// UNUSED FUNCTION
+	return;
 }
 
 /**

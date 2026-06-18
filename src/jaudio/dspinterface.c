@@ -31,6 +31,7 @@ DSPchannel_* GetDspHandle(u8 idx)
 DSPchannel_* GetDspHandleNc(u8)
 {
 	// UNUSED FUNCTION
+	return;
 }
 
 /**
@@ -48,6 +49,7 @@ FXBuffer* GetFxHandle(u8 idx)
 FXBuffer* GetFxHandleNc(u8 idx)
 {
 	// UNUSED FUNCTION
+	return;
 }
 
 /**

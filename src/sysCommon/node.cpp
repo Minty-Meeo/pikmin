@@ -207,6 +207,7 @@ void NodeMgr::Del(Node* node)
 void NodeMgr::recFindNode(CoreNode*, immut char*)
 {
 	// UNUSED FUNCTION
+	return;
 }
 
 /**
@@ -216,6 +217,7 @@ void NodeMgr::recFindNode(CoreNode*, immut char*)
 CoreNode* NodeMgr::findNode(immut char*, CoreNode*)
 {
 	// UNUSED FUNCTION
+	return;
 }
 
 /**

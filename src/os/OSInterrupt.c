@@ -305,6 +305,7 @@ static u32 SetInterruptMask(OSInterruptMask mask, OSInterruptMask current)
 u32 OSGetInterruptMask(void)
 {
 	// UNUSED FUNCTION
+	return;
 }
 
 /**
@@ -314,6 +315,7 @@ u32 OSGetInterruptMask(void)
 u32 OSSetInterruptMask(u32)
 {
 	// UNUSED FUNCTION
+	return;
 }
 
 /**

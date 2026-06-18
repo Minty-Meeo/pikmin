@@ -325,6 +325,7 @@ void Creature::moveNew(f32 deltaTime)
 CollTriInfo* Creature::checkForward(immut Vector3f&, f32, f32&)
 {
 	// UNUSED FUNCTION
+	return;
 }
 
 /**
@@ -334,6 +335,7 @@ CollTriInfo* Creature::checkForward(immut Vector3f&, f32, f32&)
 CollTriInfo* Creature::getNextTri(CollTriInfo*, immut Vector3f&, int&)
 {
 	// UNUSED FUNCTION
+	return;
 }
 
 /**

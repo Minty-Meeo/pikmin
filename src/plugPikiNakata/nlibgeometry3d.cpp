@@ -282,6 +282,7 @@ void NPlane::construct(NPlane&)
 bool NPlane::intersects(NLine&, f32*)
 {
 	// UNUSED FUNCTION
+	return;
 }
 
 /**
@@ -291,6 +292,7 @@ bool NPlane::intersects(NLine&, f32*)
 bool NPlane::outputIntersection(NLine&, NVector3f&)
 {
 	// UNUSED FUNCTION
+	return;
 }
 
 /**
@@ -300,6 +302,7 @@ bool NPlane::outputIntersection(NLine&, NVector3f&)
 bool NPlane::intersectsRay(NLine&, f32*)
 {
 	// UNUSED FUNCTION
+	return;
 }
 
 /**
@@ -309,6 +312,7 @@ bool NPlane::intersectsRay(NLine&, f32*)
 bool NPlane::outputRayIntersection(NLine&, NVector3f&)
 {
 	// UNUSED FUNCTION
+	return;
 }
 
 /**
@@ -318,6 +322,7 @@ bool NPlane::outputRayIntersection(NLine&, NVector3f&)
 bool NPlane::intersectsSegment(NSegment&, f32*)
 {
 	// UNUSED FUNCTION
+	return;
 }
 
 /**
@@ -327,6 +332,7 @@ bool NPlane::intersectsSegment(NSegment&, f32*)
 bool NPlane::outputSegmentIntersection(NSegment&, NVector3f&)
 {
 	// UNUSED FUNCTION
+	return;
 }
 
 /**
@@ -365,6 +371,7 @@ void NPlane::negate()
 bool NPlane::adjustTo(NVector3f&, f32)
 {
 	// UNUSED FUNCTION
+	return;
 }
 
 /**
@@ -374,6 +381,7 @@ bool NPlane::adjustTo(NVector3f&, f32)
 bool NPlane::adjust(NVector3f&)
 {
 	// UNUSED FUNCTION
+	return;
 }
 
 /**
@@ -383,6 +391,7 @@ bool NPlane::adjust(NVector3f&)
 bool NPlane::outputIntersectionLineY(NPlane&, NLine&)
 {
 	// UNUSED FUNCTION
+	return;
 }
 
 /**
@@ -392,6 +401,7 @@ bool NPlane::outputIntersectionLineY(NPlane&, NLine&)
 f32 NPlane::calcAngle(NPlane&)
 {
 	// UNUSED FUNCTION
+	return;
 }
 
 /**
@@ -401,6 +411,7 @@ f32 NPlane::calcAngle(NPlane&)
 f32 NPlane::calcY(f32, f32)
 {
 	// UNUSED FUNCTION
+	return;
 }
 
 /**
@@ -477,6 +488,7 @@ void NSegment::construct(NSegment&)
 f32 NSegment::calcDistanceAsSegment(NVector3f&, f32*, f32*)
 {
 	// UNUSED FUNCTION
+	return;
 }
 
 /**
@@ -486,6 +498,7 @@ f32 NSegment::calcDistanceAsSegment(NVector3f&, f32*, f32*)
 f32 NSegment::calcDistanceAsSegment(NLine&, f32*, f32*)
 {
 	// UNUSED FUNCTION
+	return;
 }
 
 /**
@@ -495,6 +508,7 @@ f32 NSegment::calcDistanceAsSegment(NLine&, f32*, f32*)
 f32 NSegment::calcSegmentDistanceAsSegment(NSegment&, f32*, f32*)
 {
 	// UNUSED FUNCTION
+	return;
 }
 
 /**

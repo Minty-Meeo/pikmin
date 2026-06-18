@@ -194,4 +194,5 @@ void OSTicksToCalendarTime(OSTime ticks, OSCalendarTime* cal)
 OSTime OSCalendarTimeToTicks(OSCalendarTime*)
 {
 	// UNUSED FUNCTION
+	return;
 }

@@ -16,6 +16,7 @@ static SramControlBlock Scb ATTRIBUTE_ALIGN(32);
 static BOOL GetRTC(u32* rtc)
 {
 	// UNUSED FUNCTION
+	return;
 }
 
 /**
@@ -25,6 +26,7 @@ static BOOL GetRTC(u32* rtc)
 static BOOL __OSGetRTC(u32* rtc)
 {
 	// UNUSED FUNCTION
+	return;
 }
 
 /**
@@ -34,6 +36,7 @@ static BOOL __OSGetRTC(u32* rtc)
 static BOOL __OSSetRTC(u32 rtc)
 {
 	// UNUSED FUNCTION
+	return;
 }
 
 /**
@@ -233,6 +236,7 @@ void __OSCheckSram(void)
 BOOL __OSReadROM(void* buffer, s32 length, s32 offset)
 {
 	// UNUSED FUNCTION
+	return;
 }
 
 /**

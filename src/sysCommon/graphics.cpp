@@ -1392,6 +1392,7 @@ int Graphics::calcLighting(f32 intensity)
 int Graphics::calcSphereLighting(immut Vector3f&, f32)
 {
 	// UNUSED FUNCTION
+	return;
 }
 
 /**
@@ -1401,6 +1402,7 @@ int Graphics::calcSphereLighting(immut Vector3f&, f32)
 int Graphics::calcBoxLighting(immut BoundBox&)
 {
 	// UNUSED FUNCTION
+	return;
 }
 
 /**

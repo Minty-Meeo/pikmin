@@ -467,6 +467,7 @@ void LCAllocNoInvalidate(void)
 u32 LCLoadData(void* destAddr, void* srcAddr, u32 nBytes)
 {
 	// UNUSED FUNCTION
+	return;
 }
 
 /**
@@ -476,6 +477,7 @@ u32 LCLoadData(void* destAddr, void* srcAddr, u32 nBytes)
 u32 LCStoreData(void* destAddr, void* srcAddr, u32 nBytes)
 {
 	// UNUSED FUNCTION
+	return;
 }
 
 /**
@@ -485,6 +487,7 @@ u32 LCStoreData(void* destAddr, void* srcAddr, u32 nBytes)
 u32 LCQueueLength(void)
 {
 	// UNUSED FUNCTION
+	return;
 }
 
 /**

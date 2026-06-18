@@ -409,6 +409,7 @@ OSGetStackPointer:
 u32 OSSwitchStack(u32 newsp)
 {
 	// UNUSED FUNCTION
+	return;
 }
 
 /**
@@ -418,6 +419,7 @@ u32 OSSwitchStack(u32 newsp)
 int OSSwitchFiber(u32 pc, u32 newsp)
 {
 	// UNUSED FUNCTION
+	return;
 }
 
 /**

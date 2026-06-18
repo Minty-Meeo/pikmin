@@ -467,6 +467,7 @@ static void cbForSeekAsync(s32 result, DVDCommandBlock* block)
 s32 DVDSeekPrio(DVDFileInfo* fileInfo, s32 offset, s32 prio)
 {
 	// UNUSED FUNCTION
+	return;
 }
 
 /**
@@ -485,6 +486,7 @@ static void cbForSeekSync(s32 result, DVDCommandBlock* block)
 s32 DVDGetFileInfoStatus(DVDFileInfo* fileInfo)
 {
 	// UNUSED FUNCTION
+	return;
 }
 
 /**
@@ -526,6 +528,7 @@ BOOL DVDOpenDir(const char* dirName, DVDDir* dir)
 BOOL DVDReadDir(DVDDir* dir, DVDDirEntry* dirent)
 {
 	// UNUSED FUNCTION
+	return;
 }
 
 /**
@@ -535,6 +538,7 @@ BOOL DVDReadDir(DVDDir* dir, DVDDirEntry* dirent)
 BOOL DVDCloseDir(DVDDir* dir)
 {
 	// UNUSED FUNCTION
+	return;
 }
 
 /**
@@ -544,6 +548,7 @@ BOOL DVDCloseDir(DVDDir* dir)
 void* DVDGetFSTLocation()
 {
 	// UNUSED FUNCTION
+	return;
 }
 
 #define RoundUp32KB(x)   (((u32)(x) + 32 * 1024 - 1) & ~(32 * 1024 - 1))
@@ -697,4 +702,5 @@ static void cbForPrepareStreamSync(s32 result, DVDCommandBlock* block)
 s32 DVDGetTransferredSize(DVDFileInfo* fileinfo)
 {
 	// UNUSED FUNCTION
+	return;
 }

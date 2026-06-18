@@ -229,6 +229,7 @@ static void __VIRetraceHandler(__OSInterrupt interrupt, OSContext* context)
 VIRetraceCallback VISetPreRetraceCallback(VIRetraceCallback callback)
 {
 	// UNUSED FUNCTION
+	return;
 }
 
 /**
@@ -1093,6 +1094,7 @@ u32 VIGetCurrentLine(void)
 	return halfLine >> 1U;
 #else
 	// UNUSED FUNCTION
+	return;
 #endif
 }
 

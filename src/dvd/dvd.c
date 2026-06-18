@@ -1140,6 +1140,7 @@ static void cbForCancelStreamSync(s32 result, DVDCommandBlock* block)
 static BOOL DVDStopStreamAtEndAsync(DVDCommandBlock* block, DVDCBCallback callback)
 {
 	// UNUSED FUNCTION
+	return;
 }
 
 /**
@@ -1293,6 +1294,7 @@ void DVDChangeDiskAsyncForBS(void)
 BOOL DVDChangeDiskAsync(DVDCommandBlock*, DVDDiskID*, DVDCBCallback)
 {
 	// UNUSED FUNCTION
+	return;
 }
 
 /**
@@ -1302,6 +1304,7 @@ BOOL DVDChangeDiskAsync(DVDCommandBlock*, DVDDiskID*, DVDCBCallback)
 s32 DVDChangeDisk(DVDCommandBlock*, DVDDiskID*)
 {
 	// UNUSED FUNCTION
+	return;
 }
 
 /**
@@ -1320,6 +1323,7 @@ static void cbForChangeDiskSync(void)
 BOOL DVDInquiryAsync(DVDCommandBlock* block, DVDDriveInfo* info, DVDCBCallback callback)
 {
 	// UNUSED FUNCTION
+	return;
 }
 
 /**
@@ -1640,6 +1644,7 @@ BOOL DVDCancelAllAsync(DVDCBCallback callback)
 s32 DVDCancelAll()
 {
 	// UNUSED FUNCTION
+	return;
 }
 
 /**

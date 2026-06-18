@@ -854,4 +854,5 @@ s32 EXIGetID(s32 chan, u32 dev, u32* id)
 
 	return err ? 0 : 1;
 #endif
+	return;
 }

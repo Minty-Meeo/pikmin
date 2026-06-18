@@ -86,6 +86,7 @@ void ReadFont(void)
 u32 OSLoadFont(OSFontHeader* fontInfo, void* temp)
 {
 	// UNUSED FUNCTION
+	return;
 }
 
 /**
@@ -95,6 +96,7 @@ u32 OSLoadFont(OSFontHeader* fontInfo, void* temp)
 char* OSGetFontTexel(const char*, void*, s32, s32, s32*)
 {
 	// UNUSED FUNCTION
+	return;
 }
 
 /**
@@ -113,6 +115,7 @@ void ExpandFontSheet(void)
 BOOL OSInitFont(OSFontHeader* font)
 {
 	// UNUSED FUNCTION
+	return;
 }
 
 /**
@@ -122,6 +125,7 @@ BOOL OSInitFont(OSFontHeader* font)
 char* OSGetFontTexture(const char* string, void** image, s32* x, s32* y, s32* width)
 {
 	// UNUSED FUNCTION
+	return;
 }
 
 /**
@@ -131,4 +135,5 @@ char* OSGetFontTexture(const char* string, void** image, s32* x, s32* y, s32* wi
 char* OSGetFontWidth(const char* string, s32* width)
 {
 	// UNUSED FUNCTION
+	return;
 }

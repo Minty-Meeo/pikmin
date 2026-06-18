@@ -152,6 +152,7 @@ void ActBridge::initDetour()
 int ActBridge::exeDetour()
 {
 	// UNUSED FUNCTION
+	return;
 }
 
 /**
@@ -217,6 +218,7 @@ int ActBridge::exeApproach()
 {
 
 	// UNUSED FUNCTION
+	return;
 }
 
 /**
@@ -235,6 +237,7 @@ void ActBridge::initGo()
 int ActBridge::exeGo()
 {
 	// UNUSED FUNCTION
+	return;
 }
 
 /**
@@ -244,6 +247,7 @@ int ActBridge::exeGo()
 void ActBridge::initWork()
 {
 	// UNUSED FUNCTION
+	return;
 }
 
 /**
@@ -253,6 +257,7 @@ void ActBridge::initWork()
 int ActBridge::exeWork()
 {
 	// UNUSED FUNCTION
+	return;
 }
 
 /**

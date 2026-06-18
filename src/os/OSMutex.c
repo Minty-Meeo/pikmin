@@ -82,6 +82,7 @@ void __OSUnlockAllMutex(OSThread* thread)
 BOOL OSTryLockMutex(OSMutex* mutex)
 {
 	// UNUSED FUNCTION
+	return;
 }
 
 /**

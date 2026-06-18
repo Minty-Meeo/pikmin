@@ -40,6 +40,7 @@ void __OSResetSWInterruptHandler(__OSInterrupt interrupt, OSContext* context)
 OSResetCallback OSSetResetCallback(OSResetCallback)
 {
 	// UNUSED FUNCTION
+	return;
 }
 
 #if OS_BUILD_VERSION >= 20011002L

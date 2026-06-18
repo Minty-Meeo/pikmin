@@ -241,6 +241,7 @@ u16 Jac_BnkVirtualToPhysical(u16 vID)
 u16 Jac_BnkPhysicalToVirtual(u16 bnk)
 {
 	// UNUSED FUNCTION
+	return;
 }
 
 /**
@@ -250,6 +251,7 @@ u16 Jac_BnkPhysicalToVirtual(u16 bnk)
 u16 Jac_WsPhysicalToVirtual(u16 ws)
 {
 	// UNUSED FUNCTION
+	return;
 }
 
 /**

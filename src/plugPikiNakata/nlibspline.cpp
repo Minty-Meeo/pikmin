@@ -356,6 +356,7 @@ SplineSegment::SplineSegment()
 f32 SplineSegment::calcDistance(NVector3f&, f32*)
 {
 	// UNUSED FUNCTION
+	return;
 }
 
 /**
@@ -393,6 +394,7 @@ template <>
 int NArray<SplineKeyFrame>::indexOf(SplineKeyFrame*, int)
 {
 	// UNUSED FUNCTION
+	return;
 }
 
 /**
@@ -433,6 +435,7 @@ template <>
 SplineKeyFrame* NArray<SplineKeyFrame>::firstElement()
 {
 	// UNUSED FUNCTION
+	return;
 }
 
 /**
@@ -443,6 +446,7 @@ template <>
 SplineKeyFrame* NArray<SplineKeyFrame>::lastElement()
 {
 	// UNUSED FUNCTION
+	return;
 }
 
 /**
@@ -453,6 +457,7 @@ template <>
 int NArray<SplineSegment>::indexOf(SplineSegment*, int)
 {
 	// UNUSED FUNCTION
+	return;
 }
 
 /**
@@ -493,6 +498,7 @@ template <>
 SplineSegment* NArray<SplineSegment>::firstElement()
 {
 	// UNUSED FUNCTION
+	return;
 }
 
 /**
@@ -503,6 +509,7 @@ template <>
 SplineSegment* NArray<SplineSegment>::lastElement()
 {
 	// UNUSED FUNCTION
+	return;
 }
 
 /**
@@ -533,6 +540,7 @@ template <>
 int NArray<SplineSegment>::indexOf(SplineSegment*)
 {
 	// UNUSED FUNCTION
+	return;
 }
 
 /**
@@ -543,6 +551,7 @@ template <>
 bool NArray<SplineSegment>::contains(SplineSegment*)
 {
 	// UNUSED FUNCTION
+	return;
 }
 
 /**
@@ -573,6 +582,7 @@ template <>
 int NArray<SplineKeyFrame>::indexOf(SplineKeyFrame*)
 {
 	// UNUSED FUNCTION
+	return;
 }
 
 /**
@@ -583,4 +593,5 @@ template <>
 bool NArray<SplineKeyFrame>::contains(SplineKeyFrame*)
 {
 	// UNUSED FUNCTION
+	return;
 }

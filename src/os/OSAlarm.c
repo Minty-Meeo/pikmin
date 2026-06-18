@@ -15,6 +15,7 @@ static void DecrementerExceptionHandler(__OSException exception, OSContext* cont
 int OSCheckAlarmQueue(void)
 {
 	// UNUSED FUNCTION
+	return;
 }
 
 /**

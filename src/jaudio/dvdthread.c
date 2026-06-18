@@ -107,6 +107,7 @@ void DVDT_ExtendPath(char* dst, immut char* ext)
 s32 DVDT_AddTaskHigh(TaskCallback, void*, size_t)
 {
 	// UNUSED FUNCTION
+	return;
 }
 
 /**

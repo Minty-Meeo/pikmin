@@ -1136,6 +1136,7 @@ void RouteTracer::Context::setTarget(RouteTracer*)
 int RouteTracer::Context::recognise(RouteTracer*)
 {
 	// UNUSED FUNCTION
+	return;
 }
 
 /**
@@ -1145,6 +1146,7 @@ int RouteTracer::Context::recognise(RouteTracer*)
 bool RouteTracer::noLink()
 {
 	// UNUSED FUNCTION
+	return;
 }
 
 /**
@@ -1172,6 +1174,7 @@ void RouteTracer::updateState()
 Vector3f RouteTracer::getTarget()
 {
 	// UNUSED FUNCTION
+	return;
 }
 
 /**
@@ -1306,6 +1309,7 @@ void WayPoint::initLinkInfos()
 int PathFinder::findFirstStepOnyon(int, int, PathFinder::Buffer*)
 {
 	// UNUSED FUNCTION
+	return;
 }
 
 /**

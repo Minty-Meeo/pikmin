@@ -992,6 +992,7 @@ System::~System()
 bool System::hasDebugInfo()
 {
 	// UNUSED FUNCTION
+	return;
 }
 
 /**

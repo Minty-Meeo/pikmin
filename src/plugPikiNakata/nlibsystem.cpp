@@ -160,6 +160,7 @@ void NListNode::removeChild(NListNode*)
 int NListNode::getChildCount()
 {
 	// UNUSED FUNCTION
+	return;
 }
 
 /**

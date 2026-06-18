@@ -290,6 +290,7 @@ void OSAddToHeap(void)
 s32 OSCheckHeap(int)
 {
 	// UNUSED FUNCTION
+	return;
 }
 
 /**

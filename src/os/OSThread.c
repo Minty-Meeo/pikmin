@@ -92,6 +92,7 @@ static void __OSSwitchThread(OSThread* nextThread)
 BOOL OSIsThreadSuspended(OSThread* thread)
 {
 	// UNUSED FUNCTION
+	return;
 }
 
 /**
@@ -648,6 +649,7 @@ void OSWakeupThread(OSThreadQueue* threadQueue)
 BOOL OSSetThreadPriority(OSThread*, s32)
 {
 	// UNUSED FUNCTION
+	return;
 }
 
 /**
@@ -665,6 +667,7 @@ OSPriority OSGetThreadPriority(OSThread* thread)
 OSThread* OSSetIdleFunction(OSIdleFunction idleFunc, void* param, void* stack, u32 stackSize)
 {
 	// UNUSED FUNCTION
+	return;
 }
 
 /**
@@ -674,6 +677,7 @@ OSThread* OSSetIdleFunction(OSIdleFunction idleFunc, void* param, void* stack, u
 OSThread* OSGetIdleFunction(void)
 {
 	// UNUSED FUNCTION
+	return;
 }
 
 /**

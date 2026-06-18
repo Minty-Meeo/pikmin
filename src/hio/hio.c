@@ -350,6 +350,7 @@ BOOL HIOWriteMailbox(u32 word)
 BOOL HIORead(u32 addr, void* buffer, s32 size)
 {
 	// UNUSED FUNCTION
+	return;
 }
 
 /**
@@ -401,6 +402,7 @@ BOOL HIOWrite(u32 addr, void* buffer, s32 size)
 BOOL HIOReadAsync(u32 addr, void* buffer, s32 size, HIOCallback callback)
 {
 	// UNUSED FUNCTION
+	return;
 }
 
 /**
@@ -410,6 +412,7 @@ BOOL HIOReadAsync(u32 addr, void* buffer, s32 size, HIOCallback callback)
 BOOL HIOWriteAsync(u32 addr, void* buffer, s32 size, HIOCallback callback)
 {
 	// UNUSED FUNCTION
+	return;
 }
 
 /**
@@ -419,4 +422,5 @@ BOOL HIOWriteAsync(u32 addr, void* buffer, s32 size, HIOCallback callback)
 BOOL HIOReadStatus(u32* status)
 {
 	// UNUSED FUNCTION
+	return;
 }
