@@ -3,6 +3,7 @@
 
 #include "system.h"
 #include "types.h"
+#include <new>
 #include <stddef.h>
 
 inline void* operator new(size_t size)
@@ -25,7 +26,7 @@ void operator delete[](void* ptr);
 #ifdef __MWERKS__
 #define stack_new(...) &__VA_ARGS__
 #else
-#define stack_new(...) &__VA_ARGS__ /* This must be replaced with something legal or be removed. */
+#define stack_new(...) new (__builtin_alloca(ALIGN_NEXT(sizeof(__VA_ARGS__), alignof(__VA_ARGS__)))) __VA_ARGS__
 #endif
 
 #endif // _SYSNEW_H
