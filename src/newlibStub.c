@@ -76,7 +76,7 @@ int getpid(void)
 	return 1;
 }
 
-static char fake_heap[0 + 0x328 + 0x408 + 0x328];
+static char fake_heap[0x10000];
 
 caddr_t sbrk(int incr)
 {
