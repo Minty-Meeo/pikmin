@@ -113,3 +113,9 @@ target_link_options(main.elf PRIVATE
 target_include_directories(main.elf PRIVATE
     ${PROJECT_SOURCE_DIR}/include
 )
+
+add_custom_command(TARGET main.elf POST_BUILD
+    COMMAND sh ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/elf2dol_dtk.sh
+    WORKING_DIRECTORY ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}
+    COMMENT "Running ELF2DOL..."
+)
