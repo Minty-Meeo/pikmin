@@ -1,4 +1,5 @@
 #include "Dolphin/PPCArch.h"
+#include "Dolphin/exi.h"
 #include "Dolphin/hw_regs.h"
 #include "Dolphin/os.h"
 
@@ -13,15 +14,38 @@ OSErrorHandler __OSErrorTable[OS_ERROR_MAX];
 #else
 static OSErrorHandler OSErrorTable[OS_ERROR_MAX];
 #endif
+
+u32 InitializeUART(u32 baudRate);
+u32 WriteUARTN(void* buf, u32 len);
+
+static inline int __init_console(void)
+{
+	static BOOL initialized = FALSE;
+
+	int res = 0;
+	if (!initialized) {
+		res = InitializeUART(0xE100);
+		if (res == 0) {
+			initialized = TRUE;
+		}
+	}
+	return res;
+}
+
 /**
  * @TODO: Documentation
  */
 void OSReport(const char* msg, ...)
 {
+	if (__init_console() != 0) {
+		return;
+	}
+
 	va_list args;
+	char buffer[2048];
 
 	va_start(args, msg);
-	vprintf(msg, args);
+	WriteUARTN(buffer, vsnprintf(buffer, sizeof(buffer), msg, args));
 	va_end(args);
 }
 
