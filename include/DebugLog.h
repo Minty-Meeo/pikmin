@@ -10,6 +10,7 @@
 #include <string.h>
 
 #define DEFINE_PRINT(_NAME)                        \
+	[[gnu::format(printf, 1, 2)]]                  \
 	static void _Print(immut char* fmt, ...)       \
 	{                                              \
 		va_list args;                              \
@@ -30,6 +31,7 @@
 
 // Size - 0x9C
 #define DEFINE_ERROR(line)                    \
+	[[gnu::format(printf, 1, 2)]]             \
 	static void _Error(immut char* fmt, ...)  \
 	{                                         \
 		va_list args;                         \
