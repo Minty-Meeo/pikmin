@@ -43,7 +43,7 @@ add_compile_options(-fno-exceptions)
 add_compile_options(-fno-asynchronous-unwind-tables)
 add_compile_options(-fpermissive)
 add_compile_options(-funsigned-char)
-add_compile_options(-O0)
+add_compile_options(-Os)
 
 add_compile_options($<$<COMPILE_LANGUAGE:C>:-Werror=implicit>)
 add_compile_options(-Werror=return-type)
