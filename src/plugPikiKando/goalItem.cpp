@@ -790,7 +790,7 @@ void GoalItem::refresh(Graphics& gfx)
 	if (aiCullable()) {
 		mItemShapeObject->mShape->drawshape(gfx, *gfx.mCamera, &mAnimatedMaterials);
 	}
-	mCollInfo->updateInfo(gfx, false);
+	mCollInfo->updateInfo(gfx, (gsys->mToggleDebugInfo & DInfoFlags::CollInfo));
 
 	for (int i = 0; i < 3; i++) {
 		GoalLeg* leg = (GoalLeg*)((&this->_444) + i * 2);

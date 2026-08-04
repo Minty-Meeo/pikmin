@@ -160,7 +160,7 @@ void Slime::refresh(Graphics& gfx)
 	mAnimator.updateContext();
 	mShapeObject->mShape->updateAnim(gfx, onCamMtx, nullptr);
 	mSlimeBody->refresh(mShapeObject, gfx);
-	mCollInfo->updateInfo(gfx, false);
+	mCollInfo->updateInfo(gfx, (gsys->mToggleDebugInfo & DInfoFlags::CollInfo));
 }
 
 /**

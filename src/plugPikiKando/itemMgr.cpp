@@ -1128,7 +1128,7 @@ void BuildingItem::refresh(Graphics& gfx)
 	}
 
 	mPlatMgr.update(gfx);
-	mCollInfo->updateInfo(gfx, false);
+	mCollInfo->updateInfo(gfx, (gsys->mToggleDebugInfo & DInfoFlags::CollInfo));
 }
 
 /**

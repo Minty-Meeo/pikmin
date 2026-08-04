@@ -275,7 +275,7 @@ void PelCreature::doRender(Graphics& gfx, Matrix4f& mtx)
 	mItemAnimator.updateContext();
 	mItemShape->mShape->updateAnim(gfx, mtx, nullptr);
 	mItemShape->mShape->drawshape(gfx, *gfx.mCamera, nullptr);
-	mCollInfo->updateInfo(gfx, false);
+	mCollInfo->updateInfo(gfx, (gsys->mToggleDebugInfo & DInfoFlags::CollInfo));
 }
 
 /**

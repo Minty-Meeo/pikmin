@@ -1353,7 +1353,7 @@ void Pellet::doRender(Graphics& gfx, Matrix4f& mtx)
 
 	mShapeObject->mShape->updateAnim(gfx, mtx, nullptr);
 	if (mCollInfo) {
-		mCollInfo->updateInfo(gfx, false);
+		mCollInfo->updateInfo(gfx, (gsys->mToggleDebugInfo & DInfoFlags::CollInfo));
 	}
 
 	if (aiCullable()) {

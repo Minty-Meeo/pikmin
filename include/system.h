@@ -169,7 +169,8 @@ enum {
 	ShapeRoute = 1 << 3,
 	ShapeCull  = 1 << 4,
 	Atari      = 1 << 5,
-	Extra      = 1 << 6,
+	CollInfo   = 1 << 6,
+	Extra      = 1 << 7,
 } END_ENUM_TYPE;
 
 /**

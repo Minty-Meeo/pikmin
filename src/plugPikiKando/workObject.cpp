@@ -728,7 +728,7 @@ void HinderRock::refresh(Graphics& gfx)
 	gfx.useMatrix(Matrix4f::ident, 0);
 	mBuildShape->updateContext();
 	mBoxShape->drawshape(gfx, *gfx.mCamera, nullptr);
-	mCollInfo->updateInfo(gfx, false);
+	mCollInfo->updateInfo(gfx, (gsys->mToggleDebugInfo & DInfoFlags::CollInfo));
 	updatePlanes();
 }
 
@@ -1021,7 +1021,7 @@ void Bridge::refresh(Graphics& gfx)
 	mBridgeShape->drawshape(gfx, *gfx.mCamera, &mAnimatedMaterials);
 
 	if (!mDoUseJointSegments) {
-		mCollInfo->updateInfo(gfx, false);
+		mCollInfo->updateInfo(gfx, (gsys->mToggleDebugInfo & DInfoFlags::CollInfo));
 	}
 
 	if (_424) {

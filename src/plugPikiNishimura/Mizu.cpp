@@ -116,7 +116,7 @@ void Mizu::refresh(Graphics& gfx)
 	gfx.mCamera->mLookAtMtx.multiplyTo(mWorldMtx, onCamMtx);
 	mAnimator.updateContext();
 	mShapeObject->mShape->updateAnim(gfx, onCamMtx, nullptr);
-	mCollInfo->updateInfo(gfx, false);
+	mCollInfo->updateInfo(gfx, (gsys->mToggleDebugInfo & DInfoFlags::CollInfo));
 }
 
 /**

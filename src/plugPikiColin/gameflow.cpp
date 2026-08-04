@@ -301,6 +301,15 @@ void GameFlow::menuToggleDInfoAtari(Menu& menu)
 /**
  * @todo
  */
+void GameFlow::menuToggleDInfoCollInfo(Menu& menu)
+{
+	gsys->mToggleDebugInfo ^= DInfoFlags::CollInfo;
+	sprintf(menu.mCurrentItem->mLabel, "CollInfo %s", (gsys->mToggleDebugInfo & DInfoFlags::CollInfo) ? " [on]" : "[off]");
+}
+
+/**
+ * @todo
+ */
 void GameFlow::menuToggleDInfoExtra(Menu& menu)
 {
 	gsys->mToggleDebugInfo ^= DInfoFlags::Extra;
@@ -448,7 +457,7 @@ void GameFlow::addFilterMenu(Menu* parent)
 
 void GameFlow::addDInfoMenu(Menu* parent)
 {
-	char* buffer = new char[7 * 20];
+	char* buffer = new char[8 * 20];
 
 	sprintf(buffer, "Teki %s", (gsys->mToggleDebugInfo & DInfoFlags::Teki) ? " [on]" : "[off]");
 	parent->addOption(0, buffer, new Delegate1<GameFlow, Menu&>(this, &GameFlow::menuToggleDInfoTeki));
@@ -472,6 +481,10 @@ void GameFlow::addDInfoMenu(Menu* parent)
 
 	sprintf(buffer, "Atari %s", (gsys->mToggleDebugInfo & DInfoFlags::Atari) ? " [on]" : "[off]");
 	parent->addOption(0, buffer, new Delegate1<GameFlow, Menu&>(this, &GameFlow::menuToggleDInfoAtari));
+	buffer += 20;
+
+	sprintf(buffer, "CollInfo %s", (gsys->mToggleDebugInfo & DInfoFlags::CollInfo) ? " [on]" : "[off]");
+	parent->addOption(0, buffer, new Delegate1<GameFlow, Menu&>(this, &GameFlow::menuToggleDInfoCollInfo));
 	buffer += 20;
 
 	sprintf(buffer, "Extra %s", (gsys->mToggleDebugInfo & DInfoFlags::Extra) ? " [on]" : "[off]");

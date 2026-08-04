@@ -1035,7 +1035,7 @@ void UfoItem::demoDraw(Graphics& gfx, immut Matrix4f* mtx)
 		mTroubleFxPositionList[5] = pos;
 	}
 
-	mCollInfo->updateInfo(gfx, false);
+	mCollInfo->updateInfo(gfx, (gsys->mToggleDebugInfo & DInfoFlags::CollInfo));
 	for (i = 0; i < 3; i++) {
 		CollPart* part = mCollInfo->getSphere('gol1');
 		if (part) {

@@ -194,7 +194,7 @@ void BombItem::refresh(Graphics& gfx)
 	// I hate this compiler SO much.
 	aiCullable();
 
-	mCollInfo->updateInfo(gfx, false);
+	mCollInfo->updateInfo(gfx, (gsys->mToggleDebugInfo & DInfoFlags::CollInfo));
 	if (state == BombAI::BOMB_Set) {
 		renderTimer(gfx);
 	}

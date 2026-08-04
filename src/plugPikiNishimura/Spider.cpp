@@ -131,7 +131,7 @@ void Spider::draw(Graphics& gfx)
 void Spider::refresh(Graphics& gfx)
 {
 	draw(gfx);
-	mCollInfo->updateInfo(gfx, false);
+	mCollInfo->updateInfo(gfx, (gsys->mToggleDebugInfo & DInfoFlags::CollInfo));
 }
 
 /**

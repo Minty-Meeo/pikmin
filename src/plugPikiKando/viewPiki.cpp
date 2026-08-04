@@ -674,7 +674,7 @@ void ViewPiki::refresh(Graphics& gfx)
 		}
 	}
 
-	mCollInfo->updateInfo(gfx, false);
+	mCollInfo->updateInfo(gfx, (gsys->mToggleDebugInfo & DInfoFlags::CollInfo));
 	demoDraw(gfx, nullptr);
 }
 

@@ -120,7 +120,7 @@ void Snake::refresh(Graphics& gfx)
 	mAnimator.updateContext();
 	mShapeObject->mShape->updateAnim(gfx, onCamMtx, nullptr);
 	mSnakeBody->refresh(mShapeObject, gfx);
-	mCollInfo->updateInfo(gfx, false);
+	mCollInfo->updateInfo(gfx, (gsys->mToggleDebugInfo & DInfoFlags::CollInfo));
 }
 
 /**

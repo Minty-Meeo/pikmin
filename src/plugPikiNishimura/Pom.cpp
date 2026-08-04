@@ -116,7 +116,7 @@ void Pom::refresh(Graphics& gfx)
 		f32 dynAnimType = mColor;
 		mAnimatedMaterials.animate(&dynAnimType);
 		mShapeObject->mShape->updateAnim(gfx, mtx, nullptr);
-		mCollInfo->updateInfo(gfx, false);
+		mCollInfo->updateInfo(gfx, (gsys->mToggleDebugInfo & DInfoFlags::CollInfo));
 	}
 }
 

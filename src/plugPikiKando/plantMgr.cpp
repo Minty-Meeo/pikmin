@@ -139,7 +139,7 @@ void Plant::refresh(Graphics& gfx)
 
 	gfx.useMatrix(Matrix4f::ident, 0);
 	shape->mShape->drawshape(gfx, *gfx.mCamera, nullptr);
-	mCollInfo->updateInfo(gfx, false);
+	mCollInfo->updateInfo(gfx, (gsys->mToggleDebugInfo & DInfoFlags::CollInfo));
 }
 
 /**

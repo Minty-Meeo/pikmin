@@ -140,7 +140,7 @@ void King::draw(Graphics& gfx)
 void King::refresh(Graphics& gfx)
 {
 	draw(gfx);
-	mCollInfo->updateInfo(gfx, false);
+	mCollInfo->updateInfo(gfx, (gsys->mToggleDebugInfo & DInfoFlags::CollInfo));
 	mPlatMgr.update(gfx);
 }
 

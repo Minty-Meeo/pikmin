@@ -641,6 +641,7 @@ public:
 	void menuToggleDInfoShapeRoute(Menu& menu);
 	void menuToggleDInfoShapeCull(Menu& menu);
 	void menuToggleDInfoAtari(Menu& menu);
+	void menuToggleDInfoCollInfo(Menu& menu);
 	void menuToggleDInfoExtra(Menu& menu);
 	void menuToggleBlur(Menu& menu);
 	void menuToggleInfo(Menu& menu);

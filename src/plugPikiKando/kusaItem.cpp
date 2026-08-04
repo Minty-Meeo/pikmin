@@ -130,7 +130,7 @@ void KusaItem::refresh(Graphics& gfx)
 
 	mItemShape->updateAnim(gfx, camMat, nullptr);
 	mItemShape->drawshape(gfx, *gfx.mCamera, nullptr);
-	mCollInfo->updateInfo(gfx, false);
+	mCollInfo->updateInfo(gfx, (gsys->mToggleDebugInfo & DInfoFlags::CollInfo));
 }
 
 /**
@@ -237,7 +237,7 @@ void BoBaseItem::refresh(Graphics& gfx)
 
 		mItemShape->updateAnim(gfx, camMat, nullptr);
 		mItemShape->drawshape(gfx, *gfx.mCamera, nullptr);
-		mCollInfo->updateInfo(gfx, false);
+		mCollInfo->updateInfo(gfx, (gsys->mToggleDebugInfo & DInfoFlags::CollInfo));
 	}
 }
 

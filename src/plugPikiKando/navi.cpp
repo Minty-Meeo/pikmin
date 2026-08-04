@@ -2054,7 +2054,7 @@ void Navi::demoDraw(Graphics& gfx, immut Matrix4f* mtx)
 	mShadowCaster.mSourcePosition.set(mSRT.t.x + 75.0f, mSRT.t.y + 100.0f, mSRT.t.z + 25.0f);
 	mShadowCaster.mTargetPosition.set(mSRT.t.x, mSRT.t.y + 10.0f, mSRT.t.z);
 	mNaviShapeObject->mShape->drawshape(gfx, *gfx.mCamera, nullptr);
-	mCollInfo->updateInfo(gfx, false);
+	mCollInfo->updateInfo(gfx, (gsys->mToggleDebugInfo & DInfoFlags::CollInfo));
 	mNaviLightPosition = mCollInfo->getSphere('ante')->mCentre;
 	mNaviLightEfx->updatePos(mNaviLightPosition);
 	mNaviLightGlowEfx->updatePos(mNaviLightPosition);

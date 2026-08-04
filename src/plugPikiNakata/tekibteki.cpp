@@ -1938,7 +1938,7 @@ void BTeki::drawTekiShape(Graphics& gfx)
 	mTekiShape->mShape->updateAnim(gfx, onCamMtx, nullptr);
 
 	if (mCollInfo) {
-		mCollInfo->updateInfo(gfx, false);
+		mCollInfo->updateInfo(gfx, (gsys->mToggleDebugInfo & DInfoFlags::CollInfo));
 	}
 
 	mPlatMgr.update(gfx);
